@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Vibration, View } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import EncryptedStorage from 'react-native-encrypted-storage';
@@ -58,11 +58,20 @@ const styles = StyleSheet.create({
 
 const storeQrCodeUrl = async (url: string) => {
   try {
+    let shcVaccinations = [];
+    const storedShcVaccinations = await EncryptedStorage.getItem(
+      'shc_vaccinations',
+    );
+    if (storedShcVaccinations) {
+      shcVaccinations = JSON.parse(storedShcVaccinations);
+    }
+    shcVaccinations.push({
+      url,
+      date: Date.now(),
+    });
     await EncryptedStorage.setItem(
-      'shc_vaccination',
-      JSON.stringify({
-        url,
-      }),
+      'shc_vaccinations',
+      JSON.stringify(shcVaccinations),
     );
   } catch (error) {
     console.error(error);
