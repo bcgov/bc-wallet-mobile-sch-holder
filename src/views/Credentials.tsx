@@ -25,12 +25,17 @@ export const Credentials = () => {
       if (qrCodeUrls) {
         urls = JSON.parse(qrCodeUrls);
 
-        // For debug only!
-        const rec: SHCRecord = await SHC.unpackAndVerify(
-          urls[0].url,
-          PHSAPubKey.key,
-        );
-        console.log(rec);
+        // For debug and demo only!
+        try {
+          const rec: SHCRecord = await SHC.unpackAndVerify(
+            urls[0].url,
+            PHSAPubKey.key,
+          );
+
+          console.log(rec);
+        } catch (err) {
+          console.log('Problem..');
+        }
       }
     } catch (error) {
       console.error(error);
