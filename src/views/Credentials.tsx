@@ -71,6 +71,9 @@ export const Credentials = () => {
         onRequestClose={() => setModalUrl(null)}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
+            <Text numberOfLines={1} style={{ padding: 48 }}>
+              {modalUrl}
+            </Text>
             <QRCode value={modalUrl || ''} size={300} />
             <Button title="Close" onPress={() => setModalUrl(null)} />
           </View>

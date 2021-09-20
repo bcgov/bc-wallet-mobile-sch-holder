@@ -85,9 +85,9 @@ export const Scanner = ({ navigation }) => {
           }}
           barCodeTypes={[RNCamera.Constants.BarCodeType.qr]}
           onBarCodeRead={async e => {
+            setActive(false);
             Vibration.vibrate();
             await storeQrCodeUrl(e.data);
-            setActive(false);
             navigation.navigate('Credentials');
           }}>
           <View style={styles.window} />
