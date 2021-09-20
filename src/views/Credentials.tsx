@@ -1,3 +1,5 @@
+import * as SHC from '@pathcheck/shc-sdk';
+import {PHSAPubKey} from '../constants';
 import React, { useEffect, useState } from 'react';
 import {
   Button,
@@ -10,6 +12,7 @@ import {
 } from 'react-native';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import QRCode from 'react-native-qrcode-svg';
+import { SHCRecord } from '../types';
 
 export const Credentials = () => {
   const [urls, setUrls] = useState(null);
@@ -21,6 +24,13 @@ export const Credentials = () => {
       const qrCodeUrls = await EncryptedStorage.getItem('shc_vaccinations');
       if (qrCodeUrls) {
         urls = JSON.parse(qrCodeUrls);
+
+        // For debug only!
+        const rec: SHCRecord = await SHC.unpackAndVerify(
+          urls[0].url,
+          PHSAPubKey.key,
+        );
+        console.log(rec);
       }
     } catch (error) {
       console.error(error);
