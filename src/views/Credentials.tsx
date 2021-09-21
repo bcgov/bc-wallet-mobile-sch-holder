@@ -42,7 +42,7 @@ export const Credentials = () => {
               activeOpacity={0.5}
               underlayColor="light-gray">
               <View style={styles.item}>
-                <Text>Proof of Vaccination, </Text>
+                <Text>Proof of Vaccination for </Text>
                 <Text>
                   {CredentialHelper.fullNameForCredential(item.record)}
                 </Text>
