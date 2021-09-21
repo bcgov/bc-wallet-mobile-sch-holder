@@ -20,9 +20,14 @@ export interface SHCRecord {
   vc: SHCVerifiedCredential; // verified credential
 }
 
+export interface Credential {
+  id: number;
+  record: SHCRecord;
+}
+
 export interface SHCVerifiedCredential {
   type: Array<string>;
-  credentialSubject: object;
+  credentialSubject: any;
 }
 
 // FHIR - Fast Health Interoperability Resources

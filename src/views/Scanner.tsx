@@ -9,34 +9,13 @@ import {
   View,
 } from 'react-native';
 import { RNCamera } from 'react-native-camera';
-import EncryptedStorage from 'react-native-encrypted-storage';
 import { launchImageLibrary } from 'react-native-image-picker';
 import RNQRGenerator from 'rn-qr-generator';
+import {CredentialHelper} from '../utils/credhelper';
 
 export const Scanner = ({ navigation }) => {
   const [active, setActive] = useState(true);
-
-  const storeQrCodeUrl = async (url: string) => {
-    try {
-      let shcVaccinations = [];
-      const storedShcVaccinations = await EncryptedStorage.getItem(
-        'shc_vaccinations',
-      );
-      if (storedShcVaccinations) {
-        shcVaccinations = JSON.parse(storedShcVaccinations);
-      }
-      shcVaccinations.push({
-        url,
-        date: Date.now(),
-      });
-      await EncryptedStorage.setItem(
-        'shc_vaccinations',
-        JSON.stringify(shcVaccinations),
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const credHelper = new CredentialHelper();
 
   async function hasAndroidPermission() {
     const permission = PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
@@ -60,7 +39,10 @@ export const Scanner = ({ navigation }) => {
       launchImageLibrary({ mediaType: 'photo', base64: true }, async image => {
         const res = await RNQRGenerator.detect({ uri: image?.assets[0]?.uri });
         if (res.values.length) {
-          await Promise.all(res.values.map(storeQrCodeUrl));
+          for (const cred of res.values) {
+            await credHelper.storeCredential(cred);
+          }
+
           navigation.navigate('Credentials');
         }
       });
@@ -87,7 +69,7 @@ export const Scanner = ({ navigation }) => {
           onBarCodeRead={async e => {
             setActive(false);
             Vibration.vibrate();
-            await storeQrCodeUrl(e.data);
+            await credHelper.storeCredential(e.data);
             navigation.navigate('Credentials');
           }}>
           <View style={styles.window} />
