@@ -1,6 +1,4 @@
-import * as SHC from '@pathcheck/shc-sdk';
-import {PHSAPubKey} from '../constants';
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Button,
   FlatList,
@@ -10,75 +8,56 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
-import EncryptedStorage from 'react-native-encrypted-storage';
 import QRCode from 'react-native-qrcode-svg';
-import { SHCRecord } from '../types';
+import {CredentialHelper} from '../utils/credhelper';
+import {Credential} from '../types';
 
 export const Credentials = () => {
-  const [urls, setUrls] = useState(null);
+  const [credentials, setCredentials] = useState<Credential[]>([]);
   const [modalUrl, setModalUrl] = useState(null);
 
-  const retrieveQrCodeUrls = async () => {
-    let urls = [];
-    try {
-      const qrCodeUrls = await EncryptedStorage.getItem('shc_vaccinations');
-      if (qrCodeUrls) {
-        urls = JSON.parse(qrCodeUrls);
-
-        // For debug and demo only!
-        try {
-          const rec: SHCRecord = await SHC.unpackAndVerify(
-            urls[0].url,
-            PHSAPubKey.key,
-          );
-
-          console.log(rec);
-        } catch (err) {
-          console.log('Problem..');
-        }
+  useMemo(() => {
+    async function wrap() {
+      try {
+        const credHelper = new CredentialHelper();
+        const results = await credHelper.credentials();
+        setCredentials(results);
+      } catch (err) {
+        const msg = 'Unable to fetch credentials';
+        console.error(msg);
       }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setUrls(urls.filter(url => !!url));
     }
-  };
-
-  useEffect(() => {
-    retrieveQrCodeUrls();
+    wrap();
   }, []);
 
   return (
     <View style={styles.container}>
-      {urls && (
+      {credentials && (
         <FlatList
-          data={urls}
-          renderItem={({ item }) => (
+          data={credentials}
+          renderItem={({item}) => (
             <TouchableHighlight
-              key={item.date}
-              onPress={() => setModalUrl(item.url)}
+              key={item.id}
+              // onPress={}
               activeOpacity={0.5}
               underlayColor="light-gray">
               <View style={styles.item}>
-                <QRCode value={item.url} quietZone={5} size={48} />
+                <Text>Proof of Vaccination, </Text>
+                <Text>
+                  {CredentialHelper.fullNameForCredential(item.record)}
+                </Text>
+                {/* <QRCode value={item.url} quietZone={5} size={48} />
                 <View style={{ justifyContent: 'space-between', padding: 2 }}>
                   <Text style={{ fontWeight: 'bold', fontSize: 18 }}>
                     Smart Health Card Vaccination
                   </Text>
                   <Text>Added: {formatDate(item.date)}</Text>
-                </View>
+                </View> */}
               </View>
             </TouchableHighlight>
           )}
         />
       )}
-      <Button
-        title="Clear Credentials"
-        onPress={async () => {
-          await EncryptedStorage.clear();
-          await retrieveQrCodeUrls();
-        }}
-      />
       <Modal
         animationType="slide"
         transparent={true}
