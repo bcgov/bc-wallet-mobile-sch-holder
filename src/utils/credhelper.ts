@@ -9,11 +9,19 @@ export class CredentialHelper {
   private storageKey = 'shc_vaccinations';
 
   public static fullNameForCredential(item: SHCRecord): string {
-    const person = item.vc.credentialSubject.fhirBundle.entry.filter(
+    const results = item.vc.credentialSubject.fhirBundle.entry.filter(
       (e: any) => e.resource.resourceType === 'Patient',
     );
-    const {family, given} = person.pop().resource.name.pop();
-    const fullName = `${given.pop()} ${family}`.toLocaleLowerCase();
+
+    if (results.length === 0) {
+      console.error('Unable to find Person record');
+      return 'Unknow Name';
+    }
+
+    const person = results.pop();
+    const [name] = person.resource.name;
+    const {family, given} = name;
+    const fullName = `${family}, ${given.join(' ')}`.toLocaleLowerCase();
     const fullNameAsStartCase = startCase(fullName);
 
     return fullNameAsStartCase;
@@ -21,7 +29,6 @@ export class CredentialHelper {
 
   async credentials(): Promise<Array<Credential>> {
     let credentials = [];
-
     try {
       const qrCodeUrls = await EncryptedStorage.getItem(this.storageKey);
 
