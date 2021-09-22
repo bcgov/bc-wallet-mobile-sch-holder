@@ -19,6 +19,8 @@ export const Credentials = ({navigation}: Props) => {
       try {
         const credHelper = new CredentialHelper();
         const results = await credHelper.credentials();
+
+        console.log(`Found ${results.length} credentials`);
         setCredentials(results);
       } catch (err) {
         const msg = 'Unable to fetch credentials';
@@ -28,6 +30,13 @@ export const Credentials = ({navigation}: Props) => {
     wrap();
   }, []);
 
+  const onCredentialSelected = (item: Credential) => {
+    navigation.navigate('DisplayPOV', {
+      itemId: item.id,
+      record: item.record,
+    });
+  };
+
   return (
     <View>
       {credentials && (
@@ -36,7 +45,7 @@ export const Credentials = ({navigation}: Props) => {
           renderItem={({item}) => (
             <TouchableHighlight
               key={item.id}
-              // onPress={}
+              onPress={() => onCredentialSelected(item)}
               activeOpacity={0.5}
               underlayColor="light-gray">
               <View style={styles.item}>

@@ -1,9 +1,9 @@
 import EncryptedStorage from 'react-native-encrypted-storage';
-import {PHSAPubKey} from '../constants';
-import {SHCRecord, Credential} from '../types';
+import { PHSAPubKey } from '../constants';
+import { SHCRecord, Credential } from '../types';
 // @ts-ignore
 import * as SHC from '@pathcheck/shc-sdk';
-import {startCase} from 'lodash';
+import { startCase, isArray } from 'lodash';
 
 export class CredentialHelper {
   private storageKey = 'shc_vaccinations';
@@ -27,24 +27,24 @@ export class CredentialHelper {
     return fullNameAsStartCase;
   }
 
-  async credentials(): Promise<Array<Credential>> {
-    let credentials = [];
+  async decodeRecords(records: Array<any>): Promise<Array<Credential>> {
+    let credentials: Array<Credential> = [];
+
+    if (!records || !isArray(records)) {
+      return [];
+    }
+
     try {
-      const qrCodeUrls = await EncryptedStorage.getItem(this.storageKey);
+      for (const u of records) {
+        const record: SHCRecord = await SHC.unpackAndVerify(
+          u.record,
+          PHSAPubKey.key,
+        );
 
-      if (qrCodeUrls) {
-        const shcUrls = JSON.parse(qrCodeUrls);
-
-        for (const u of shcUrls) {
-          const record: SHCRecord = await SHC.unpackAndVerify(
-            u.record,
-            PHSAPubKey.key,
-          );
-          credentials.push({
-            id: u.id,
-            record,
-          });
-        }
+        credentials.push({
+          id: u.id,
+          record,
+        });
       }
     } catch (error) {
       // TODO:(jl) Need to shore up error handling mechanics.
@@ -54,7 +54,48 @@ export class CredentialHelper {
     }
   }
 
+  async credentials(): Promise<Array<Credential>> {
+    let credentials: Array<Credential> = [];
+
+    try {
+      const qrCodeUrls = await EncryptedStorage.getItem(this.storageKey);
+      if (qrCodeUrls) {
+        const data = JSON.parse(qrCodeUrls);
+        credentials = await this.decodeRecords(data);
+      }
+    } catch (error) {
+      // TODO:(jl) Need to shore up error handling mechanics.
+      console.error('Decode error', error);
+    } finally {
+      return credentials;
+    }
+  }
+
+  async credentialWithId(
+    itemId: number,
+    raw: boolean = false,
+  ): Promise<Credential | undefined> {
+    try {
+      const qrCodeUrls = await EncryptedStorage.getItem(this.storageKey);
+
+      if (qrCodeUrls) {
+        const shcUrls = JSON.parse(qrCodeUrls);
+        const record = shcUrls.filter((u: any) => u.id === itemId);
+
+        if (raw) {
+          return record.pop();
+        }
+
+        return (await this.decodeRecords(record)).pop();
+      }
+    } catch (err) {
+      console.error('Fail');
+    }
+  }
+
   async storeCredential(record: string): Promise<void> {
+    console.log('store credential');
+
     try {
       let shcVaccinations = [];
       const storedShcVaccinations = await EncryptedStorage.getItem(
@@ -63,6 +104,7 @@ export class CredentialHelper {
 
       if (storedShcVaccinations) {
         shcVaccinations = JSON.parse(storedShcVaccinations);
+        console.log(`Found ${shcVaccinations.lenght} existing creds`);
       }
 
       shcVaccinations.push({

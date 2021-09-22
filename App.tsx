@@ -20,6 +20,7 @@ import {CredentialTabs} from './src/components/credential/CredentialTabs';
 import {Home} from './src/views/Home';
 import {CredentialAdd} from './src/views/credential/CredentialAdd';
 import {Scanner} from './src/views/Scanner';
+import { DisplayPOV } from './src/views/DisplayPOV';
 
 const theme = {
   primaryBlue: '#003366',
@@ -61,6 +62,11 @@ const App = () => {
                 name="CredentialAdd"
                 component={CredentialAdd}
                 options={{headerTitle: 'Add Vaccine Card'}}
+              />
+              <Stack.Screen
+                name="DisplayPOV"
+                component={DisplayPOV}
+                options={{headerTitle: 'Blarb'}}
               />
             </Stack.Group>
             <Stack.Group screenOptions={{presentation: 'modal'}}>
