@@ -17,8 +17,8 @@ export const CredentialTabs = () => {
         tabBarStyle: {
           backgroundColor: theme.colors.white,
         },
-        tabBarActiveTintColor: theme.colors.headerBlue,
-        tabBarInactiveTintColor: theme.colors.inputGray,
+        tabBarActiveTintColor: theme.colors.tabActive,
+        tabBarInactiveTintColor: theme.colors.tabInactive,
       }}>
       <Tab.Screen
         name="Credentials"

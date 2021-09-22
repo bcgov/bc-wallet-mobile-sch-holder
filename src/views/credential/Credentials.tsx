@@ -1,6 +1,5 @@
 import React, {useMemo, useState} from 'react';
 import {
-  Button,
   FlatList,
   StyleSheet,
   Text,
@@ -9,7 +8,42 @@ import {
 } from 'react-native';
 import {CredentialHelper} from '../../utils/credhelper';
 import {Credential} from '../../types';
-import {Props} from '../../../App';
+import {AppTheme, Props} from '../../../App';
+
+import Wallet from '../../assets/img/wallet.svg';
+import {css} from '@emotion/native';
+import {ThemeProvider, useTheme} from '@emotion/react';
+
+const flexCenter = css`
+  flex-direction: column;
+  justify-content:center
+  align-items: center;
+`;
+
+const paragraphText = css`
+  font-size: 18px;
+  margin-bottom: 20px;
+`;
+
+const largeText = css`
+  font-size: 24px;
+  margin-bottom: 26px;
+`;
+
+const boldText = css`
+  font-weight: bold;
+`;
+
+const primaryButton = (theme: AppTheme) => css`
+  padding: 16px;
+  border-radius: 4px;
+  background-color: ${theme.colors.primaryBlue};
+`;
+
+const primaryButtonText = (theme: AppTheme) => css`
+  font-size: 16px;
+  color: ${theme.colors.white};
+`;
 
 export const Credentials = ({navigation}: Props) => {
   const [credentials, setCredentials] = useState<Credential[]>([]);
@@ -28,35 +62,51 @@ export const Credentials = ({navigation}: Props) => {
     wrap();
   }, []);
 
+  const theme = useTheme();
+
   return (
-    <View>
-      {credentials && (
-        <FlatList
-          data={credentials}
-          renderItem={({item}) => (
-            <TouchableHighlight
-              key={item.id}
-              // onPress={}
-              activeOpacity={0.5}
-              underlayColor="light-gray">
-              <View style={styles.item}>
-                <Text>Proof of Vaccination for </Text>
-                <Text>
-                  {CredentialHelper.fullNameForCredential(item.record)}
-                </Text>
-              </View>
-            </TouchableHighlight>
-          )}
-        />
-      )}
-      <Button
-        title="Add Vaccine Card"
-        onPress={() => navigation.navigate('CredentialAdd')}
-      />
-    </View>
+    <ThemeProvider theme={theme}>
+      <View style={[flexCenter]}>
+        {!(credentials && credentials.length) && (
+          <View style={[flexCenter]}>
+            <Wallet />
+            <Text style={[largeText, boldText]}>Welcome to your wallet!</Text>
+            <Text style={[paragraphText]}>Add your first Vaccine Card</Text>
+          </View>
+        )}
+        {credentials && (
+          <FlatList
+            data={credentials}
+            renderItem={({item}) => (
+              <TouchableHighlight
+                key={item.id}
+                // onPress={}
+                activeOpacity={0.5}
+                underlayColor="light-gray">
+                <View style={styles.item}>
+                  <Text>Proof of Vaccination for </Text>
+                  <Text>
+                    {CredentialHelper.fullNameForCredential(item.record)}
+                  </Text>
+                </View>
+              </TouchableHighlight>
+            )}
+          />
+        )}
+        <TouchableHighlight
+          style={[primaryButton(theme as AppTheme)]}
+          underlayColor={(theme as AppTheme).colors.activeBlue}
+          onPress={() => navigation.navigate('CredentialAdd')}>
+          <Text style={[primaryButtonText(theme as AppTheme), boldText]}>
+            Add Vaccine Card
+          </Text>
+        </TouchableHighlight>
+      </View>
+    </ThemeProvider>
   );
 };
 
+// DEPRECATED
 const styles = StyleSheet.create({
   container: {
     flex: 1,

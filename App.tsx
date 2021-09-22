@@ -34,6 +34,7 @@ export interface AppTheme extends Theme {
 export const theme: AppTheme = {
   colors: {
     primaryBlue: '#003366',
+    activeBlue: '#003366B3',
     linkBlue: '#1A5A96',
     headerBlue: '#38598A',
     betaYellow: '#FCBA19',
@@ -42,7 +43,9 @@ export const theme: AppTheme = {
     inputGray: '#606060',
     errorRed: '#D8292F',
     successGreen: '#2E8540',
-    white: '#fff',
+    white: '#FFFFFF',
+    tabActive: '#38598A',
+    tabInactive: '#707070',
   },
 };
 
@@ -50,7 +53,7 @@ const navigationTheme: NavigationTheme = {
   dark: false,
   colors: {
     primary: theme.colors.white,
-    background: theme.colors.white,
+    background: theme.colors.backgroundGray,
     card: theme.colors.primaryBlue,
     text: theme.colors.white,
     border: theme.colors.white,
