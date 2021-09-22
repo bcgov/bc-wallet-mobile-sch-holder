@@ -22,9 +22,15 @@ import {CredentialAdd} from './src/views/credential/CredentialAdd';
 import {Scanner} from './src/views/Scanner';
 
 const theme = {
-  primaryBlue: 'hotpink',
-  secondaryBlue: 'purple',
-  primaryYellow: 'yellow',
+  primaryBlue: '#003366',
+  linkBlue: '#1A5A96',
+  headerBlue: '#38598A',
+  betaYellow: '#FCBA19',
+  textGray: '#313132',
+  backgroundGray: '#F2F2F2',
+  inputGray: '#606060',
+  errorRed: '#D8292F',
+  successGreen: '#2E8540',
 };
 
 type RootStackParamList = {
