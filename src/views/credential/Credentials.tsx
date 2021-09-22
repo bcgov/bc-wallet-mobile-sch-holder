@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, {useMemo, useState} from 'react';
 import {
   Button,
   FlatList,
@@ -7,10 +7,10 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
-import { CredentialHelper } from '../../utils/credhelper';
-import { Credential } from '../../types';
+import {CredentialHelper} from '../../utils/credhelper';
+import {Credential} from '../../types';
 
-export const Credentials = ({ navigation }) => {
+export const Credentials = ({navigation}) => {
   const [credentials, setCredentials] = useState<Credential[]>([]);
 
   useMemo(() => {
@@ -32,7 +32,7 @@ export const Credentials = ({ navigation }) => {
       {credentials && (
         <FlatList
           data={credentials}
-          renderItem={({ item }) => (
+          renderItem={({item}) => (
             <TouchableHighlight
               key={item.id}
               // onPress={}

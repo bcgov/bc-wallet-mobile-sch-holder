@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button, View } from 'react-native';
+import {Button, View} from 'react-native';
 
-export const Home = ({ navigation }) => (
+export const Home = ({navigation}) => (
   <View>
     <Button title="First Time Using App" onPress={_ => _} />
     <Button

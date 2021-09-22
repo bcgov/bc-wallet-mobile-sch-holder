@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   PermissionsAndroid,
   Platform,
@@ -8,12 +8,12 @@ import {
   Vibration,
   View,
 } from 'react-native';
-import { RNCamera } from 'react-native-camera';
-import { launchImageLibrary } from 'react-native-image-picker';
+import {RNCamera} from 'react-native-camera';
+import {launchImageLibrary} from 'react-native-image-picker';
 import RNQRGenerator from 'rn-qr-generator';
-import { CredentialHelper } from '../utils/credhelper';
+import {CredentialHelper} from '../utils/credhelper';
 
-export const Scanner = ({ navigation }) => {
+export const Scanner = ({navigation}) => {
   const [active, setActive] = useState(true);
   const credHelper = new CredentialHelper();
 
@@ -36,8 +36,8 @@ export const Scanner = ({ navigation }) => {
 
     try {
       setActive(false);
-      launchImageLibrary({ mediaType: 'photo', base64: true }, async image => {
-        const res = await RNQRGenerator.detect({ uri: image?.assets[0]?.uri });
+      launchImageLibrary({mediaType: 'photo', base64: true}, async image => {
+        const res = await RNQRGenerator.detect({uri: image?.assets[0]?.uri});
         if (res.values.length) {
           for (const cred of res.values) {
             await credHelper.storeCredential(cred);
@@ -74,13 +74,13 @@ export const Scanner = ({ navigation }) => {
           }}>
           <View style={styles.window} />
           <View
-            style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
+            style={{flex: 0, flexDirection: 'row', justifyContent: 'center'}}>
             <TouchableOpacity
               style={styles.upload}
               onPress={() => {
                 uploadImage();
               }}>
-              <Text style={{ fontSize: 18 }}>Upload</Text>
+              <Text style={{fontSize: 18}}>Upload</Text>
             </TouchableOpacity>
           </View>
         </RNCamera>

@@ -9,14 +9,14 @@
  */
 
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ThemeProvider } from '@emotion/react';
-import { CredentialTabs } from './src/components/credential/CredentialTabs';
-import { Home } from './src/views/Home';
-import { CredentialAdd } from './src/views/credential/CredentialAdd';
-import { Scanner } from './src/views/Scanner';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {ThemeProvider} from '@emotion/react';
+import {CredentialTabs} from './src/components/credential/CredentialTabs';
+import {Home} from './src/views/Home';
+import {CredentialAdd} from './src/views/credential/CredentialAdd';
+import {Scanner} from './src/views/Scanner';
 
 const theme = {
   primaryBlue: 'hotpink',
@@ -28,7 +28,7 @@ const App = () => {
   const Stack = createNativeStackNavigator();
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{flex: 1}}>
       <ThemeProvider theme={theme}>
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Home">
@@ -37,19 +37,19 @@ const App = () => {
               <Stack.Screen
                 name="CredentialTabs"
                 component={CredentialTabs}
-                options={{ headerTitle: 'Your Wallet' }}
+                options={{headerTitle: 'Your Wallet'}}
               />
               <Stack.Screen
                 name="CredentialAdd"
                 component={CredentialAdd}
-                options={{ headerTitle: 'Add Vaccine Card' }}
+                options={{headerTitle: 'Add Vaccine Card'}}
               />
             </Stack.Group>
-            <Stack.Group screenOptions={{ presentation: 'modal' }}>
+            <Stack.Group screenOptions={{presentation: 'modal'}}>
               <Stack.Screen
                 name="Scanner"
                 component={Scanner}
-                options={{ headerTitle: 'Scan QR Code' }}
+                options={{headerTitle: 'Scan QR Code'}}
               />
             </Stack.Group>
           </Stack.Navigator>

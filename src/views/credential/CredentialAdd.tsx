@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button, View } from 'react-native';
+import {Button, View} from 'react-native';
 
-export const CredentialAdd = ({ navigation }) => {
+export const CredentialAdd = ({navigation}) => {
   return (
     <View>
       <Button
