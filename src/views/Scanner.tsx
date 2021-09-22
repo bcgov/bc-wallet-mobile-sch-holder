@@ -11,7 +11,7 @@ import {
 import { RNCamera } from 'react-native-camera';
 import { launchImageLibrary } from 'react-native-image-picker';
 import RNQRGenerator from 'rn-qr-generator';
-import {CredentialHelper} from '../utils/credhelper';
+import { CredentialHelper } from '../utils/credhelper';
 
 export const Scanner = ({ navigation }) => {
   const [active, setActive] = useState(true);

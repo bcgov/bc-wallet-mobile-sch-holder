@@ -3,13 +3,10 @@ import { Button, View } from 'react-native';
 
 export const Home = ({ navigation }) => (
   <View>
+    <Button title="First Time Using App" onPress={_ => _} />
     <Button
-      title="Scan QR Code"
-      onPress={() => navigation.navigate('Scanner')}
-    />
-    <Button
-      title="Credentials"
-      onPress={() => navigation.navigate('Credentials')}
+      title="Already Set Up"
+      onPress={() => navigation.navigate('CredentialTabs')}
     />
   </View>
 );

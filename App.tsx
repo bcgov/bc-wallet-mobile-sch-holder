@@ -9,53 +9,52 @@
  */
 
 import React from 'react';
-import {
-  NavigationContainer,
-  useNavigationContainerRef,
-} from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Home } from './src/views/Home';
-import { Scanner } from './src/views/Scanner';
-import { Credentials } from './src/views/Credentials';
-import { Button } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ThemeProvider } from '@emotion/react';
+import { CredentialTabs } from './src/components/credential/CredentialTabs';
+import { Home } from './src/views/Home';
+import { CredentialAdd } from './src/views/credential/CredentialAdd';
+import { Scanner } from './src/views/Scanner';
+
+const theme = {
+  primaryBlue: 'hotpink',
+  secondaryBlue: 'purple',
+  primaryYellow: 'yellow',
+};
 
 const App = () => {
   const Stack = createNativeStackNavigator();
-  const navigationRef = useNavigationContainerRef();
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <NavigationContainer ref={navigationRef}>
-        <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen name="Home" component={Home} />
-          <Stack.Screen
-            name="Scanner"
-            component={Scanner}
-            options={{
-              title: 'Scan',
-              headerLeft: () => (
-                <Button
-                  title="Home"
-                  onPress={() => navigationRef.navigate('Home')}
-                />
-              ),
-            }}
-          />
-          <Stack.Screen
-            name="Credentials"
-            component={Credentials}
-            options={{
-              headerLeft: () => (
-                <Button
-                  title="Home"
-                  onPress={() => navigationRef.navigate('Home')}
-                />
-              ),
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <ThemeProvider theme={theme}>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="Home">
+            <Stack.Group>
+              <Stack.Screen name="Home" component={Home} />
+              <Stack.Screen
+                name="CredentialTabs"
+                component={CredentialTabs}
+                options={{ headerTitle: 'Your Wallet' }}
+              />
+              <Stack.Screen
+                name="CredentialAdd"
+                component={CredentialAdd}
+                options={{ headerTitle: 'Add Vaccine Card' }}
+              />
+            </Stack.Group>
+            <Stack.Group screenOptions={{ presentation: 'modal' }}>
+              <Stack.Screen
+                name="Scanner"
+                component={Scanner}
+                options={{ headerTitle: 'Scan QR Code' }}
+              />
+            </Stack.Group>
+          </Stack.Navigator>
+        </NavigationContainer>
+      </ThemeProvider>
     </SafeAreaView>
   );
 };
