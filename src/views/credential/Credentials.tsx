@@ -1,20 +1,18 @@
-import React, { useMemo, useState } from 'react';
+import React, {useMemo, useState} from 'react';
 import {
   Button,
   FlatList,
-  Modal,
   StyleSheet,
   Text,
   TouchableHighlight,
   View,
 } from 'react-native';
-import QRCode from 'react-native-qrcode-svg';
-import {CredentialHelper} from '../utils/credhelper';
-import {Credential} from '../types';
+import {CredentialHelper} from '../../utils/credhelper';
+import {Credential} from '../../types';
+import {Props} from '../../../App';
 
-export const Credentials = () => {
+export const Credentials = ({navigation}: Props) => {
   const [credentials, setCredentials] = useState<Credential[]>([]);
-  const [modalUrl, setModalUrl] = useState(null);
 
   useMemo(() => {
     async function wrap() {
@@ -31,7 +29,7 @@ export const Credentials = () => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View>
       {credentials && (
         <FlatList
           data={credentials}
@@ -46,33 +44,15 @@ export const Credentials = () => {
                 <Text>
                   {CredentialHelper.fullNameForCredential(item.record)}
                 </Text>
-                {/* <QRCode value={item.url} quietZone={5} size={48} />
-                <View style={{ justifyContent: 'space-between', padding: 2 }}>
-                  <Text style={{ fontWeight: 'bold', fontSize: 18 }}>
-                    Smart Health Card Vaccination
-                  </Text>
-                  <Text>Added: {formatDate(item.date)}</Text>
-                </View> */}
               </View>
             </TouchableHighlight>
           )}
         />
       )}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={!!modalUrl}
-        onRequestClose={() => setModalUrl(null)}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text numberOfLines={1} style={{ padding: 48 }}>
-              {modalUrl}
-            </Text>
-            <QRCode value={modalUrl || ''} size={300} />
-            <Button title="Close" onPress={() => setModalUrl(null)} />
-          </View>
-        </View>
-      </Modal>
+      <Button
+        title="Add Vaccine Card"
+        onPress={() => navigation.navigate('CredentialAdd')}
+      />
     </View>
   );
 };
@@ -98,8 +78,3 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
-const formatDate = (timestamp: number) => {
-  const date = new Date(timestamp);
-  return date.toLocaleString();
-};

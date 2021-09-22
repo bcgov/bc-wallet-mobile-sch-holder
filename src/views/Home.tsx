@@ -1,15 +1,13 @@
 import React from 'react';
-import { Button, View } from 'react-native';
+import {Button, View} from 'react-native';
+import {Props} from '../../App';
 
-export const Home = ({ navigation }) => (
+export const Home = ({navigation}: Props) => (
   <View>
+    <Button title="First Time Using App" onPress={_ => _} />
     <Button
-      title="Scan QR Code"
-      onPress={() => navigation.navigate('Scanner')}
-    />
-    <Button
-      title="Credentials"
-      onPress={() => navigation.navigate('Credentials')}
+      title="Already Set Up"
+      onPress={() => navigation.navigate('CredentialTabs')}
     />
   </View>
 );
