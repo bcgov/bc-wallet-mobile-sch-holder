@@ -11,9 +11,10 @@ import {
 import {RNCamera} from 'react-native-camera';
 import {launchImageLibrary} from 'react-native-image-picker';
 import RNQRGenerator from 'rn-qr-generator';
+import {Props} from '../../App';
 import {CredentialHelper} from '../utils/credhelper';
 
-export const Scanner = ({navigation}) => {
+export const Scanner = ({navigation}: Props) => {
   const [active, setActive] = useState(true);
   const credHelper = new CredentialHelper();
 
@@ -43,7 +44,7 @@ export const Scanner = ({navigation}) => {
             await credHelper.storeCredential(cred);
           }
 
-          navigation.navigate('Credentials');
+          navigation.navigate('CredentialTabs');
         }
       });
     } catch (error) {
@@ -70,7 +71,7 @@ export const Scanner = ({navigation}) => {
             setActive(false);
             Vibration.vibrate();
             await credHelper.storeCredential(e.data);
-            navigation.navigate('Credentials');
+            navigation.navigate('CredentialTabs');
           }}>
           <View style={styles.window} />
           <View

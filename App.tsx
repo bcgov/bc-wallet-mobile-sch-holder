@@ -10,7 +10,10 @@
 
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {
+  createNativeStackNavigator,
+  NativeStackScreenProps,
+} from '@react-navigation/native-stack';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ThemeProvider} from '@emotion/react';
 import {CredentialTabs} from './src/components/credential/CredentialTabs';
@@ -23,6 +26,15 @@ const theme = {
   secondaryBlue: 'purple',
   primaryYellow: 'yellow',
 };
+
+type RootStackParamList = {
+  Home: undefined;
+  CredentialTabs: undefined;
+  CredentialAdd: undefined;
+  Scanner: undefined;
+};
+
+export type Props = NativeStackScreenProps<RootStackParamList>;
 
 const App = () => {
   const Stack = createNativeStackNavigator();

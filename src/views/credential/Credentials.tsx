@@ -9,8 +9,9 @@ import {
 } from 'react-native';
 import {CredentialHelper} from '../../utils/credhelper';
 import {Credential} from '../../types';
+import {Props} from '../../../App';
 
-export const Credentials = ({navigation}) => {
+export const Credentials = ({navigation}: Props) => {
   const [credentials, setCredentials] = useState<Credential[]>([]);
 
   useMemo(() => {
