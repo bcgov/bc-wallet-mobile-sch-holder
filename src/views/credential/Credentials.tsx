@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import {CredentialHelper} from '../../utils/credhelper';
 import {Credential} from '../../types';
-import {AppTheme, Props} from '../../../App';
+import {AppTheme} from '../../../App';
 
 import Wallet from '../../assets/img/wallet.svg';
 import {css} from '@emotion/native';
@@ -45,7 +45,7 @@ const primaryButtonText = (theme: AppTheme) => css`
   color: ${theme.colors.white};
 `;
 
-export const Credentials = ({navigation}: Props) => {
+export const Credentials = ({navigation}) => {
   const [credentials, setCredentials] = useState<Credential[]>([]);
 
   useMemo(() => {
@@ -53,6 +53,8 @@ export const Credentials = ({navigation}: Props) => {
       try {
         const credHelper = new CredentialHelper();
         const results = await credHelper.credentials();
+
+        console.log(`Found ${results.length} credentials`);
         setCredentials(results);
       } catch (err) {
         const msg = 'Unable to fetch credentials';
@@ -63,6 +65,13 @@ export const Credentials = ({navigation}: Props) => {
   }, []);
 
   const theme = useTheme();
+
+  const onCredentialSelected = (item: Credential) => {
+    navigation.navigate('DisplayPOV', {
+      itemId: item.id,
+      record: item.record,
+    });
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -80,7 +89,7 @@ export const Credentials = ({navigation}: Props) => {
             renderItem={({item}) => (
               <TouchableHighlight
                 key={item.id}
-                // onPress={}
+                onPress={() => onCredentialSelected(item)}
                 activeOpacity={0.5}
                 underlayColor="light-gray">
                 <View style={styles.item}>
