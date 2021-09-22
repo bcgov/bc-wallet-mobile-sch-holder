@@ -63,17 +63,17 @@ const App = () => {
                 component={CredentialAdd}
                 options={{headerTitle: 'Add Vaccine Card'}}
               />
+              <Stack.Screen
+                name="DisplayPOV"
+                component={DisplayPOV}
+                options={{headerTitle: 'Blarb'}}
+              />
             </Stack.Group>
             <Stack.Group screenOptions={{presentation: 'modal'}}>
               <Stack.Screen
                 name="Scanner"
                 component={Scanner}
                 options={{headerTitle: 'Scan QR Code'}}
-              />
-              <Stack.Screen
-                name="My Vax"
-                component={DisplayPOV}
-                options={{headerTitle: 'Blarb'}}
               />
             </Stack.Group>
           </Stack.Navigator>
