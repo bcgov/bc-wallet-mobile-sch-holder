@@ -15,8 +15,8 @@
 		76415CDF13DD4D14A2F3FF02 /* BCSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B9D51807BF954746BC1D36F4 /* BCSans-Regular.ttf */; };
 		7EF68E3733C33B6898317E18 /* libPods-wallet-walletTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABFE59519B596E51CEFDCCC0 /* libPods-wallet-walletTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		8759211326FAFC2F00675B36 /* libswiftWebKit.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8759211226FAFC1D00675B36 /* libswiftWebKit.tbd */; };
 		868A68EF46274FA199FD1C09 /* BCSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 528859F1C75B44AA96E26E0B /* BCSans-Bold.ttf */; };
+		8759211326FAFC2F00675B36 /* libswiftWebKit.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8759211226FAFC1D00675B36 /* libswiftWebKit.tbd */; };
 		98A3CE33DBAA47DFB4A6A448 /* BCSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 43DECDF3447541779E8F6170 /* BCSans-BoldItalic.ttf */; };
 		AC25233CC0CF4406BF2A9370 /* BCSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 90BCF0AD96B34A3AABC17523 /* BCSans-Italic.ttf */; };
 /* End PBXBuildFile section */
