@@ -9,29 +9,58 @@
  */
 
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  Theme as NavigationTheme,
+} from '@react-navigation/native';
 import {
   createNativeStackNavigator,
   NativeStackScreenProps,
 } from '@react-navigation/native-stack';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {ThemeProvider} from '@emotion/react';
+import {Theme, ThemeProvider} from '@emotion/react';
 import {CredentialTabs} from './src/components/credential/CredentialTabs';
 import {Home} from './src/views/Home';
 import {CredentialAdd} from './src/views/credential/CredentialAdd';
+import {DisplayPOV} from './src/views/DisplayPOV';
 import {Scanner} from './src/views/Scanner';
-import { DisplayPOV } from './src/views/DisplayPOV';
+import styled from '@emotion/native';
+import {StatusBar} from 'react-native';
 
-const theme = {
-  primaryBlue: '#003366',
-  linkBlue: '#1A5A96',
-  headerBlue: '#38598A',
-  betaYellow: '#FCBA19',
-  textGray: '#313132',
-  backgroundGray: '#F2F2F2',
-  inputGray: '#606060',
-  errorRed: '#D8292F',
-  successGreen: '#2E8540',
+import './src/assets/icons';
+
+export interface AppTheme extends Theme {
+  colors: Record<string, string>;
+}
+
+export const theme: AppTheme = {
+  colors: {
+    primaryBlue: '#003366',
+    activeBlue: '#003366B3',
+    activeGray: '#E6E6E6',
+    linkBlue: '#1A5A96',
+    headerBlue: '#38598A',
+    betaYellow: '#FCBA19',
+    textGray: '#313132',
+    backgroundGray: '#F2F2F2',
+    inputGray: '#606060',
+    errorRed: '#D8292F',
+    successGreen: '#2E8540',
+    white: '#FFFFFF',
+    tabActive: '#38598A',
+    tabInactive: '#707070',
+  },
+};
+
+const navigationTheme: NavigationTheme = {
+  dark: false,
+  colors: {
+    primary: theme.colors.white,
+    background: theme.colors.backgroundGray,
+    card: theme.colors.primaryBlue,
+    text: theme.colors.white,
+    border: theme.colors.white,
+    notification: theme.colors.white,
+  },
 };
 
 type RootStackParamList = {
@@ -43,20 +72,34 @@ type RootStackParamList = {
 
 export type Props = NativeStackScreenProps<RootStackParamList>;
 
+const FlexSafeAreaView = styled.SafeAreaView`
+  background-color: ${theme.colors.primaryBlue};
+  flex-grow: 1;
+`;
+
+const NoFlexSafeAreaView = styled.SafeAreaView`
+  background-color: ${theme.colors.white};
+  flex-grow: 0;
+`;
+
 const App = () => {
   const Stack = createNativeStackNavigator();
 
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <ThemeProvider theme={theme}>
-        <NavigationContainer>
+    <ThemeProvider theme={theme}>
+      <FlexSafeAreaView>
+        <StatusBar
+          backgroundColor={theme.colors.primaryBlue}
+          barStyle="light-content"
+        />
+        <NavigationContainer theme={navigationTheme}>
           <Stack.Navigator initialRouteName="Home">
             <Stack.Group>
               <Stack.Screen name="Home" component={Home} />
               <Stack.Screen
                 name="CredentialTabs"
                 component={CredentialTabs}
-                options={{headerTitle: 'Your Wallet'}}
+                options={{headerTitle: 'Cards'}}
               />
               <Stack.Screen
                 name="CredentialAdd"
@@ -73,13 +116,15 @@ const App = () => {
               <Stack.Screen
                 name="Scanner"
                 component={Scanner}
-                options={{headerTitle: 'Scan QR Code'}}
+                options={{headerShown: false}}
               />
             </Stack.Group>
           </Stack.Navigator>
         </NavigationContainer>
-      </ThemeProvider>
-    </SafeAreaView>
+      </FlexSafeAreaView>
+      {/* Keep this here so the bottom status bar remains un-styled */}
+      <NoFlexSafeAreaView />
+    </ThemeProvider>
   );
 };
 
