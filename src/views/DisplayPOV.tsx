@@ -1,55 +1,73 @@
 import React, {useMemo, useState} from 'react';
-import {StyleSheet, SafeAreaView, View, Text} from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import {CredentialHelper} from '../utils/credhelper';
+import styled from '@emotion/native';
+import {theme} from '../../App';
 
 export interface IRouteProps {
   navigation: any;
   route: any;
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F2F2F2',
-  },
-  content: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignContent: 'flex-start',
-    marginTop: 30,
-    marginLeft: 30,
-    marginRight: 30,
-    marginBottom: 30,
-  },
-  header: {
-    fontFamily: 'BCSans-Bold',
-    fontSize: 36,
-    color: '#313132',
-  },
-  text: {
-    fontFamily: 'BCSans-Regular',
-    fontSize: 26,
-    color: '#313132',
-  },
-  line: {
-    display: 'flex',
-    height: 1,
-    width: '100%',
-    marginTop: 5,
-    marginBottom: 15,
-    backgroundColor: '#313132',
-  },
-  qr: {
-    display: 'flex',
-    marginTop: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const ContainerView = styled.SafeAreaView`
+  flex: 1;
+  background-color: ${theme.colors.background};
+`;
+
+const ContentView = styled.View`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+  margin-left: 20px;
+  margin-right: 20px;
+  background-color: ${theme.colors.primaryBlue};
+  border-radius: 10px;
+`;
+
+const StatusView = styled.View`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  background-color: ${theme.colors.headerBlue};
+`;
+
+const QRContainerView = styled.View`
+  display: flex;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  align-items: center;
+  justify-content: center;
+`;
+
+const HeaderText = styled.Text`
+  font-family: 'BCSans-Bold';
+  font-size: 26px;
+  color: ${theme.colors.white};
+  text-align: center;
+  margin-top: 20px;
+`;
+
+const LineView = styled.View`
+  height: 1px;
+  width: 90%;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  background-color: ${theme.colors.betaYellow};
+`;
+
+const NormalText = styled.Text`
+  font-family: 'BCSans-Regular';
+  font-size: 26px;
+  color: ${theme.colors.white};
+  text-align: center;
+`;
 
 export const DisplayPOV: React.FC<IRouteProps> = ({route}) => {
-  // @ts-ignore
   const {itemId, record} = route.params;
   const [data, setData] = useState<string>('no data');
 
@@ -73,17 +91,22 @@ export const DisplayPOV: React.FC<IRouteProps> = ({route}) => {
   }, [itemId]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.header}>Proof of Vaccination</Text>
-        <View style={styles.line} />
-        <Text style={styles.text}>
+    <ContainerView>
+      <ContentView>
+        <HeaderText>BC Vaccination Card</HeaderText>
+        <LineView />
+        <NormalText>
           {CredentialHelper.fullNameForCredential(record)}
-        </Text>
-        <View style={styles.qr}>
-          <QRCode value={data} quietZone={5} size={320} />
-        </View>
-      </View>
-    </SafeAreaView>
+        </NormalText>
+        <StatusView>
+          <NormalText style={{marginTop: 20}}>
+            {CredentialHelper.vaccinationStatus(record)}
+          </NormalText>
+          <QRContainerView>
+            <QRCode value={data} quietZone={5} size={300} />
+          </QRContainerView>
+        </StatusView>
+      </ContentView>
+    </ContainerView>
   );
 };

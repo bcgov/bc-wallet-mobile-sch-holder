@@ -27,6 +27,11 @@ export class CredentialHelper {
     return fullNameAsStartCase;
   }
 
+  // @ts-ignore
+  public static vaccinationStatus(item: SHCRecord): string {
+    return 'Partially Vaccinated';
+  }
+
   async decodeRecords(records: Array<any>): Promise<Array<Credential>> {
     let credentials: Array<Credential> = [];
 

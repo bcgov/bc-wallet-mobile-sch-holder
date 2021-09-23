@@ -109,7 +109,7 @@ const App = () => {
               <Stack.Screen
                 name="DisplayPOV"
                 component={DisplayPOV}
-                options={{headerTitle: 'Blarb'}}
+                options={{headerTitle: ''}}
               />
             </Stack.Group>
             <Stack.Group screenOptions={{presentation: 'modal'}}>
