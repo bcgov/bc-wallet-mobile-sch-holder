@@ -40,7 +40,7 @@ export class CredentialHelper {
       (e: any) => e.resource.resourceType === FhirBundleResourceType.Immunization,
     );
 
-    return results.length === fullVaxMinRecordCount
+    return results.length >= fullVaxMinRecordCount
       ? ImmunizationStatus.Full
       : ImmunizationStatus.Partial;
   }
