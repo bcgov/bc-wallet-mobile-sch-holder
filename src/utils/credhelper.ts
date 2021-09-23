@@ -1,11 +1,12 @@
 import EncryptedStorage from 'react-native-encrypted-storage';
 import { PHSAPubKey } from '../constants';
-import { SHCRecord, Credential } from '../types';
+import { SHCRecord, Credential, FhirBundleResourceType } from '../types';
 // @ts-ignore
 import * as SHC from '@pathcheck/shc-sdk';
 import { startCase, isArray } from 'lodash';
+import {fullVaxMinRecordCount} from '../constants';
 
-export enum VaccinationStatus {
+export enum ImmunizationStatus {
   Partial,
   Full,
 }
@@ -15,7 +16,7 @@ export class CredentialHelper {
 
   public static fullNameForCredential(item: SHCRecord): string {
     const results = item.vc.credentialSubject.fhirBundle.entry.filter(
-      (e: any) => e.resource.resourceType === 'Patient',
+      (e: any) => e.resource.resourceType === FhirBundleResourceType.Patient,
     );
 
     if (results.length === 0) {
@@ -34,8 +35,14 @@ export class CredentialHelper {
   }
 
   // @ts-ignore
-  public static vaccinationStatus(item: SHCRecord): VaccinationStatus {
-    return VaccinationStatus.Partial;
+  public static immunizationStatus(item: SHCRecord): ImmunizationStatus {
+    const results = item.vc.credentialSubject.fhirBundle.entry.filter(
+      (e: any) => e.resource.resourceType === FhirBundleResourceType.Immunization,
+    );
+
+    return results.length >= fullVaxMinRecordCount
+      ? ImmunizationStatus.Full
+      : ImmunizationStatus.Partial;
   }
 
   async decodeRecords(records: Array<any>): Promise<Array<Credential>> {

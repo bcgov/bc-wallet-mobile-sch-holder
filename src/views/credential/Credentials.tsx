@@ -1,10 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-  View,
-} from 'react-native';
+import {StyleSheet, Text, TouchableHighlight, View} from 'react-native';
 import {CredentialHelper} from '../../utils/credhelper';
 import {Credential} from '../../types';
 import {AppTheme} from '../../../App';
@@ -105,7 +100,7 @@ export const Credentials = ({navigation}) => {
                 underlayColor="light-gray">
                 <CredentialCard
                   name={CredentialHelper.fullNameForCredential(item.record)}
-                  vaccinationStatus={CredentialHelper.vaccinationStatus(item.record)}
+                  immunizationStatus={CredentialHelper.immunizationStatus(item.record)}
                   issued="Mar 31, 2021"
                 />
               </TouchableHighlight>
