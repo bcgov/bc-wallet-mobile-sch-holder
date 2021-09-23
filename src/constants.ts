@@ -16,3 +16,7 @@ export const PHSAPubKey: JWKS = {
     y: 'jA5uS5bz8R2nxf_TU-0ZmXq6CKWZhAG1Y4icAx8a9CA',
   },
 };
+
+// The number of Vaccination records required to be
+// considered fully vaccinated.
+export const fullVaxMinRecordCount = 2;

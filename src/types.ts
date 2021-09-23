@@ -36,9 +36,14 @@ export interface SHCCredentialSubject {
   FHIRBundle: SHCFhirBundle;
 }
 
+export enum FhirBundleResourceType {
+  Immunization = 'Immunization',
+  Patient = 'Patient',
+}
+
 export interface SHCFhirBundle {
   resourceType: string;
-  type: string;
+  type: FhirBundleResourceType;
   entry: Array<object>;
 }
 
