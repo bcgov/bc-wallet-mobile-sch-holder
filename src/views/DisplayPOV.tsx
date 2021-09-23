@@ -1,6 +1,6 @@
 import React, {useMemo, useState} from 'react';
 import QRCode from 'react-native-qrcode-svg';
-import {CredentialHelper} from '../utils/credhelper';
+import {CredentialHelper, VaccinationStatus} from '../utils/credhelper';
 import styled from '@emotion/native';
 import {theme} from '../../App';
 
@@ -90,6 +90,21 @@ export const DisplayPOV: React.FC<IRouteProps> = ({route}) => {
     wrap();
   }, [itemId]);
 
+  const vaccinationStatusText = (status: VaccinationStatus): string => {
+    if (status === VaccinationStatus.Full) {
+      return 'Fully Vaccinated';
+    }
+    return 'Partially Vaccinated';
+  };
+
+  const vaccinationStatusColor = (status: VaccinationStatus): string => {
+    if (status === VaccinationStatus.Full) {
+      return theme.colors.successGreen;
+    }
+
+    return theme.colors.headerBlue;
+  };
+
   return (
     <ContainerView>
       <ContentView>
@@ -98,9 +113,14 @@ export const DisplayPOV: React.FC<IRouteProps> = ({route}) => {
         <NormalText>
           {CredentialHelper.fullNameForCredential(record)}
         </NormalText>
-        <StatusView>
+        <StatusView
+          style={{
+            backgroundColor: vaccinationStatusColor(
+              CredentialHelper.vaccinationStatus(record),
+            ),
+          }}>
           <NormalText style={{marginTop: 20}}>
-            {CredentialHelper.vaccinationStatus(record)}
+            {vaccinationStatusText(CredentialHelper.vaccinationStatus(record))}
           </NormalText>
           <QRContainerView>
             <QRCode value={data} quietZone={5} size={300} />
