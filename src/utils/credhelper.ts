@@ -5,6 +5,11 @@ import { SHCRecord, Credential } from '../types';
 import * as SHC from '@pathcheck/shc-sdk';
 import { startCase, isArray } from 'lodash';
 
+export enum VaccinationStatus {
+  Partial,
+  Full,
+}
+
 export class CredentialHelper {
   private storageKey = 'shc_vaccinations';
 
@@ -29,8 +34,8 @@ export class CredentialHelper {
   }
 
   // @ts-ignore
-  public static vaccinationStatus(item: SHCRecord): string {
-    return 'Partially Vaccinated';
+  public static vaccinationStatus(item: SHCRecord): VaccinationStatus {
+    return VaccinationStatus.Partial;
   }
 
   async decodeRecords(records: Array<any>): Promise<Array<Credential>> {

@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {
-  FlatList,
   StyleSheet,
   Text,
   TouchableHighlight,
@@ -16,6 +15,12 @@ import {ThemeProvider, useTheme} from '@emotion/react';
 import Wallet from '../../assets/img/wallet.svg';
 import {boldText} from '../../assets/styles';
 import {useIsFocused} from '@react-navigation/native';
+import CredentialCard from './CredentialCard';
+import styled from '@emotion/native';
+
+const CredentialList = styled.FlatList`
+  margin: 15px 0 15px 0;
+`;
 
 const flexCenter = css`
   flex-direction: column;
@@ -56,7 +61,7 @@ export const Credentials = ({navigation}) => {
         const results = await credHelper.credentials();
         console.log(`Found ${results.length} credentials`);
         setCredentials([...results]);
-        credHelper.clearAllCredentials();
+        // credHelper.clearAllCredentials();
       } catch (err) {
         const msg = 'Unable to fetch credentials';
         console.error(msg);
@@ -90,7 +95,7 @@ export const Credentials = ({navigation}) => {
             </TouchableHighlight>
           </View>
         ) : (
-          <FlatList
+          <CredentialList
             data={credentials}
             renderItem={({item}) => (
               <TouchableHighlight
@@ -98,12 +103,11 @@ export const Credentials = ({navigation}) => {
                 onPress={() => onCredentialSelected(item)}
                 activeOpacity={0.5}
                 underlayColor="light-gray">
-                <View style={styles.item}>
-                  <Text>Proof of Vaccination for </Text>
-                  <Text>
-                    {CredentialHelper.fullNameForCredential(item.record)}
-                  </Text>
-                </View>
+                <CredentialCard
+                  name={CredentialHelper.fullNameForCredential(item.record)}
+                  vaccinationStatus={CredentialHelper.vaccinationStatus(item.record)}
+                  issued="Mar 31, 2021"
+                />
               </TouchableHighlight>
             )}
           />
