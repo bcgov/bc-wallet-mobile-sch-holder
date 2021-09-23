@@ -27,9 +27,9 @@ export const CredentialTabs = () => {
           headerShown: false,
           tabBarLabel: 'Cards',
           tabBarIcon: ({color, size}) => (
-            <FontAwesomeIcon icon="id-card" size={size || 24} color={color} />
+            <FontAwesomeIcon icon="address-card" size={size} color={color} />
           ),
-          tabBarLabelStyle: {fontSize: 12},
+          tabBarLabelStyle: {fontSize: 16},
         }}
       />
       <Tab.Screen
@@ -38,9 +38,9 @@ export const CredentialTabs = () => {
         options={{
           headerShown: false,
           tabBarIcon: ({color, size}) => (
-            <FontAwesomeIcon icon="cog" size={size || 24} color={color} />
+            <FontAwesomeIcon icon="cog" size={size} color={color} />
           ),
-          tabBarLabelStyle: {fontSize: 12},
+          tabBarLabelStyle: {fontSize: 16},
         }}
       />
     </Tab.Navigator>

@@ -10,9 +10,11 @@ import {CredentialHelper} from '../../utils/credhelper';
 import {Credential} from '../../types';
 import {AppTheme} from '../../../App';
 
-import Wallet from '../../assets/img/wallet.svg';
 import {css} from '@emotion/native';
 import {ThemeProvider, useTheme} from '@emotion/react';
+
+import Wallet from '../../assets/img/wallet.svg';
+import {boldText} from '../../assets/styles';
 
 const flexCenter = css`
   flex-direction: column;
@@ -30,18 +32,14 @@ const largeText = css`
   margin-bottom: 26px;
 `;
 
-const boldText = css`
-  font-weight: bold;
-`;
-
 const primaryButton = (theme: AppTheme) => css`
-  padding: 16px;
+  padding: 16px 32px;
   border-radius: 4px;
   background-color: ${theme.colors.primaryBlue};
 `;
 
 const primaryButtonText = (theme: AppTheme) => css`
-  font-size: 16px;
+  font-size: 18px;
   color: ${theme.colors.white};
 `;
 
@@ -64,14 +62,14 @@ export const Credentials = ({navigation}) => {
     wrap();
   }, []);
 
-  const theme = useTheme();
-
   const onCredentialSelected = (item: Credential) => {
     navigation.navigate('DisplayPOV', {
       itemId: item.id,
       record: item.record,
     });
   };
+
+  const theme = useTheme() as AppTheme;
 
   return (
     <ThemeProvider theme={theme}>
@@ -81,6 +79,14 @@ export const Credentials = ({navigation}) => {
             <Wallet />
             <Text style={[largeText, boldText]}>Welcome to your wallet!</Text>
             <Text style={[paragraphText]}>Add your first Vaccine Card</Text>
+            <TouchableHighlight
+              style={[primaryButton(theme)]}
+              underlayColor={theme.colors.activeBlue}
+              onPress={() => navigation.navigate('CredentialAdd')}>
+              <Text style={[primaryButtonText(theme), boldText]}>
+                Add a Vaccine Card
+              </Text>
+            </TouchableHighlight>
           </View>
         )}
         {credentials && (
@@ -102,14 +108,6 @@ export const Credentials = ({navigation}) => {
             )}
           />
         )}
-        <TouchableHighlight
-          style={[primaryButton(theme as AppTheme)]}
-          underlayColor={(theme as AppTheme).colors.activeBlue}
-          onPress={() => navigation.navigate('CredentialAdd')}>
-          <Text style={[primaryButtonText(theme as AppTheme), boldText]}>
-            Add Vaccine Card
-          </Text>
-        </TouchableHighlight>
       </View>
     </ThemeProvider>
   );

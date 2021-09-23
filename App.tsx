@@ -36,6 +36,7 @@ export const theme: AppTheme = {
   colors: {
     primaryBlue: '#003366',
     activeBlue: '#003366B3',
+    activeGray: '#E6E6E6',
     linkBlue: '#1A5A96',
     headerBlue: '#38598A',
     betaYellow: '#FCBA19',

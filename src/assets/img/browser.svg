@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <g id="Group_1638" data-name="Group 1638" transform="translate(-111 -110)">
+    <rect id="Rectangle_726" data-name="Rectangle 726" width="64" height="64" transform="translate(111 110)" fill="none"/>
+    <g id="Group_1168" data-name="Group 1168" transform="translate(11.001 51.841)">
+      <rect id="Rectangle_38" data-name="Rectangle 38" width="60" height="49.448" rx="6.115" transform="translate(101.999 65.159)" fill="none" stroke="#313132" stroke-linejoin="round" stroke-width="4"/>
+      <g id="Group_1167" data-name="Group 1167" transform="translate(122.772 87.465)">
+        <path id="Path_299" data-name="Path 299" d="M131.271,96.592l8.194,18.456,2.607-7.655,7.655-2.607Z" transform="translate(-131.271 -96.592)" fill="#313132"/>
+        <line id="Line_3" data-name="Line 3" x2="5.972" y2="5.972" transform="translate(10.801 10.801)" fill="none" stroke="#313132" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"/>
+      </g>
+      <line id="Line_4" data-name="Line 4" x1="60" transform="translate(101.999 78.47)" fill="none" stroke="#313132" stroke-linejoin="round" stroke-width="4"/>
+      <circle id="Ellipse_18" data-name="Ellipse 18" cx="2.093" cy="2.093" r="2.093" transform="translate(108.614 69.782)" fill="#313132"/>
+      <circle id="Ellipse_19" data-name="Ellipse 19" cx="2.093" cy="2.093" r="2.093" transform="translate(115.325 69.782)" fill="#313132"/>
+      <circle id="Ellipse_20" data-name="Ellipse 20" cx="2.093" cy="2.093" r="2.093" transform="translate(122.035 69.782)" fill="#313132"/>
+    </g>
+  </g>
+</svg>
