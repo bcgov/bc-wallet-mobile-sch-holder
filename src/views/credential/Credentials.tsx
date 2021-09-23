@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   StyleSheet,
@@ -15,6 +15,7 @@ import {ThemeProvider, useTheme} from '@emotion/react';
 
 import Wallet from '../../assets/img/wallet.svg';
 import {boldText} from '../../assets/styles';
+import {useIsFocused} from '@react-navigation/native';
 
 const flexCenter = css`
   flex-direction: column;
@@ -45,22 +46,24 @@ const primaryButtonText = (theme: AppTheme) => css`
 
 export const Credentials = ({navigation}) => {
   const [credentials, setCredentials] = useState<Credential[]>([]);
+  const isFocused = useIsFocused();
+  const theme = useTheme() as AppTheme;
 
-  useMemo(() => {
+  useEffect(() => {
     async function wrap() {
       try {
         const credHelper = new CredentialHelper();
         const results = await credHelper.credentials();
-
         console.log(`Found ${results.length} credentials`);
-        setCredentials(results);
+        setCredentials([...results]);
+        credHelper.clearAllCredentials();
       } catch (err) {
         const msg = 'Unable to fetch credentials';
         console.error(msg);
       }
     }
     wrap();
-  }, []);
+  }, [isFocused]);
 
   const onCredentialSelected = (item: Credential) => {
     navigation.navigate('DisplayPOV', {
@@ -69,12 +72,10 @@ export const Credentials = ({navigation}) => {
     });
   };
 
-  const theme = useTheme() as AppTheme;
-
   return (
     <ThemeProvider theme={theme}>
       <View style={[flexCenter]}>
-        {!(credentials && credentials.length) && (
+        {!(credentials && credentials.length) ? (
           <View style={[flexCenter]}>
             <Wallet />
             <Text style={[largeText, boldText]}>Welcome to your wallet!</Text>
@@ -88,8 +89,7 @@ export const Credentials = ({navigation}) => {
               </Text>
             </TouchableHighlight>
           </View>
-        )}
-        {credentials && (
+        ) : (
           <FlatList
             data={credentials}
             renderItem={({item}) => (
