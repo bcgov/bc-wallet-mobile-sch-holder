@@ -21,8 +21,9 @@ export class CredentialHelper {
     const person = results.pop();
     const [name] = person.resource.name;
     const {family, given} = name;
-    const fullName = `${family}, ${given.join(' ')}`.toLocaleLowerCase();
-    const fullNameAsStartCase = startCase(fullName);
+    const fullNameAsStartCase = `${startCase(
+      family.toLowerCase(),
+    )}, ${startCase(given.join(' ').toLowerCase())}`;
 
     return fullNameAsStartCase;
   }
