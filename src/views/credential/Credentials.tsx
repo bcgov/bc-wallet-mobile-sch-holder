@@ -100,7 +100,7 @@ export const Credentials = ({navigation}) => {
                 underlayColor="light-gray">
                 <CredentialCard
                   name={CredentialHelper.fullNameForCredential(item.record)}
-                  vaccinationStatus={CredentialHelper.vaccinationStatus(item.record)}
+                  immunizationStatus={CredentialHelper.immunizationStatus(item.record)}
                   issued="Mar 31, 2021"
                 />
               </TouchableHighlight>

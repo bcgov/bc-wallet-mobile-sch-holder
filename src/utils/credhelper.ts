@@ -6,7 +6,7 @@ import * as SHC from '@pathcheck/shc-sdk';
 import { startCase, isArray } from 'lodash';
 import {fullVaxMinRecordCount} from '../constants';
 
-export enum VaccinationStatus {
+export enum ImmunizationStatus {
   Partial,
   Full,
 }
@@ -35,14 +35,14 @@ export class CredentialHelper {
   }
 
   // @ts-ignore
-  public static vaccinationStatus(item: SHCRecord): VaccinationStatus {
+  public static immunizationStatus(item: SHCRecord): ImmunizationStatus {
     const results = item.vc.credentialSubject.fhirBundle.entry.filter(
       (e: any) => e.resource.resourceType === FhirBundleResourceType.Immunization,
     );
 
     return results.length === fullVaxMinRecordCount
-      ? VaccinationStatus.Full
-      : VaccinationStatus.Partial;
+      ? ImmunizationStatus.Full
+      : ImmunizationStatus.Partial;
   }
 
   async decodeRecords(records: Array<any>): Promise<Array<Credential>> {

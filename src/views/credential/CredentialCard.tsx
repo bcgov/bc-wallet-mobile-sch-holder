@@ -3,11 +3,11 @@ import styled from '@emotion/native';
 import {theme} from '../../../App';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faQrcode} from '@fortawesome/free-solid-svg-icons';
-import {VaccinationStatus} from '../../utils/credhelper';
+import {ImmunizationStatus} from '../../utils/credhelper';
 
 export interface ICredentialProps {
   name: string;
-  vaccinationStatus: VaccinationStatus;
+  immunizationStatus: ImmunizationStatus;
   issued: string;
 }
 
@@ -65,12 +65,12 @@ const NormalText = styled.Text`
 
 const CredentialCard: React.FC<ICredentialProps> = ({
   name,
-  vaccinationStatus,
+  immunizationStatus: vaccinationStatus,
   issued,
 }) => {
   const qrCodeSize = 40;
-  const vaccinationStatusText = (status: VaccinationStatus): string => {
-    if (status === VaccinationStatus.Full) {
+  const vaccinationStatusText = (status: ImmunizationStatus): string => {
+    if (status === ImmunizationStatus.Full) {
       return 'Fully Vaccinated';
     }
     return 'Partially Vaccinated';
