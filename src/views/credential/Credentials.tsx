@@ -1,20 +1,25 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, TouchableHighlight, View} from 'react-native';
+import {
+  Text,
+  TouchableHighlight,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import {CredentialHelper} from '../../utils/credhelper';
 import {Credential} from '../../types';
 import {AppTheme} from '../../../App';
 
-import {css} from '@emotion/native';
+import styled, {css} from '@emotion/native';
 import {ThemeProvider, useTheme} from '@emotion/react';
 
 import Wallet from '../../assets/img/wallet.svg';
 import {boldText} from '../../assets/styles';
 import {useIsFocused} from '@react-navigation/native';
 import CredentialCard from './CredentialCard';
-import styled from '@emotion/native';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 
 const CredentialList = styled.FlatList`
-  margin: 15px 0 15px 0;
+  padding: 32px 16px 16px 16px;
 `;
 
 const flexCenter = css`
@@ -44,6 +49,13 @@ const primaryButtonText = (theme: AppTheme) => css`
   color: ${theme.colors.white};
 `;
 
+const RightHeaderIcon = styled.View`
+  height: 48px;
+  width: 48px;
+  justify-content: center;
+  align-items: flex-end;
+`;
+
 export const Credentials = ({navigation}) => {
   const [credentials, setCredentials] = useState<Credential[]>([]);
   const isFocused = useIsFocused();
@@ -54,8 +66,22 @@ export const Credentials = ({navigation}) => {
       try {
         const credHelper = new CredentialHelper();
         const results = await credHelper.credentials();
-        console.log(`Found ${results.length} credentials`);
-        setCredentials([...results]);
+        console.debug(`Found ${results.length} credentials`);
+        if (results?.length) {
+          setCredentials(results);
+          navigation.getParent().setOptions({
+            headerRight: () => {
+              return (
+                <TouchableWithoutFeedback
+                  onPress={() => navigation.navigate('CredentialAdd')}>
+                  <RightHeaderIcon>
+                    <FontAwesomeIcon icon="plus" color={theme.colors.white} />
+                  </RightHeaderIcon>
+                </TouchableWithoutFeedback>
+              );
+            },
+          });
+        }
         // credHelper.clearAllCredentials();
       } catch (err) {
         const msg = 'Unable to fetch credentials';
@@ -63,7 +89,7 @@ export const Credentials = ({navigation}) => {
       }
     }
     wrap();
-  }, [isFocused]);
+  }, [isFocused, navigation]);
 
   const onCredentialSelected = (item: Credential) => {
     navigation.navigate('DisplayPOV', {
@@ -100,7 +126,9 @@ export const Credentials = ({navigation}) => {
                 underlayColor="light-gray">
                 <CredentialCard
                   name={CredentialHelper.fullNameForCredential(item.record)}
-                  immunizationStatus={CredentialHelper.immunizationStatus(item.record)}
+                  immunizationStatus={CredentialHelper.immunizationStatus(
+                    item.record,
+                  )}
                   issued="Mar 31, 2021"
                 />
               </TouchableHighlight>
@@ -111,26 +139,3 @@ export const Credentials = ({navigation}) => {
     </ThemeProvider>
   );
 };
-
-// DEPRECATED
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  item: {
-    height: 48,
-    flex: 0,
-    flexDirection: 'row',
-    margin: 2,
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white',
-  },
-  modalView: {
-    backgroundColor: 'white',
-    alignItems: 'center',
-  },
-});

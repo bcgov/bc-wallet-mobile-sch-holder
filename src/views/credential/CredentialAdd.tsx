@@ -1,12 +1,9 @@
 import React from 'react';
+import {Text, TouchableHighlight, View} from 'react-native';
 import {
-  PermissionsAndroid,
-  Platform,
-  Text,
-  TouchableHighlight,
-  View,
-} from 'react-native';
-import {launchImageLibrary} from 'react-native-image-picker';
+  launchImageLibrary,
+  ImageLibraryOptions,
+} from 'react-native-image-picker';
 import RNQRGenerator from 'rn-qr-generator';
 import {CredentialHelper} from '../../utils/credhelper';
 import {AppTheme, Props} from '../../../App';
@@ -49,34 +46,34 @@ const iconMargin = css`
 export const CredentialAdd = ({navigation}: Props) => {
   const credHelper = new CredentialHelper();
 
-  async function hasAndroidPermission() {
-    const permission = PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
-
-    const hasPermission = await PermissionsAndroid.check(permission);
-    if (hasPermission) {
-      return true;
-    }
-
-    const status = await PermissionsAndroid.request(permission);
-    return status === 'granted';
-  }
-
   async function uploadImage() {
-    if (Platform.OS === 'android' && !(await hasAndroidPermission())) {
-      return;
-    }
-
     try {
-      launchImageLibrary({mediaType: 'photo', base64: true}, async image => {
-        const res = await RNQRGenerator.detect({uri: image?.assets[0]?.uri});
-        if (res.values.length) {
-          for (const cred of res.values) {
-            await credHelper.storeCredential(cred);
+      launchImageLibrary(
+        {mediaType: 'photo', base64: true} as ImageLibraryOptions,
+        async image => {
+          if (image.didCancel) {
+            return;
           }
 
-          navigation.navigate('CredentialTabs');
-        }
-      });
+          const {assets} = image;
+          if (!assets?.length) {
+            return;
+          }
+
+          const {uri} = assets[0];
+          if (!uri) {
+            return;
+          }
+
+          const res = await RNQRGenerator.detect({uri});
+          if (res.values.length) {
+            for (const cred of res.values) {
+              await credHelper.storeCredential(cred);
+            }
+            navigation.navigate('CredentialTabs');
+          }
+        },
+      );
     } catch (error) {
       console.error(error);
     }
