@@ -48,6 +48,7 @@ export const theme: AppTheme = {
     white: '#FFFFFF',
     tabActive: '#38598A',
     tabInactive: '#707070',
+    transparent: '#FFFFFF00',
   },
 };
 

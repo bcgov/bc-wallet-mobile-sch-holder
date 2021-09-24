@@ -2,8 +2,8 @@ import React from 'react';
 import styled from '@emotion/native';
 import {theme} from '../../../App';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faQrcode} from '@fortawesome/free-solid-svg-icons';
 import {ImmunizationStatus} from '../../utils/credhelper';
+import {vaccinationStatusColor} from '../../assets/styles';
 
 export interface ICredentialProps {
   name: string;
@@ -18,17 +18,18 @@ const ContainerView = styled.View`
   width: 333px;
   flex-direction: row;
   background-color: ${theme.colors.headerBlue};
-  border-radius: 10px;
+  border-radius: 16px;
+  margin-bottom: 16px;
+  overflow: hidden;
 `;
 
 const IconView = styled.View`
   display: flex;
-  width: 60px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   background-color: ${theme.colors.headerBlue};
-  border-radius: 10px;
+  padding: 16px 8px 16px 16px;
 `;
 
 const DetailsView = styled.View`
@@ -38,8 +39,7 @@ const DetailsView = styled.View`
   align-items: flex-start;
   justify-content: center;
   background-color: ${theme.colors.headerBlue};
-  padding-left: 15px;
-  border-radius: 10px;
+  padding: 16px 16px 16px 8px;
 `;
 
 const HeaderText = styled.Text`
@@ -51,7 +51,7 @@ const HeaderText = styled.Text`
 
 const LineView = styled.View`
   height: 1px;
-  width: 90%;
+  width: 100%;
   margin-top: 10px;
   margin-bottom: 10px;
   background-color: ${theme.colors.betaYellow};
@@ -77,15 +77,24 @@ const CredentialCard: React.FC<ICredentialProps> = ({
   };
 
   return (
-    <ContainerView>
-      <IconView>
+    <ContainerView
+      style={{
+        backgroundColor: vaccinationStatusColor(vaccinationStatus),
+      }}>
+      <IconView
+        style={{
+          backgroundColor: vaccinationStatusColor(vaccinationStatus),
+        }}>
         <FontAwesomeIcon
-          icon={faQrcode}
+          icon="qrcode"
           size={qrCodeSize}
           color={theme.colors.white}
         />
       </IconView>
-      <DetailsView>
+      <DetailsView
+        style={{
+          backgroundColor: vaccinationStatusColor(vaccinationStatus),
+        }}>
         <HeaderText>{name}</HeaderText>
         <LineView />
         <NormalText>{vaccinationStatusText(vaccinationStatus)}</NormalText>

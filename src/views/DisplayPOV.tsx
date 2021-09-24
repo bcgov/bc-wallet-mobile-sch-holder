@@ -1,8 +1,9 @@
 import React, {useMemo, useState} from 'react';
 import QRCode from 'react-native-qrcode-svg';
-import {CredentialHelper, ImmunizationStatus} from '../utils/credhelper';
+import {CredentialHelper} from '../utils/credhelper';
 import styled from '@emotion/native';
 import {theme} from '../../App';
+import {vaccinationStatusColor, vaccinationStatusText} from '../assets/styles';
 
 export interface IRouteProps {
   navigation: any;
@@ -19,11 +20,9 @@ const ContentView = styled.View`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 30px;
-  margin-left: 20px;
-  margin-right: 20px;
+  margin: 32px 16px 16px 16px;
   background-color: ${theme.colors.primaryBlue};
-  border-radius: 10px;
+  border-radius: 16px;
 `;
 
 const StatusView = styled.View`
@@ -89,21 +88,6 @@ export const DisplayPOV: React.FC<IRouteProps> = ({route}) => {
     }
     wrap();
   }, [itemId]);
-
-  const vaccinationStatusText = (status: ImmunizationStatus): string => {
-    if (status === ImmunizationStatus.Full) {
-      return 'Fully Vaccinated';
-    }
-    return 'Partially Vaccinated';
-  };
-
-  const vaccinationStatusColor = (status: ImmunizationStatus): string => {
-    if (status === ImmunizationStatus.Full) {
-      return theme.colors.successGreen;
-    }
-
-    return theme.colors.headerBlue;
-  };
 
   return (
     <ContainerView>
