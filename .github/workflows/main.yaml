@@ -9,6 +9,11 @@ defaults:
 jobs:
   build-ios:
     runs-on: macos-latest
+    # strategy:
+    #   fail-fast: false
+    #   matrix:
+    #     xcode: ["13.0"]
+    #     platform: ["iOS"]
     steps:
       - uses: actions/checkout@v2
 
@@ -22,15 +27,52 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.6
-      
+
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Cache dependencies
+        uses: actions/cache@v1
+        with:
+          path: ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      - name: Cache derived data
+        uses: actions/cache@v1
+        with:
+          path: ~/Library/Developer/Xcode/DerivedData
+          key: ${{ runner.os }}-derived_data-xcode
+          restore-keys: |
+            ${{ runner.os }}-derived_data
+
       - name: Install dependencies
         run: |
           gem install cocoapods && \
+          npm ci && \
           pod install
 
-      - name: Run debug build
+      - name: Install provisioning profile
         run: |
-          xcodebuild -workspace \
-          BCWallet.xcworkspace \
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles && \
+          echo ${PROVISIONING_PROFILE} | \
+          base64 -d > ~/Library/MobileDevice/Provisioning\ Profiles/${PROFILE_ID}.mobileprovision
+        env:
+          PROVISIONING_PROFILE:  ${{ secrets.PROVISIONING_PROFILE }}
+          PROFILE_ID: 0b893b6e-9567-4d10-bc4b-cd2ae51224d3
+
+      - name: Run debug buildx
+        run: |
+          xcodebuild \
+          -workspace BCWallet.xcworkspace \
           -scheme BCWallet \
-          build
+          -configuration Debug \
+          build \
+          CODE_SIGNING_ALLOWED=NO \
+          CODE_SIGNING_REQUIRED=NO
