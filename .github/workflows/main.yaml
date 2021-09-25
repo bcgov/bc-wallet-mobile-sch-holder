@@ -1,0 +1,36 @@
+name: Test & Build
+
+on: [push, workflow_dispatch]
+
+defaults:
+  run:
+    working-directory: ./ios
+
+jobs:
+  build-ios:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: configure node
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+          registry-url: "https://registry.npmjs.org"
+      
+      - name: configure ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+      
+      - name: Install dependencies
+        run: |
+          gem install cocoapods && \
+          pod install
+
+      - name: Run debug build
+        run: |
+          xcodebuild -workspace \
+          BCWallet.xcworkspace \
+          -scheme BCWallet \
+          build
