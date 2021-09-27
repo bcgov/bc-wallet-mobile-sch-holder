@@ -1,6 +1,10 @@
 name: Test & Build
 
-on: [push, workflow_dispatch]
+on:
+  push:
+    paths:
+      - 'ios'
+      - 'src'
 
 defaults:
   run:
