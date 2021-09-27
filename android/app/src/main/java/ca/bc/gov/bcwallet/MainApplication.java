@@ -1,4 +1,4 @@
-package ca.bc.gov.bcwallet;
+package ca.bc.gov.BCWallet;
 
 import android.app.Application;
 import android.content.Context;
