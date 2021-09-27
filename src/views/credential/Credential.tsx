@@ -1,9 +1,12 @@
 import React, {useMemo, useState} from 'react';
 import QRCode from 'react-native-qrcode-svg';
-import {CredentialHelper} from '../utils/credhelper';
+import {CredentialHelper} from '../../utils/credhelper';
 import styled from '@emotion/native';
-import {theme} from '../../App';
-import {vaccinationStatusColor, vaccinationStatusText} from '../assets/styles';
+import {theme} from '../../../App';
+import {
+  vaccinationStatusColor,
+  vaccinationStatusText,
+} from '../../assets/styles';
 
 export interface IRouteProps {
   navigation: any;
@@ -66,7 +69,7 @@ const NormalText = styled.Text`
   text-align: center;
 `;
 
-export const DisplayPOV: React.FC<IRouteProps> = ({route}) => {
+export const Credential: React.FC<IRouteProps> = ({route}) => {
   const {itemId, record} = route.params;
   const [data, setData] = useState<string>('no data');
 

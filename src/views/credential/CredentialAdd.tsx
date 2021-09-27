@@ -70,7 +70,7 @@ export const CredentialAdd = ({navigation}: Props) => {
             for (const cred of res.values) {
               await credHelper.storeCredential(cred);
             }
-            navigation.navigate('CredentialTabs');
+            navigation.navigate('Credentials');
           }
         },
       );

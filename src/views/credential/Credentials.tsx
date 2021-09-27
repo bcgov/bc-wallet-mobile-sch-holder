@@ -1,10 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Text,
-  TouchableHighlight,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import {Text, TouchableHighlight, View} from 'react-native';
 import {CredentialHelper} from '../../utils/credhelper';
 import {Credential} from '../../types';
 import {AppTheme} from '../../../App';
@@ -15,8 +10,7 @@ import {ThemeProvider, useTheme} from '@emotion/react';
 import Wallet from '../../assets/img/wallet.svg';
 import {boldText} from '../../assets/styles';
 import {useIsFocused} from '@react-navigation/native';
-import CredentialCard from './CredentialCard';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import CredentialCard from '../../components/credential/CredentialCard';
 
 const CredentialList = styled.FlatList`
   padding: 32px 16px 16px 16px;
@@ -49,13 +43,6 @@ const primaryButtonText = (theme: AppTheme) => css`
   color: ${theme.colors.white};
 `;
 
-const RightHeaderIcon = styled.View`
-  height: 48px;
-  width: 48px;
-  justify-content: center;
-  align-items: flex-end;
-`;
-
 export const Credentials = ({navigation}) => {
   const [credentials, setCredentials] = useState<Credential[]>([]);
   const isFocused = useIsFocused();
@@ -69,18 +56,6 @@ export const Credentials = ({navigation}) => {
         console.debug(`Found ${results.length} credentials`);
         if (results?.length) {
           setCredentials(results);
-          navigation.getParent().setOptions({
-            headerRight: () => {
-              return (
-                <TouchableWithoutFeedback
-                  onPress={() => navigation.navigate('CredentialAdd')}>
-                  <RightHeaderIcon>
-                    <FontAwesomeIcon icon="plus" color={theme.colors.white} />
-                  </RightHeaderIcon>
-                </TouchableWithoutFeedback>
-              );
-            },
-          });
         }
         // credHelper.clearAllCredentials();
       } catch (err) {
@@ -89,10 +64,10 @@ export const Credentials = ({navigation}) => {
       }
     }
     wrap();
-  }, [isFocused, navigation]);
+  }, [isFocused]);
 
   const onCredentialSelected = (item: Credential) => {
-    navigation.navigate('DisplayPOV', {
+    navigation.navigate('Credential', {
       itemId: item.id,
       record: item.record,
     });

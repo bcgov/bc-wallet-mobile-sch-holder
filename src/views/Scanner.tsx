@@ -27,7 +27,7 @@ export const Scanner = ({navigation}: Props) => {
             setActive(false);
             Vibration.vibrate();
             await credHelper.storeCredential(e.data);
-            navigation.navigate('CredentialTabs');
+            navigation.navigate('Credentials');
           }}>
           <View style={styles.window} />
         </RNCamera>
