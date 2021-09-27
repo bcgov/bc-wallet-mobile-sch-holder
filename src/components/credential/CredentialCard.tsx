@@ -4,11 +4,12 @@ import {theme} from '../../../App';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {ImmunizationStatus} from '../../utils/credhelper';
 import {vaccinationStatusColor} from '../../assets/styles';
+import {formatAsIssuedDate} from '../../utils/date';
 
 export interface ICredentialProps {
   name: string;
   immunizationStatus: ImmunizationStatus;
-  issued: string;
+  issuedAt: Date;
 }
 
 const ContainerView = styled.View`
@@ -66,7 +67,7 @@ const NormalText = styled.Text`
 const CredentialCard: React.FC<ICredentialProps> = ({
   name,
   immunizationStatus: vaccinationStatus,
-  issued,
+  issuedAt,
 }) => {
   const qrCodeSize = 40;
   const vaccinationStatusText = (status: ImmunizationStatus): string => {
@@ -98,7 +99,7 @@ const CredentialCard: React.FC<ICredentialProps> = ({
         <HeaderText>{name}</HeaderText>
         <LineView />
         <NormalText>{vaccinationStatusText(vaccinationStatus)}</NormalText>
-        <NormalText>Issued {issued}</NormalText>
+        <NormalText>Issued {formatAsIssuedDate(issuedAt)}</NormalText>
       </DetailsView>
     </ContainerView>
   );

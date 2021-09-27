@@ -7,6 +7,7 @@ import {
   vaccinationStatusColor,
   vaccinationStatusText,
 } from '../../assets/styles';
+import {formatAsIssuedDate} from '../../utils/date';
 
 export interface IRouteProps {
   navigation: any;
@@ -106,9 +107,13 @@ export const Credential: React.FC<IRouteProps> = ({route}) => {
               CredentialHelper.immunizationStatus(record),
             ),
           }}>
-          <NormalText style={{marginTop: 20}}>
+          <NormalText style={{marginTop: 20, fontSize: 36}}>
             {vaccinationStatusText(CredentialHelper.immunizationStatus(record))}
           </NormalText>
+          <NormalText style={{fontSize: 18}}>
+            Issued {formatAsIssuedDate(CredentialHelper.issueAtDate(record))}
+          </NormalText>
+
           <QRContainerView>
             <QRCode value={data} quietZone={5} size={300} />
           </QRContainerView>
