@@ -46,6 +46,13 @@ export class CredentialHelper {
       : ImmunizationStatus.Partial;
   }
 
+  public static issueAtDate(item: SHCRecord): Date {
+    // As per RFC 7519, the nbf ("not before") property of
+    // the JWT claim is the issuance date encoded as
+    // the number of **seconds** from 1970-01-01T00:00:00Z UTC
+    return new Date(item.nbf * 1000);
+  }
+
   async decodeRecords(records: Array<any>): Promise<Array<Credential>> {
     let credentials: Array<Credential> = [];
 
@@ -59,7 +66,7 @@ export class CredentialHelper {
           u.record,
           // PHSAPubKey.key,
         );
-
+        console.log(JSON.stringify(record));
         credentials.push({
           id: u.id,
           record,

@@ -104,7 +104,7 @@ export const Credentials = ({navigation}) => {
                   immunizationStatus={CredentialHelper.immunizationStatus(
                     item.record,
                   )}
-                  issued="Mar 31, 2021"
+                  issuedAt={CredentialHelper.issueAtDate(item.record)}
                 />
               </TouchableHighlight>
             )}
