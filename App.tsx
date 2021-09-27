@@ -67,7 +67,8 @@ const navigationTheme: NavigationTheme = {
 
 type RootStackParamList = {
   Home: undefined;
-  CredentialTabs: undefined;
+  Credentials: undefined;
+  Credential: undefined;
   CredentialAdd: undefined;
   Scanner: undefined;
 };

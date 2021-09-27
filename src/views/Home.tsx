@@ -3,6 +3,7 @@ import React from 'react';
 import {
   Dimensions,
   ImageStyle,
+  ScrollView,
   Text,
   TouchableHighlight,
   TouchableWithoutFeedback,
@@ -103,7 +104,7 @@ const walkthrough: {image: React.FC<SvgProps>; text: string}[] = [
 ];
 
 export const Home = ({navigation}: Props) => (
-  <View style={containerView}>
+  <ScrollView contentContainerStyle={containerView}>
     <Logo style={[headerSize as ImageStyle]} width={205} height={80} />
     <Text style={[headerText, boldText]}>BC Wallet</Text>
     <SwiperFlatList
@@ -157,5 +158,5 @@ export const Home = ({navigation}: Props) => (
         <Text style={[primaryButtonText(theme), boldText]}>Get started</Text>
       </TouchableHighlight>
     </View>
-  </View>
+  </ScrollView>
 );
