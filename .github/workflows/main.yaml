@@ -67,7 +67,7 @@ jobs:
           PROVISIONING_PROFILE:  ${{ secrets.PROVISIONING_PROFILE }}
           PROFILE_ID: 0b893b6e-9567-4d10-bc4b-cd2ae51224d3
 
-      - name: Run debug buildx
+      - name: Run debug build
         run: |
           xcodebuild \
           -workspace BCWallet.xcworkspace \
