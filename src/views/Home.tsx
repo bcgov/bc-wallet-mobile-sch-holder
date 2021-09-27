@@ -153,7 +153,7 @@ export const Home = ({navigation}: Props) => (
       <TouchableHighlight
         style={[primaryButton(theme)]}
         underlayColor={theme.colors.activeBlue}
-        onPress={() => navigation.navigate('CredentialTabs')}>
+        onPress={() => navigation.navigate('Credentials')}>
         <Text style={[primaryButtonText(theme), boldText]}>Get started</Text>
       </TouchableHighlight>
     </View>

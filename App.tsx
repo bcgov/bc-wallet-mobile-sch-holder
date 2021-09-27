@@ -18,15 +18,16 @@ import {
   NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import {Theme, ThemeProvider} from '@emotion/react';
-import {CredentialTabs} from './src/components/credential/CredentialTabs';
 import {Home} from './src/views/Home';
 import {CredentialAdd} from './src/views/credential/CredentialAdd';
-import {DisplayPOV} from './src/views/DisplayPOV';
+import {Credential} from './src/views/credential/Credential';
 import {Scanner} from './src/views/Scanner';
 import styled from '@emotion/native';
-import {StatusBar} from 'react-native';
+import {StatusBar, TouchableWithoutFeedback} from 'react-native';
 
 import './src/assets/icons';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {Credentials} from './src/views/credential/Credentials';
 
 export interface AppTheme extends Theme {
   colors: Record<string, string>;
@@ -83,6 +84,13 @@ const NoFlexSafeAreaView = styled.SafeAreaView`
   flex-grow: 0;
 `;
 
+const RightHeaderIcon = styled.View`
+  height: 48px;
+  width: 48px;
+  justify-content: center;
+  align-items: flex-end;
+`;
+
 const App = () => {
   const Stack = createNativeStackNavigator();
 
@@ -98,18 +106,35 @@ const App = () => {
             <Stack.Group>
               <Stack.Screen name="Home" component={Home} />
               <Stack.Screen
-                name="CredentialTabs"
-                component={CredentialTabs}
-                options={{headerTitle: 'Cards'}}
+                name="Credentials"
+                component={Credentials}
+                options={({navigation}) => ({
+                  headerTitle: 'Cards',
+                  headerRight: () => {
+                    return (
+                      <TouchableWithoutFeedback
+                        onPress={() => navigation.navigate('CredentialAdd')}>
+                        <RightHeaderIcon>
+                          <FontAwesomeIcon
+                            icon="plus"
+                            color={theme.colors.white}
+                          />
+                        </RightHeaderIcon>
+                      </TouchableWithoutFeedback>
+                    );
+                  },
+                })}
               />
               <Stack.Screen
                 name="CredentialAdd"
                 component={CredentialAdd}
-                options={{headerTitle: 'Add Vaccine Card'}}
+                options={{
+                  headerTitle: 'Add Vaccine Card',
+                }}
               />
               <Stack.Screen
-                name="DisplayPOV"
-                component={DisplayPOV}
+                name="Credential"
+                component={Credential}
                 options={{headerTitle: ''}}
               />
             </Stack.Group>
