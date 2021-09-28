@@ -22,6 +22,7 @@ import {Home} from './src/views/Home';
 import {CredentialAdd} from './src/views/credential/CredentialAdd';
 import {Credential} from './src/views/credential/Credential';
 import {Scanner} from './src/views/Scanner';
+import {Splash} from './src/views/Splash';
 import styled from '@emotion/native';
 import {StatusBar, TouchableWithoutFeedback} from 'react-native';
 
@@ -104,14 +105,24 @@ const App = () => {
           barStyle="light-content"
         />
         <NavigationContainer theme={navigationTheme}>
-          <Stack.Navigator initialRouteName="Home">
+          <Stack.Navigator initialRouteName="Splash">
             <Stack.Group>
-              <Stack.Screen name="Home" component={Home} />
+              <Stack.Screen
+                name="Splash"
+                component={Splash}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="Home"
+                component={Home}
+                options={{headerBackVisible: false}}
+              />
               <Stack.Screen
                 name="Credentials"
                 component={Credentials}
                 options={({navigation}) => ({
                   headerTitle: 'Cards',
+                  headerBackVisible: false,
                   headerRight: () => {
                     return (
                       <TouchableWithoutFeedback
