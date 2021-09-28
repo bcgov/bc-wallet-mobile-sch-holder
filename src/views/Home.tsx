@@ -10,7 +10,12 @@ import {
   View,
 } from 'react-native';
 import {Props, theme} from '../../App';
-import {boldText, primaryButton, primaryButtonText} from '../assets/styles';
+import {
+  boldText,
+  primaryButton,
+  primaryButtonText,
+  text,
+} from '../assets/styles';
 import {SwiperFlatList} from 'react-native-swiper-flatlist';
 
 import Logo from '../assets/img/logo-banner.svg';
@@ -26,31 +31,32 @@ const {width} = Dimensions.get('window');
 
 const containerView = css`
   align-items: center;
-  background: ${theme.colors.backgroundColor};
 `;
 
 const containerViewCenter = css`
   margin-top: 16px;
-  ${containerView}// justify-content: center;
+  margin-bottom: 16px;
+  ${containerView}
 `;
 
 const containerRow = css`
   flex-direction: row;
+  align-items: center;
 `;
 
 const largeText = css`
-  font-size: 24px;
+  ${text}
+  font-size: 18px;
   color: ${theme.colors.textGray};
 `;
 
 const headerText = css`
-  font-size: 36px;
+  ${boldText}
+  font-size: 32px;
   color: ${theme.colors.textGray};
 `;
 
 const headerSize = css`
-  margin-top: 16px;
-  margin-bottom: 16px;
   width: ${width};
 `;
 
@@ -106,14 +112,14 @@ const walkthrough: {image: React.FC<SvgProps>; text: string}[] = [
 export const Home = ({navigation}: Props) => (
   <ScrollView contentContainerStyle={containerView}>
     <Logo style={[headerSize as ImageStyle]} width={205} height={80} />
-    <Text style={[headerText, boldText]}>BC Wallet</Text>
+    <Text style={[headerText]}>BC Wallet</Text>
     <SwiperFlatList
       showPagination
       data={walkthrough}
       renderItem={({item, index}) => (
         <View style={[{width}, containerView]}>
-          <View style={[padding]}>
-            {item.image({fill: theme.colors.textGray, height: 200, width: 200})}
+          <View>
+            {item.image({fill: theme.colors.textGray, height: 180, width: 180})}
           </View>
           <View style={[containerView, containerRow]}>
             {index > 0 ? (

@@ -1,20 +1,57 @@
 import React, {useState} from 'react';
-import {StyleSheet, Vibration, View} from 'react-native';
+import {TouchableHighlight, Vibration, View} from 'react-native';
 import {RNCamera} from 'react-native-camera';
-import {Props} from '../../App';
+import {Props, theme} from '../../App';
+import FlashOn from '../assets/img/flash-on.svg';
+import FlashOff from '../assets/img/flash-off.svg';
 import {CredentialHelper} from '../utils/credhelper';
+import {css} from '@emotion/native';
 
 export const Scanner = ({navigation}: Props) => {
   const [active, setActive] = useState(true);
+  const [torch, setTorch] = useState(false);
   const credHelper = new CredentialHelper();
 
+  const container = css`
+    flex: 1;
+  `;
+
+  const preview = css`
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+  `;
+
+  const window = css`
+    width: 240px;
+    height: 240px;
+    margin: 96px;
+    margin-bottom: ${96 - 48}px;
+    border-radius: 16px;
+    border: 2px solid ${theme.colors.white};
+  `;
+
+  const torchButton = css`
+    border-radius: 24px;
+    background-color: ${torch ? theme.colors.white : theme.colors.black};
+    width: 48px;
+    height: 48px;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+  `;
+
   return (
-    <View style={styles.container}>
+    <View style={[container]}>
       {active && (
         <RNCamera
-          style={styles.preview}
+          style={[preview]}
           type={RNCamera.Constants.Type.back}
-          flashMode={RNCamera.Constants.FlashMode.torch}
+          flashMode={
+            torch
+              ? RNCamera.Constants.FlashMode.torch
+              : RNCamera.Constants.FlashMode.off
+          }
           captureAudio={false}
           androidCameraPermissionOptions={{
             title: 'Permission to use camera',
@@ -29,39 +66,20 @@ export const Scanner = ({navigation}: Props) => {
             await credHelper.storeCredential(e.data);
             navigation.navigate('Credentials');
           }}>
-          <View style={styles.window} />
+          <View>
+            <View style={[window]} />
+            <TouchableHighlight
+              style={[torchButton]}
+              onPress={() => setTorch(!torch)}>
+              {torch ? (
+                <FlashOff fill="black" width={24} height={24} />
+              ) : (
+                <FlashOn fill="white" width={24} height={24} />
+              )}
+            </TouchableHighlight>
+          </View>
         </RNCamera>
       )}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: 'black',
-  },
-  preview: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  window: {
-    height: 250,
-    width: 250,
-    padding: 100,
-    backgroundColor: 'rgba(255,255,255,0.3)',
-    borderRadius: 30,
-    borderWidth: 2,
-    borderColor: 'white',
-  },
-  upload: {
-    flex: 0,
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    padding: 16,
-    alignSelf: 'center',
-    margin: 32,
-  },
-});
