@@ -2,10 +2,6 @@ import {css} from '@emotion/native';
 import {AppTheme, theme} from '../../../App';
 import {ImmunizationStatus} from '../../utils/credhelper';
 
-export const boldText = css`
-  font-weight: bold;
-`;
-
 export const vaccinationStatusText = (status: ImmunizationStatus): string => {
   if (status === ImmunizationStatus.Full) {
     return 'Fully Vaccinated';
@@ -27,6 +23,15 @@ export const primaryButton = (theme: AppTheme) => css`
 `;
 
 export const primaryButtonText = (theme: AppTheme) => css`
+  font-family: 'BCSans-Regular';
   font-size: 18px;
   color: ${theme.colors.white};
+`;
+
+export const text = css`
+  font-family: 'BCSans-Regular';
+`;
+
+export const boldText = css`
+  font-family: 'BCSans-Bold';
 `;

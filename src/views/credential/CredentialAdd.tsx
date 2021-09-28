@@ -34,6 +34,7 @@ const button = css`
 `;
 
 const buttonText = css`
+  ${boldText}
   font-size: 18px;
   margin-left: 18px;
   flex-shrink: 1;
@@ -89,7 +90,7 @@ export const CredentialAdd = ({navigation}: Props) => {
         onPress={() => navigation.navigate('Scanner')}>
         <View style={[flexRow]}>
           <QrCodeScan />
-          <Text style={[buttonText, boldText]}>Scan a QR Code</Text>
+          <Text style={[buttonText]}>Scan a QR Code</Text>
         </View>
       </TouchableHighlight>
       <TouchableHighlight
@@ -98,7 +99,7 @@ export const CredentialAdd = ({navigation}: Props) => {
         onPress={() => uploadImage()}>
         <View style={[flexRow]}>
           <Image />
-          <Text style={[buttonText, boldText]}>Upload a QR Code</Text>
+          <Text style={[buttonText]}>Upload a QR Code</Text>
         </View>
       </TouchableHighlight>
       <TouchableHighlight
@@ -107,14 +108,12 @@ export const CredentialAdd = ({navigation}: Props) => {
         onPress={_ => _}>
         <View style={[flexRow]}>
           <Browser />
-          <Text style={[buttonText, boldText]}>
-            Get from Health Gateway
-            <FontAwesomeIcon
-              style={[iconMargin]}
-              size={14}
-              icon="external-link-alt"
-            />
-          </Text>
+          <Text style={[buttonText]}>Get from Health Gateway</Text>
+          <FontAwesomeIcon
+            style={[iconMargin]}
+            size={16}
+            icon="external-link-alt"
+          />
         </View>
       </TouchableHighlight>
     </View>

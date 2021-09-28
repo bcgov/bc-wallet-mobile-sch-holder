@@ -4,7 +4,6 @@ import {
   faAddressCard,
   faExternalLinkAlt,
   faPlus,
-  faQrcode,
 } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faCog, faAddressCard, faExternalLinkAlt, faPlus, faQrcode);
+library.add(faCog, faAddressCard, faExternalLinkAlt, faPlus);

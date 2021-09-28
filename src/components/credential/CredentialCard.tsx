@@ -1,9 +1,10 @@
 import React from 'react';
-import styled from '@emotion/native';
+import styled, {css} from '@emotion/native';
 import {theme} from '../../../App';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {ImmunizationStatus} from '../../utils/credhelper';
 import {vaccinationStatusColor} from '../../assets/styles';
+import QrCode from '../../assets/img/qrcode.svg';
 import {formatAsIssuedDate} from '../../utils/date';
 
 export interface ICredentialProps {
@@ -13,14 +14,10 @@ export interface ICredentialProps {
 }
 
 const ContainerView = styled.View`
-  flex: 0 0 100px;
   display: flex;
-  height: 132px;
-  width: 333px;
   flex-direction: row;
   background-color: ${theme.colors.headerBlue};
   border-radius: 16px;
-  margin-bottom: 16px;
   overflow: hidden;
 `;
 
@@ -45,7 +42,7 @@ const DetailsView = styled.View`
 
 const HeaderText = styled.Text`
   font-family: 'BCSans-Bold';
-  font-size: 26px;
+  font-size: 24px;
   color: ${theme.colors.white};
   text-align: center;
 `;
@@ -60,8 +57,12 @@ const LineView = styled.View`
 
 const NormalText = styled.Text`
   font-family: 'BCSans-Regular';
-  font-size: 18px;
+  font-size: 16px;
   color: ${theme.colors.white};
+`;
+
+const margin = css`
+  margin: 8px 16px 8px 16px;
 `;
 
 const CredentialCard: React.FC<ICredentialProps> = ({
@@ -79,17 +80,20 @@ const CredentialCard: React.FC<ICredentialProps> = ({
 
   return (
     <ContainerView
-      style={{
-        backgroundColor: vaccinationStatusColor(vaccinationStatus),
-      }}>
+      style={[
+        margin,
+        {
+          backgroundColor: vaccinationStatusColor(vaccinationStatus),
+        },
+      ]}>
       <IconView
         style={{
           backgroundColor: vaccinationStatusColor(vaccinationStatus),
         }}>
-        <FontAwesomeIcon
-          icon="qrcode"
-          size={qrCodeSize}
-          color={theme.colors.white}
+        <QrCode
+          width={qrCodeSize}
+          height={qrCodeSize}
+          fill={theme.colors.white}
         />
       </IconView>
       <DetailsView

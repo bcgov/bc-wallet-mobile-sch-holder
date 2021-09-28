@@ -1,46 +1,52 @@
 import React, {useEffect, useState} from 'react';
-import {Text, TouchableHighlight, View} from 'react-native';
+import {
+  Dimensions,
+  FlatList,
+  Text,
+  TouchableHighlight,
+  View,
+} from 'react-native';
 import {CredentialHelper} from '../../utils/credhelper';
 import {Credential} from '../../types';
 import {AppTheme} from '../../../App';
 
-import styled, {css} from '@emotion/native';
-import {ThemeProvider, useTheme} from '@emotion/react';
+import {css} from '@emotion/native';
+import {useTheme} from '@emotion/react';
 
 import Wallet from '../../assets/img/wallet.svg';
-import {boldText} from '../../assets/styles';
+import {boldText, text} from '../../assets/styles';
 import {useIsFocused} from '@react-navigation/native';
 import CredentialCard from '../../components/credential/CredentialCard';
 
-const CredentialList = styled.FlatList`
-  padding: 32px 16px 16px 16px;
-`;
+import {primaryButton, primaryButtonText} from '../../assets/styles';
+
+const {width} = Dimensions.get('window');
 
 const flexCenter = css`
+  flex: 1;
   flex-direction: column;
   justify-content:center
   align-items: center;
 `;
 
 const paragraphText = css`
-  font-size: 18px;
+  ${text}
+  font-size: 16px;
   margin-bottom: 20px;
 `;
 
 const largeText = css`
-  font-size: 24px;
-  margin-bottom: 26px;
+  ${boldText}
+  font-size: 20px;
+  margin-bottom: 16px;
 `;
 
-const primaryButton = (theme: AppTheme) => css`
-  padding: 16px 32px;
-  border-radius: 4px;
-  background-color: ${theme.colors.primaryBlue};
+const extraMarginTop = css`
+  margin-top: 24px;
 `;
 
-const primaryButtonText = (theme: AppTheme) => css`
-  font-size: 18px;
-  color: ${theme.colors.white};
+const extraMarginBottom = css`
+  margin-bottom: 24px;
 `;
 
 export const Credentials = ({navigation}) => {
@@ -74,26 +80,31 @@ export const Credentials = ({navigation}) => {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <View style={[flexCenter]}>
-        {!(credentials && credentials.length) ? (
-          <View style={[flexCenter]}>
-            <Wallet />
-            <Text style={[largeText, boldText]}>Welcome to your wallet!</Text>
-            <Text style={[paragraphText]}>Add your first Vaccine Card</Text>
-            <TouchableHighlight
-              style={[primaryButton(theme)]}
-              underlayColor={theme.colors.activeBlue}
-              onPress={() => navigation.navigate('CredentialAdd')}>
-              <Text style={[primaryButtonText(theme), boldText]}>
-                Add a Vaccine Card
-              </Text>
-            </TouchableHighlight>
-          </View>
-        ) : (
-          <CredentialList
-            data={credentials}
-            renderItem={({item}) => (
+    <View style={[flexCenter]}>
+      {!(credentials && credentials.length) ? (
+        <View style={[flexCenter]}>
+          <Wallet width={180} height={180} />
+          <Text style={[largeText]}>Welcome to your wallet!</Text>
+          <Text style={[paragraphText]}>Add your first Vaccine Card</Text>
+          <TouchableHighlight
+            style={[primaryButton(theme)]}
+            underlayColor={theme.colors.activeBlue}
+            onPress={() => navigation.navigate('CredentialAdd')}>
+            <Text style={[primaryButtonText(theme), boldText]}>
+              Add a Vaccine Card
+            </Text>
+          </TouchableHighlight>
+        </View>
+      ) : (
+        <FlatList
+          style={[{width}]}
+          data={credentials}
+          renderItem={({item, index}) => (
+            <View
+              style={[
+                index === 0 && extraMarginTop,
+                index === credentials.length - 1 && extraMarginBottom,
+              ]}>
               <TouchableHighlight
                 key={item.id}
                 onPress={() => onCredentialSelected(item)}
@@ -107,10 +118,10 @@ export const Credentials = ({navigation}) => {
                   issuedAt={CredentialHelper.issueAtDate(item.record)}
                 />
               </TouchableHighlight>
-            )}
-          />
-        )}
-      </View>
-    </ThemeProvider>
+            </View>
+          )}
+        />
+      )}
+    </View>
   );
 };
