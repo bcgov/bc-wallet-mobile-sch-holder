@@ -46,6 +46,7 @@ export const theme: AppTheme = {
     inputGray: '#606060',
     errorRed: '#D8292F',
     successGreen: '#2E8540',
+    black: '#000000',
     white: '#FFFFFF',
     tabActive: '#38598A',
     tabInactive: '#707070',
@@ -143,7 +144,7 @@ const App = () => {
               <Stack.Screen
                 name="Scanner"
                 component={Scanner}
-                options={{headerShown: false}}
+                options={{headerTitle: 'Scan a QR Code', headerShown: false}}
               />
             </Stack.Group>
           </Stack.Navigator>

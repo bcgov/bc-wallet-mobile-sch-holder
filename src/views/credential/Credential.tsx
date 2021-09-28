@@ -33,7 +33,7 @@ const StatusView = styled.View`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 16px;
   background-color: ${theme.colors.headerBlue};
 `;
 
@@ -50,14 +50,14 @@ const HeaderText = styled.Text`
   font-size: 24px;
   color: ${theme.colors.white};
   text-align: center;
-  margin-top: 20px;
+  margin-top: 16px;
 `;
 
 const LineView = styled.View`
   height: 1px;
   width: 90%;
-  margin-top: 15px;
-  margin-bottom: 15px;
+  margin-top: 16px;
+  margin-bottom: 16px;
   background-color: ${theme.colors.betaYellow};
 `;
 

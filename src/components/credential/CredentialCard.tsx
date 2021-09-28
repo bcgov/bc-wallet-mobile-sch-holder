@@ -1,7 +1,6 @@
 import React from 'react';
 import styled, {css} from '@emotion/native';
 import {theme} from '../../../App';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {ImmunizationStatus} from '../../utils/credhelper';
 import {vaccinationStatusColor} from '../../assets/styles';
 import QrCode from '../../assets/img/qrcode.svg';
