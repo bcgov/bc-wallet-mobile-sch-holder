@@ -66,7 +66,7 @@ export class CredentialHelper {
           u.record,
           // PHSAPubKey.key,
         );
-        console.log(JSON.stringify(record));
+
         credentials.push({
           id: u.id,
           record,
