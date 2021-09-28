@@ -14,7 +14,6 @@ export const Scanner = ({navigation}: Props) => {
 
   const container = css`
     flex: 1;
-    // flex-direction: 'column',
   `;
 
   const preview = css`
