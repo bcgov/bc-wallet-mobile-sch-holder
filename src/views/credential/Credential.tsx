@@ -164,7 +164,15 @@ export const Credential: React.FC<IRouteProps> = ({route}) => {
           <LineView />
           <ContextMenu state={xstate} />
           <LargeText>
-            {CredentialHelper.fullNameForCredential(record)}
+            {CredentialHelper.familyNameForCredential(
+              CredentialHelper.nameForCredential(record),
+            )}
+            ,
+          </LargeText>
+          <LargeText>
+            {CredentialHelper.givenNameForCredential(
+              CredentialHelper.nameForCredential(record),
+            )}
           </LargeText>
           <StatusView
             style={{

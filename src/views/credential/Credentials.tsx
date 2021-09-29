@@ -123,7 +123,7 @@ export const Credentials = ({navigation}) => {
                 activeOpacity={0.5}
                 underlayColor="light-gray">
                 <CredentialCard
-                  name={CredentialHelper.fullNameForCredential(item.record)}
+                  name={CredentialHelper.nameForCredential(item.record)}
                   immunizationStatus={CredentialHelper.immunizationStatus(
                     item.record,
                   )}

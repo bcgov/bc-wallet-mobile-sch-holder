@@ -51,3 +51,8 @@ export interface SHCFhirBundleEntry {
   fullUrl: string;
   resource: object; //TODO:(jl) Need to define additional types.
 }
+
+export interface PersonName {
+  family: string;
+  given: string[];
+}

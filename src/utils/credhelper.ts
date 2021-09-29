@@ -1,9 +1,14 @@
 import EncryptedStorage from 'react-native-encrypted-storage';
 // import {PHSAPubKey} from '../constants';
-import {SHCRecord, Credential, FhirBundleResourceType} from '../types';
+import {
+  SHCRecord,
+  Credential,
+  FhirBundleResourceType,
+  PersonName,
+} from '../types';
 // @ts-ignore
 import * as SHC from '@pathcheck/shc-sdk';
-import {startCase, isArray} from 'lodash';
+import {startCase, isArray, isString} from 'lodash';
 import {fullVaxMinRecordCount} from '../constants';
 
 export enum ImmunizationStatus {
@@ -14,7 +19,32 @@ export enum ImmunizationStatus {
 export class CredentialHelper {
   private storageKey = 'shc_vaccinations';
 
-  public static fullNameForCredential(item: SHCRecord): string {
+  public static familyNameForCredential(name: PersonName | string): string {
+    if (isString(name)) {
+      return name;
+    }
+    const {family} = name;
+    return startCase(family.toLowerCase());
+  }
+
+  public static givenNameForCredential(name: PersonName | string): string {
+    if (isString(name)) {
+      return name;
+    }
+    const {given} = name;
+    return startCase(given.join(' ').toLowerCase());
+  }
+
+  public static fullNameForCredential(name: PersonName | string): string {
+    if (isString(name)) {
+      return name;
+    }
+    return `${this.familyNameForCredential(
+      name,
+    )}, ${this.givenNameForCredential(name)}`;
+  }
+
+  public static nameForCredential(item: SHCRecord): PersonName | string {
     const results = item.vc.credentialSubject.fhirBundle.entry.filter(
       (e: any) => e.resource.resourceType === FhirBundleResourceType.Patient,
     );
@@ -26,12 +56,7 @@ export class CredentialHelper {
 
     const person = results.pop();
     const [name] = person.resource.name;
-    const {family, given} = name;
-    const fullNameAsStartCase = `${startCase(
-      family.toLowerCase(),
-    )}, ${startCase(given.join(' ').toLowerCase())}`;
-
-    return fullNameAsStartCase;
+    return name;
   }
 
   // @ts-ignore

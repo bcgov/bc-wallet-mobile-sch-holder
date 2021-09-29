@@ -4,7 +4,7 @@ import {ImmunizationStatus} from '../../utils/credhelper';
 
 export const vaccinationStatusText = (status: ImmunizationStatus): string => {
   if (status === ImmunizationStatus.Full) {
-    return 'Fully Vaccinated';
+    return 'Vaccinated';
   }
   return 'Partially Vaccinated';
 };
