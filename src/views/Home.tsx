@@ -31,17 +31,17 @@ import {useFocusEffect} from '@react-navigation/native';
 
 const {width} = Dimensions.get('window');
 
-const containerView = css`
+const container = css`
   align-items: center;
 `;
 
-const containerViewCenter = css`
+const containerMargin = css`
   margin-top: 16px;
   margin-bottom: 16px;
-  ${containerView}
+  ${container}
 `;
 
-const containerRow = css`
+const flexRow = css`
   flex-direction: row;
   align-items: center;
 `;
@@ -125,14 +125,14 @@ export const Home = ({navigation}: Props) => {
   );
 
   return (
-    <ScrollView contentContainerStyle={containerView}>
+    <ScrollView contentContainerStyle={container}>
       <Logo style={[headerSize as ImageStyle]} width={205} height={80} />
       <Text style={[headerText]}>BC Wallet</Text>
       <SwiperFlatList
         showPagination
         data={walkthrough}
         renderItem={({item, index}) => (
-          <View style={[{width}, containerView]}>
+          <View style={[{width}, container]}>
             <View>
               {item.image({
                 fill: theme.colors.textGray,
@@ -140,7 +140,7 @@ export const Home = ({navigation}: Props) => {
                 width: 180,
               })}
             </View>
-            <View style={[containerView, containerRow, padding]}>
+            <View style={[container, flexRow, padding]}>
               {index > 0 ? (
                 <TouchableWithoutFeedback>
                   <LargeArrow
@@ -174,7 +174,7 @@ export const Home = ({navigation}: Props) => {
         paginationStyleItemInactive={paginationStyleItemInactive}
         paginationStyleItemActive={paginationStyleItemActive}
       />
-      <View style={containerViewCenter}>
+      <View style={containerMargin}>
         <TouchableHighlight
           style={[primaryButton(theme)]}
           underlayColor={theme.colors.activeBlue}

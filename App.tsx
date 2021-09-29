@@ -9,27 +9,30 @@
  */
 
 import React, {useEffect} from 'react';
+import {StatusBar, TouchableWithoutFeedback} from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
 import {
   NavigationContainer,
   Theme as NavigationTheme,
+  useNavigationContainerRef,
 } from '@react-navigation/native';
 import {
   createNativeStackNavigator,
   NativeStackScreenProps,
 } from '@react-navigation/native-stack';
-import {Theme, ThemeProvider} from '@emotion/react';
+
 import {Home} from './src/views/Home';
 import {CredentialAdd} from './src/views/credential/CredentialAdd';
 import {Credential} from './src/views/credential/Credential';
+import {Credentials} from './src/views/credential/Credentials';
 import {Scanner} from './src/views/Scanner';
 import {Splash} from './src/views/Splash';
+
+import {Theme, ThemeProvider} from '@emotion/react';
 import styled from '@emotion/native';
-import {StatusBar, TouchableWithoutFeedback} from 'react-native';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 
 import './src/assets/icons';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {Credentials} from './src/views/credential/Credentials';
-import SplashScreen from 'react-native-splash-screen';
 
 export interface AppTheme extends Theme {
   colors: Record<string, string>;
@@ -74,19 +77,10 @@ type RootStackParamList = {
   Credential: undefined;
   CredentialAdd: undefined;
   Scanner: undefined;
+  Splash: undefined;
 };
 
 export type Props = NativeStackScreenProps<RootStackParamList>;
-
-const FlexSafeAreaView = styled.SafeAreaView`
-  background-color: ${theme.colors.primaryBlue};
-  flex-grow: 1;
-`;
-
-const NoFlexSafeAreaView = styled.SafeAreaView`
-  background-color: ${theme.colors.backgroundGray};
-  flex-grow: 0;
-`;
 
 const RightHeaderIcon = styled.View`
   height: 48px;
@@ -96,79 +90,82 @@ const RightHeaderIcon = styled.View`
 `;
 
 const App = () => {
+  const navigation = useNavigationContainerRef<RootStackParamList>();
   const Stack = createNativeStackNavigator();
 
   useEffect(() => {
     SplashScreen.hide();
-  });
+    setTimeout(() => {
+      navigation.navigate('Home');
+    }, 2000);
+  }, [navigation]);
 
   return (
     <ThemeProvider theme={theme}>
-      <FlexSafeAreaView>
-        <StatusBar
-          backgroundColor={theme.colors.primaryBlue}
-          barStyle="light-content"
-        />
-        <NavigationContainer theme={navigationTheme}>
-          <Stack.Navigator initialRouteName="Splash">
-            <Stack.Group>
-              <Stack.Screen
-                name="Splash"
-                component={Splash}
-                options={{headerShown: false}}
-              />
-              <Stack.Screen
-                name="Home"
-                component={Home}
-                options={{headerBackVisible: false, gestureEnabled: false}}
-              />
-              <Stack.Screen
-                name="Credentials"
-                component={Credentials}
-                options={({navigation}) => ({
-                  headerTitle: 'Cards',
-                  headerBackVisible: false,
-                  gestureEnabled: false,
-                  headerRight: () => {
-                    return (
-                      <TouchableWithoutFeedback
-                        onPress={() => navigation.navigate('CredentialAdd')}>
-                        <RightHeaderIcon>
-                          <FontAwesomeIcon
-                            icon="plus"
-                            color={theme.colors.white}
-                          />
-                        </RightHeaderIcon>
-                      </TouchableWithoutFeedback>
-                    );
-                  },
-                })}
-              />
-              <Stack.Screen
-                name="CredentialAdd"
-                component={CredentialAdd}
-                options={{
-                  headerTitle: 'Add Vaccine Card',
-                }}
-              />
-              <Stack.Screen
-                name="Credential"
-                component={Credential}
-                options={{headerTitle: ''}}
-              />
-            </Stack.Group>
-            <Stack.Group screenOptions={{presentation: 'modal'}}>
-              <Stack.Screen
-                name="Scanner"
-                component={Scanner}
-                options={{headerTitle: 'Scan a QR Code', headerShown: false}}
-              />
-            </Stack.Group>
-          </Stack.Navigator>
-        </NavigationContainer>
-      </FlexSafeAreaView>
-      {/* Keep this here so the bottom status bar remains un-styled */}
-      <NoFlexSafeAreaView />
+      <StatusBar
+        backgroundColor={theme.colors.primaryBlue}
+        barStyle="light-content"
+      />
+      <NavigationContainer theme={navigationTheme} ref={navigation}>
+        <Stack.Navigator initialRouteName="Splash">
+          <Stack.Group>
+            <Stack.Screen
+              name="Splash"
+              component={Splash}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="Home"
+              component={Home}
+              options={{
+                headerBackVisible: false,
+                gestureEnabled: false,
+              }}
+            />
+            <Stack.Screen
+              name="Credentials"
+              component={Credentials}
+              options={() => ({
+                headerTitle: 'Cards',
+                headerBackVisible: false,
+                gestureEnabled: false,
+                headerRight: () => {
+                  return (
+                    <TouchableWithoutFeedback
+                      onPress={() => navigation.navigate('CredentialAdd')}>
+                      <RightHeaderIcon>
+                        <FontAwesomeIcon
+                          icon="plus"
+                          color={theme.colors.white}
+                        />
+                      </RightHeaderIcon>
+                    </TouchableWithoutFeedback>
+                  );
+                },
+              })}
+            />
+            <Stack.Screen
+              name="CredentialAdd"
+              component={CredentialAdd}
+              options={{
+                headerTitle: 'Add Vaccine Card',
+              }}
+            />
+            <Stack.Screen
+              name="Credential"
+              component={Credential}
+              options={{headerTitle: ''}}
+            />
+          </Stack.Group>
+          <Stack.Group screenOptions={{presentation: 'modal'}}>
+            <Stack.Screen
+              name="Scanner"
+              component={Scanner}
+              options={{headerTitle: 'Scan a QR Code', headerShown: false}}
+            />
+          </Stack.Group>
+        </Stack.Navigator>
+      </NavigationContainer>
     </ThemeProvider>
   );
 };

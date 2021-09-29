@@ -23,8 +23,7 @@ import {primaryButton, primaryButtonText} from '../../assets/styles';
 
 const {width} = Dimensions.get('window');
 
-const flexCenter = css`
-  flex: 1;
+const container = css`
   flex-direction: column;
   justify-content:center
   align-items: center;
@@ -93,9 +92,9 @@ export const Credentials = ({navigation}) => {
   };
 
   return (
-    <View style={[flexCenter]}>
+    <View style={[container]}>
       {!(credentials && credentials.length) ? (
-        <View style={[flexCenter]}>
+        <View style={[container]}>
           <Wallet width={180} height={180} />
           <Text style={[largeText]}>Welcome to your wallet!</Text>
           <Text style={[paragraphText]}>Add your first Vaccine Card</Text>

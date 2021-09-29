@@ -17,13 +17,13 @@ import {css} from '@emotion/native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {useTheme} from '@emotion/react';
 
+const container = css`
+  padding: 32px;
+`;
+
 const flexRow = css`
   flex-direction: row;
   align-items: center;
-`;
-
-const container = css`
-  padding: 32px;
 `;
 
 const button = css`
