@@ -1,5 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
+  BackHandler,
   Dimensions,
   FlatList,
   Text,
@@ -15,15 +16,14 @@ import {useTheme} from '@emotion/react';
 
 import Wallet from '../../assets/img/wallet.svg';
 import {boldText, text} from '../../assets/styles';
-import {useIsFocused} from '@react-navigation/native';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import CredentialCard from '../../components/credential/CredentialCard';
 
 import {primaryButton, primaryButtonText} from '../../assets/styles';
 
 const {width} = Dimensions.get('window');
 
-const flexCenter = css`
-  flex: 1;
+const container = css`
   flex-direction: column;
   justify-content:center
   align-items: center;
@@ -54,6 +54,18 @@ export const Credentials = ({navigation}) => {
   const isFocused = useIsFocused();
   const theme = useTheme() as AppTheme;
 
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        BackHandler.exitApp();
+        return true;
+      };
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, []),
+  );
+
   useEffect(() => {
     async function wrap() {
       try {
@@ -80,9 +92,9 @@ export const Credentials = ({navigation}) => {
   };
 
   return (
-    <View style={[flexCenter]}>
+    <View style={[container]}>
       {!(credentials && credentials.length) ? (
-        <View style={[flexCenter]}>
+        <View style={[container]}>
           <Wallet width={180} height={180} />
           <Text style={[largeText]}>Welcome to your wallet!</Text>
           <Text style={[paragraphText]}>Add your first Vaccine Card</Text>

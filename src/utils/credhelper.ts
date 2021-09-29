@@ -21,7 +21,7 @@ export class CredentialHelper {
 
     if (results.length === 0) {
       console.error('Unable to find Person record');
-      return 'Unknow Name';
+      return 'Unknown Name';
     }
 
     const person = results.pop();
