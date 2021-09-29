@@ -3,8 +3,8 @@ name: Test & Build
 on:
   push:
     paths:
-      - 'ios'
-      - 'src'
+      - ios/**
+      - src/**
 
 defaults:
   run:

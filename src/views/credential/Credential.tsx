@@ -10,7 +10,15 @@ import {
   vaccinationStatusText,
 } from '../../assets/styles';
 import {formatAsIssuedDate} from '../../utils/date';
-import {Dimensions, ScrollView} from 'react-native';
+import {
+  Dimensions,
+  ScrollView,
+  TouchableOpacity,
+  View,
+  Alert,
+} from 'react-native';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {ContextMenu} from './ContextMenu';
 
 export interface IRouteProps {
   navigation: any;
@@ -47,10 +55,19 @@ const QRContainerView = styled.View`
 
 const HeaderText = styled.Text`
   ${boldText}
-  font-size: 24px;
+  font-size: 21px;
   color: ${theme.colors.white};
   text-align: center;
+  margin-left: 55px;
+`;
+
+const HeaderContainer = styled.View`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
   margin-top: 16px;
+  width: 90%;
 `;
 
 const LineView = styled.View`
@@ -86,6 +103,9 @@ const NormalText = styled.Text`
 export const Credential: React.FC<IRouteProps> = ({route}) => {
   const {itemId, record} = route.params;
   const [data, setData] = useState<string>('no data');
+  const myState = useState(false);
+  const [xstate] = myState;
+  const [modalIsVisible, setModalIsVisible] = myState;
 
   useMemo(() => {
     async function wrap() {
@@ -106,34 +126,71 @@ export const Credential: React.FC<IRouteProps> = ({route}) => {
     wrap();
   }, [itemId]);
 
+  const showContextMenu = () => {
+    Alert.alert(
+      'Coming Soon',
+      'This feature is not implemented yet. Check back later for Delete and Details view functionality.',
+      [{text: 'OK'}],
+    );
+    // if (modalIsVisible) {
+    //   return;
+    // }
+
+    // setModalIsVisible(true);
+  };
+
+  const hideContextMenu = () => {
+    if (!modalIsVisible) {
+      return;
+    }
+
+    setModalIsVisible(false);
+  };
+
   return (
     <ScrollView>
-      <ContentView>
-        <HeaderText>BC Vaccination Card</HeaderText>
-        <LineView />
-        <LargeText>{CredentialHelper.fullNameForCredential(record)}</LargeText>
-        <StatusView
-          style={{
-            backgroundColor: vaccinationStatusColor(
-              CredentialHelper.immunizationStatus(record),
-            ),
-          }}>
-          <LargerText>
-            {vaccinationStatusText(CredentialHelper.immunizationStatus(record))}
-          </LargerText>
-          <NormalText>
-            Issued {formatAsIssuedDate(CredentialHelper.issueAtDate(record))}
-          </NormalText>
+      <TouchableOpacity activeOpacity={1}>
+        <ContentView>
+          <HeaderContainer>
+            <HeaderText>BC Vaccination Card</HeaderText>
+            <View onTouchStart={showContextMenu}>
+              <FontAwesomeIcon
+                icon="ellipsis-h"
+                size={32}
+                color={theme.colors.white}
+              />
+            </View>
+          </HeaderContainer>
+          <LineView />
+          <ContextMenu state={xstate} />
+          <LargeText>
+            {CredentialHelper.fullNameForCredential(record)}
+          </LargeText>
+          <StatusView
+            style={{
+              backgroundColor: vaccinationStatusColor(
+                CredentialHelper.immunizationStatus(record),
+              ),
+            }}>
+            <LargerText>
+              {vaccinationStatusText(
+                CredentialHelper.immunizationStatus(record),
+              )}
+            </LargerText>
+            <NormalText>
+              Issued {formatAsIssuedDate(CredentialHelper.issueAtDate(record))}
+            </NormalText>
 
-          <QRContainerView>
-            <QRCode
-              value={data}
-              quietZone={5}
-              size={Dimensions.get('window').width - 64}
-            />
-          </QRContainerView>
-        </StatusView>
-      </ContentView>
+            <QRContainerView>
+              <QRCode
+                value={data}
+                quietZone={5}
+                size={Dimensions.get('window').width - 64}
+              />
+            </QRContainerView>
+          </StatusView>
+        </ContentView>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
