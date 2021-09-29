@@ -103,9 +103,8 @@ const NormalText = styled.Text`
 export const Credential: React.FC<IRouteProps> = ({route}) => {
   const {itemId, record} = route.params;
   const [data, setData] = useState<string>('no data');
-  const myState = useState(false);
-  const [xstate] = myState;
-  const [modalIsVisible, setModalIsVisible] = myState;
+  const contextMenuState = useState(false);
+  const [modalIsVisible, setModalIsVisible] = contextMenuState;
 
   useMemo(() => {
     async function wrap() {
@@ -127,19 +126,20 @@ export const Credential: React.FC<IRouteProps> = ({route}) => {
   }, [itemId]);
 
   const showContextMenu = () => {
-    Alert.alert(
-      'Coming Soon',
-      'This feature is not implemented yet. Check back later for Delete and Details view functionality.',
-      [{text: 'OK'}],
-    );
-    // if (modalIsVisible) {
-    //   return;
-    // }
+    console.log('Show...');
 
-    // setModalIsVisible(true);
+    if (modalIsVisible) {
+      console.log('Context already visible. Skipping.');
+      return;
+    }
+
+    console.log('Showing context menu now.');
+    setModalIsVisible(true);
   };
 
   const hideContextMenu = () => {
+    console.log('Hide...');
+
     if (!modalIsVisible) {
       return;
     }
@@ -148,7 +148,7 @@ export const Credential: React.FC<IRouteProps> = ({route}) => {
   };
 
   return (
-    <ScrollView>
+    <ScrollView onTouchStart={hideContextMenu}>
       <TouchableOpacity activeOpacity={1}>
         <ContentView>
           <HeaderContainer>
@@ -162,7 +162,7 @@ export const Credential: React.FC<IRouteProps> = ({route}) => {
             </View>
           </HeaderContainer>
           <LineView />
-          <ContextMenu state={xstate} />
+          <ContextMenu state={contextMenuState} />
           <LargeText>
             {CredentialHelper.fullNameForCredential(record)}
           </LargeText>

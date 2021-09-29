@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import styled from '@emotion/native';
 import {theme} from '../../../App';
+import {Alert} from 'react-native';
 // import {View} from 'react-native';
 
 export interface IModalMenuProps {
@@ -29,19 +30,34 @@ const ContextView = styled.View`
   z-index: 5;
 `;
 
-export const ContextMenu: React.FC<IModalMenuProps> = () => {
-  const [modalIsVisible, setModalIsVisible] = useState(false);
+export const ContextMenu: React.FC<IModalMenuProps> = ({state}) => {
+  const [modalIsVisible, setModalIsVisible] = state;
+
+  console.log('Context ....');
 
   if (!modalIsVisible) {
+    console.log('Nope..');
     return null;
   }
 
   const showCardDetails = () => {
     console.log('Show details touched');
+
+    Alert.alert(
+      'Coming Soon',
+      'This feature is not implemented yet. Check back later for Card Details functionality.',
+      [{text: 'OK'}],
+    );
   };
 
   const deleteCardTouched = () => {
     console.log('Delete card touched');
+
+    Alert.alert(
+      'Coming Soon',
+      'This feature is not implemented yet. Check back later for Delete functionality.',
+      [{text: 'OK'}],
+    );
   };
 
   return (
