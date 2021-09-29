@@ -8,7 +8,7 @@
  * @format
  */
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   NavigationContainer,
   Theme as NavigationTheme,
@@ -29,6 +29,7 @@ import {StatusBar, TouchableWithoutFeedback} from 'react-native';
 import './src/assets/icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {Credentials} from './src/views/credential/Credentials';
+import SplashScreen from 'react-native-splash-screen';
 
 export interface AppTheme extends Theme {
   colors: Record<string, string>;
@@ -83,7 +84,7 @@ const FlexSafeAreaView = styled.SafeAreaView`
 `;
 
 const NoFlexSafeAreaView = styled.SafeAreaView`
-  background-color: ${theme.colors.white};
+  background-color: ${theme.colors.backgroundGray};
   flex-grow: 0;
 `;
 
@@ -96,6 +97,10 @@ const RightHeaderIcon = styled.View`
 
 const App = () => {
   const Stack = createNativeStackNavigator();
+
+  useEffect(() => {
+    SplashScreen.hide();
+  });
 
   return (
     <ThemeProvider theme={theme}>
@@ -115,7 +120,7 @@ const App = () => {
               <Stack.Screen
                 name="Home"
                 component={Home}
-                options={{headerBackVisible: false}}
+                options={{headerBackVisible: false, gestureEnabled: false}}
               />
               <Stack.Screen
                 name="Credentials"
@@ -123,6 +128,7 @@ const App = () => {
                 options={({navigation}) => ({
                   headerTitle: 'Cards',
                   headerBackVisible: false,
+                  gestureEnabled: false,
                   headerRight: () => {
                     return (
                       <TouchableWithoutFeedback
