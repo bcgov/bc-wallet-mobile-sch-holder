@@ -19,6 +19,7 @@ import {
 } from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {ContextMenu} from './ContextMenu';
+import {reduce} from 'lodash';
 
 export interface IRouteProps {
   navigation: any;
@@ -105,6 +106,9 @@ export const Credential: React.FC<IRouteProps> = ({route}) => {
   const [data, setData] = useState<string>('no data');
   const contextMenuState = useState(false);
   const [modalIsVisible, setModalIsVisible] = contextMenuState;
+  const locationState = useState<any>([0, 0, 0]);
+  const [location, setLocation] = locationState;
+  let marker: any;
 
   useMemo(() => {
     async function wrap() {
@@ -125,8 +129,8 @@ export const Credential: React.FC<IRouteProps> = ({route}) => {
     wrap();
   }, [itemId]);
 
-  const showContextMenu = () => {
-    console.log('Show...');
+  const showContextMenu = (e: any) => {
+    console.log('Show...', e.nativeEvent.locationX, e.nativeEvent.locationY);
 
     if (modalIsVisible) {
       console.log('Context already visible. Skipping.');
@@ -134,6 +138,7 @@ export const Credential: React.FC<IRouteProps> = ({route}) => {
     }
 
     console.log('Showing context menu now.');
+    // setLocation([e.nativeEvent.locationX, e.nativeEvent.locationY]);
     setModalIsVisible(true);
   };
 
@@ -148,12 +153,43 @@ export const Credential: React.FC<IRouteProps> = ({route}) => {
   };
 
   return (
-    <ScrollView onTouchStart={hideContextMenu}>
-      <TouchableOpacity activeOpacity={1}>
-        <ContentView>
+    <ScrollView>
+      <TouchableOpacity onPress={hideContextMenu} activeOpacity={1}>
+        <ContentView onStartShouldSetResponder={() => !modalIsVisible}>
           <HeaderContainer>
             <HeaderText>BC Vaccination Card</HeaderText>
-            <View onTouchStart={showContextMenu}>
+            <View
+              // style={{
+              //   backgroundColor: '#F00',
+              // }}
+              onLayout={event => {
+                // console.log('btn layout', event.nativeEvent.layout);
+                setLocation([
+                  event.nativeEvent.layout.x,
+                  event.nativeEvent.layout.y,
+                  event.nativeEvent.layout.width,
+                ]);
+              }}
+              // ref={view => {
+              //   marker = view;
+              // }}
+              // onLayout={({event}: {event: any}) => {
+              //   setLocation([
+              //     event.nativeEvent.layout.x,
+              //     event.nativeEvent.layout.y,
+              //     event.nativeEvent.layout.width,
+              //   ]);
+              // if (marker) {
+              //   marker.measure((x, y, width, height, pageX, pageY) => {
+              //     setLocation([
+              //       event.nativeEvent.layout.x,
+              //       event.nativeEvent.layout.y,
+              //     ]);
+              //     console.log('**', x, y, width, height, pageX, pageY);
+              //   });
+              // }
+              // }}
+              onTouchStart={e => showContextMenu(e)}>
               <FontAwesomeIcon
                 icon="ellipsis-h"
                 size={32}
@@ -162,7 +198,7 @@ export const Credential: React.FC<IRouteProps> = ({route}) => {
             </View>
           </HeaderContainer>
           <LineView />
-          <ContextMenu state={contextMenuState} />
+          <ContextMenu state={contextMenuState} location={locationState} />
           <LargeText>
             {CredentialHelper.fullNameForCredential(record)}
           </LargeText>

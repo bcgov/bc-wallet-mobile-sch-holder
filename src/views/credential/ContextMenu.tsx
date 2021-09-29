@@ -2,10 +2,10 @@ import React, {useState} from 'react';
 import styled from '@emotion/native';
 import {theme} from '../../../App';
 import {Alert} from 'react-native';
-// import {View} from 'react-native';
 
 export interface IModalMenuProps {
   state: any;
+  location: any;
 }
 
 const TextButton = styled.Text`
@@ -30,10 +30,13 @@ const ContextView = styled.View`
   z-index: 5;
 `;
 
-export const ContextMenu: React.FC<IModalMenuProps> = ({state}) => {
-  const [modalIsVisible, setModalIsVisible] = state;
+export const ContextMenu: React.FC<IModalMenuProps> = ({state, location}) => {
+  const [modalIsVisible] = state;
+  const [loc] = location;
+  const popUpMenuWidth = 200;
+  const popUpMenuVerticalOffset = 68;
 
-  console.log('Context ....');
+  console.log('Context ....', loc);
 
   if (!modalIsVisible) {
     console.log('Nope..');
@@ -61,7 +64,16 @@ export const ContextMenu: React.FC<IModalMenuProps> = ({state}) => {
   };
 
   return (
-    <ContextView onStartShouldSetResponder={() => true}>
+    <ContextView
+      onStartShouldSetResponder={() => true}
+      style={{
+        left: loc[0] - (popUpMenuWidth - loc[2] * 1.5),
+        top: loc[1] + popUpMenuVerticalOffset,
+      }}
+      // onLayout={event => {
+      //   console.log('cccc', event.nativeEvent.layout);
+      // }}
+    >
       <TextButton onPress={showCardDetails}>Card Details</TextButton>
       <TextButton
         // eslint-disable-next-line react-native/no-inline-styles
