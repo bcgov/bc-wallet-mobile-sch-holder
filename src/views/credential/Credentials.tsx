@@ -1,5 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
+  BackHandler,
   Dimensions,
   FlatList,
   Text,
@@ -15,7 +16,7 @@ import {useTheme} from '@emotion/react';
 
 import Wallet from '../../assets/img/wallet.svg';
 import {boldText, text} from '../../assets/styles';
-import {useIsFocused} from '@react-navigation/native';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import CredentialCard from '../../components/credential/CredentialCard';
 
 import {primaryButton, primaryButtonText} from '../../assets/styles';
@@ -53,6 +54,18 @@ export const Credentials = ({navigation}) => {
   const [credentials, setCredentials] = useState<Credential[]>([]);
   const isFocused = useIsFocused();
   const theme = useTheme() as AppTheme;
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        BackHandler.exitApp();
+        return true;
+      };
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, []),
+  );
 
   useEffect(() => {
     async function wrap() {

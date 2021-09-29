@@ -1,6 +1,7 @@
 import styled, {css} from '@emotion/native';
-import React from 'react';
+import React, {useCallback} from 'react';
 import {
+  BackHandler,
   Dimensions,
   ImageStyle,
   ScrollView,
@@ -26,6 +27,7 @@ import WelcomeThree from '../assets/img/welcome-3.svg';
 import WelcomeFour from '../assets/img/welcome-4.svg';
 
 import {SvgProps} from 'react-native-svg';
+import {useFocusEffect} from '@react-navigation/native';
 
 const {width} = Dimensions.get('window');
 
@@ -109,60 +111,77 @@ const walkthrough: {image: React.FC<SvgProps>; text: string}[] = [
   },
 ];
 
-export const Home = ({navigation}: Props) => (
-  <ScrollView contentContainerStyle={containerView}>
-    <Logo style={[headerSize as ImageStyle]} width={205} height={80} />
-    <Text style={[headerText]}>BC Wallet</Text>
-    <SwiperFlatList
-      showPagination
-      data={walkthrough}
-      renderItem={({item, index}) => (
-        <View style={[{width}, containerView]}>
-          <View>
-            {item.image({fill: theme.colors.textGray, height: 180, width: 180})}
+export const Home = ({navigation}: Props) => {
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        BackHandler.exitApp();
+        return true;
+      };
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, []),
+  );
+
+  return (
+    <ScrollView contentContainerStyle={containerView}>
+      <Logo style={[headerSize as ImageStyle]} width={205} height={80} />
+      <Text style={[headerText]}>BC Wallet</Text>
+      <SwiperFlatList
+        showPagination
+        data={walkthrough}
+        renderItem={({item, index}) => (
+          <View style={[{width}, containerView]}>
+            <View>
+              {item.image({
+                fill: theme.colors.textGray,
+                height: 180,
+                width: 180,
+              })}
+            </View>
+            <View style={[containerView, containerRow, padding]}>
+              {index > 0 ? (
+                <TouchableWithoutFeedback>
+                  <LargeArrow
+                    fill={theme.colors.primaryBlue}
+                    height={48}
+                    width={48}
+                  />
+                </TouchableWithoutFeedback>
+              ) : (
+                <BlankView />
+              )}
+              <Text style={[{width: width - 96}, largeText, centeredText]}>
+                {item.text}
+              </Text>
+              {index < walkthrough.length - 1 ? (
+                <TouchableWithoutFeedback>
+                  <LargeArrow
+                    style={{transform: [{rotate: '180deg'}]}}
+                    fill={theme.colors.primaryBlue}
+                    height={48}
+                    width={48}
+                  />
+                </TouchableWithoutFeedback>
+              ) : (
+                <BlankView />
+              )}
+            </View>
           </View>
-          <View style={[containerView, containerRow]}>
-            {index > 0 ? (
-              <TouchableWithoutFeedback>
-                <LargeArrow
-                  fill={theme.colors.primaryBlue}
-                  height={48}
-                  width={48}
-                />
-              </TouchableWithoutFeedback>
-            ) : (
-              <BlankView />
-            )}
-            <Text
-              style={[{width: width - 96}, largeText, centeredText, padding]}>
-              {item.text}
-            </Text>
-            {index < walkthrough.length - 1 ? (
-              <TouchableWithoutFeedback>
-                <LargeArrow
-                  style={{transform: [{rotate: '180deg'}]}}
-                  fill={theme.colors.primaryBlue}
-                  height={48}
-                  width={48}
-                />
-              </TouchableWithoutFeedback>
-            ) : (
-              <BlankView />
-            )}
-          </View>
-        </View>
-      )}
-      paginationStyle={paginationStyle}
-      paginationStyleItemInactive={paginationStyleItemInactive}
-      paginationStyleItemActive={paginationStyleItemActive}
-    />
-    <View style={containerViewCenter}>
-      <TouchableHighlight
-        style={[primaryButton(theme)]}
-        underlayColor={theme.colors.activeBlue}
-        onPress={() => navigation.navigate('Credentials')}>
-        <Text style={[primaryButtonText(theme), boldText]}>Get started</Text>
-      </TouchableHighlight>
-    </View>
-  </ScrollView>
-);
+        )}
+        paginationStyle={paginationStyle}
+        paginationStyleItemInactive={paginationStyleItemInactive}
+        paginationStyleItemActive={paginationStyleItemActive}
+      />
+      <View style={containerViewCenter}>
+        <TouchableHighlight
+          style={[primaryButton(theme)]}
+          underlayColor={theme.colors.activeBlue}
+          onPress={() => navigation.navigate('Credentials')}>
+          <Text style={[primaryButtonText(theme), boldText]}>Get started</Text>
+        </TouchableHighlight>
+      </View>
+    </ScrollView>
+  );
+};
