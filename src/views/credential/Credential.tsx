@@ -18,7 +18,7 @@ import {
   Alert,
 } from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {ContextMenu} from './ContextMenu';
+import {ContextMenu} from '../../components/ContextMenu';
 import {reduce} from 'lodash';
 
 export interface IRouteProps {

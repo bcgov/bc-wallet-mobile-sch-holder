@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import styled from '@emotion/native';
-import {theme} from '../../../App';
+import {theme} from '../../App';
 import {Alert} from 'react-native';
 
 export interface IModalMenuProps {
