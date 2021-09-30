@@ -1,4 +1,3 @@
-
 export interface State {
   credentials: Array<any>;
   error: Error | null;

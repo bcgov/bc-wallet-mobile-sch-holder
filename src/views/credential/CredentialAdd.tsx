@@ -6,7 +6,7 @@ import {
 } from 'react-native-image-picker';
 import RNQRGenerator from 'rn-qr-generator';
 import {CredentialHelper} from '../../utils/credhelper';
-import {AppTheme, Props} from '../../../App';
+import {AppTheme} from '../../../App';
 
 import QrCodeScan from '../../assets/img/qrcode-scan.svg';
 import Image from '../../assets/img/image.svg';
@@ -46,8 +46,8 @@ const iconMargin = css`
   margin-left: 9px;
 `;
 
-export const CredentialAdd = ({navigation}: Props) => {
-  const [state, dispatch] = useContext(Context);
+export const CredentialAdd: React.FC<any> = ({navigation}) => {
+  const [, dispatch] = useContext(Context);
 
   async function uploadImage() {
     try {

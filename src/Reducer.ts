@@ -13,7 +13,7 @@ export interface ReducerAction {
   type: DispatchAction;
 }
 
-const Reducer = (state: State, action: ReducerAction) => {
+const Reducer = (state: State, action: ReducerAction): State => {
   switch (action.type) {
     case DispatchAction.SetCredentials:
       return {

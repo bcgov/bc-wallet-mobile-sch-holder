@@ -3,7 +3,7 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 import {SHCRecord, Credential, FhirBundleResourceType} from '../types';
 // @ts-ignore
 import * as SHC from '@pathcheck/shc-sdk';
-import {startCase, isArray} from 'lodash';
+import {startCase} from 'lodash';
 import {fullVaxMinRecordCount} from '../constants';
 
 const storageKey = 'shc_vaccinations';
