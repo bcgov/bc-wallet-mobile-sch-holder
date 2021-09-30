@@ -19,7 +19,6 @@ import {
 } from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {ContextMenu} from '../../components/ContextMenu';
-import {reduce} from 'lodash';
 
 export interface IRouteProps {
   navigation: any;
@@ -101,14 +100,14 @@ const NormalText = styled.Text`
   text-align: center;
 `;
 
-export const Credential: React.FC<IRouteProps> = ({route}) => {
+export const Credential: React.FC<IRouteProps> = ({route, navigation}) => {
   const {itemId, record} = route.params;
   const [data, setData] = useState<string>('no data');
   const contextMenuState = useState(false);
   const [modalIsVisible, setModalIsVisible] = contextMenuState;
   const locationState = useState<any>([0, 0, 0]);
   const [location, setLocation] = locationState;
-  let marker: any;
+  // let marker: any;
 
   useMemo(() => {
     async function wrap() {
@@ -129,22 +128,39 @@ export const Credential: React.FC<IRouteProps> = ({route}) => {
     wrap();
   }, [itemId]);
 
-  const showContextMenu = (e: any) => {
-    console.log('Show...', e.nativeEvent.locationX, e.nativeEvent.locationY);
+  const deleteCard = () => {
+    console.log('Delete card');
 
+    try {
+      const ch = new CredentialHelper();
+      ch.clearAllCredentials();
+      navigation.goBack(null);
+    } catch (e) {
+      Alert.alert('Yikes!', 'There was a problem removing this card.', [
+        {text: 'OK'},
+      ]);
+    }
+  };
+
+  const showCardDetails = () => {
+    console.log('Show details touched');
+
+    Alert.alert(
+      'Coming Soon',
+      'This feature is not implemented yet. Check back later for Card Details functionality.',
+      [{text: 'OK'}],
+    );
+  };
+
+  const showContextMenu = () => {
     if (modalIsVisible) {
-      console.log('Context already visible. Skipping.');
       return;
     }
 
-    console.log('Showing context menu now.');
-    // setLocation([e.nativeEvent.locationX, e.nativeEvent.locationY]);
     setModalIsVisible(true);
   };
 
   const hideContextMenu = () => {
-    console.log('Hide...');
-
     if (!modalIsVisible) {
       return;
     }
@@ -189,7 +205,7 @@ export const Credential: React.FC<IRouteProps> = ({route}) => {
               //   });
               // }
               // }}
-              onTouchStart={e => showContextMenu(e)}>
+              onTouchStart={showContextMenu}>
               <FontAwesomeIcon
                 icon="ellipsis-h"
                 size={32}
@@ -198,7 +214,12 @@ export const Credential: React.FC<IRouteProps> = ({route}) => {
             </View>
           </HeaderContainer>
           <LineView />
-          <ContextMenu state={contextMenuState} location={locationState} />
+          <ContextMenu
+            state={contextMenuState}
+            location={locationState}
+            onDeleteTouched={deleteCard}
+            onShowDetailsTouched={showCardDetails}
+          />
           <LargeText>
             {CredentialHelper.fullNameForCredential(record)}
           </LargeText>

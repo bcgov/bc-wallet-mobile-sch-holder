@@ -6,6 +6,8 @@ import {Alert} from 'react-native';
 export interface IModalMenuProps {
   state: any;
   location: any;
+  onDeleteTouched: () => void;
+  onShowDetailsTouched: () => void;
 }
 
 const TextButton = styled.Text`
@@ -30,38 +32,20 @@ const ContextView = styled.View`
   z-index: 5;
 `;
 
-export const ContextMenu: React.FC<IModalMenuProps> = ({state, location}) => {
+export const ContextMenu: React.FC<IModalMenuProps> = ({
+  state,
+  location,
+  onDeleteTouched,
+  onShowDetailsTouched,
+}) => {
   const [modalIsVisible] = state;
   const [loc] = location;
   const popUpMenuWidth = 200;
   const popUpMenuVerticalOffset = 68;
 
-  console.log('Context ....', loc);
-
   if (!modalIsVisible) {
-    console.log('Nope..');
     return null;
   }
-
-  const showCardDetails = () => {
-    console.log('Show details touched');
-
-    Alert.alert(
-      'Coming Soon',
-      'This feature is not implemented yet. Check back later for Card Details functionality.',
-      [{text: 'OK'}],
-    );
-  };
-
-  const deleteCardTouched = () => {
-    console.log('Delete card touched');
-
-    Alert.alert(
-      'Coming Soon',
-      'This feature is not implemented yet. Check back later for Delete functionality.',
-      [{text: 'OK'}],
-    );
-  };
 
   return (
     <ContextView
@@ -74,14 +58,14 @@ export const ContextMenu: React.FC<IModalMenuProps> = ({state, location}) => {
       //   console.log('cccc', event.nativeEvent.layout);
       // }}
     >
-      <TextButton onPress={showCardDetails}>Card Details</TextButton>
+      <TextButton onPress={onShowDetailsTouched}>Card Details</TextButton>
       <TextButton
         // eslint-disable-next-line react-native/no-inline-styles
         style={{
           color: 'red',
           marginTop: 10,
         }}
-        onPress={deleteCardTouched}>
+        onPress={onDeleteTouched}>
         Delete...
       </TextButton>
     </ContextView>

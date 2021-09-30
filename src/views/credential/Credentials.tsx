@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useContext} from 'react';
 import {
   BackHandler,
   Dimensions,
@@ -20,6 +20,9 @@ import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import CredentialCard from '../../components/credential/CredentialCard';
 
 import {primaryButton, primaryButtonText} from '../../assets/styles';
+
+import {Context} from '../../Store';
+import {DispatchAction} from '../../Reducer';
 
 const {width} = Dimensions.get('window');
 
@@ -50,7 +53,9 @@ const extraMarginBottom = css`
 `;
 
 export const Credentials = ({navigation}) => {
-  const [credentials, setCredentials] = useState<Credential[]>([]);
+  // const [credentials, setCredentials] = useState<Credential[]>([]);
+  const [state, dispatch] = useContext(Context);
+  const {credentials} = state;
   const isFocused = useIsFocused();
   const theme = useTheme() as AppTheme;
 
@@ -72,17 +77,17 @@ export const Credentials = ({navigation}) => {
         const credHelper = new CredentialHelper();
         const results = await credHelper.credentials();
         console.debug(`Found ${results.length} credentials`);
+
         if (results?.length) {
-          setCredentials(results);
+          dispatch({type: DispatchAction.SetCredentials, payload: results});
         }
-        // credHelper.clearAllCredentials();
       } catch (err) {
         const msg = 'Unable to fetch credentials';
         console.error(msg);
       }
     }
     wrap();
-  }, [isFocused]);
+  }, [isFocused, dispatch]);
 
   const onCredentialSelected = (item: Credential) => {
     navigation.navigate('Credential', {

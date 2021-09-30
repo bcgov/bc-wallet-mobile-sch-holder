@@ -130,7 +130,6 @@ export class CredentialHelper {
 
       if (storedShcVaccinations) {
         shcVaccinations = JSON.parse(storedShcVaccinations);
-        console.log(`Found ${shcVaccinations.lenght} existing creds`);
       }
 
       shcVaccinations.push({
@@ -151,6 +150,32 @@ export class CredentialHelper {
   async clearAllCredentials(): Promise<void> {
     try {
       await EncryptedStorage.clear();
+    } catch (error) {
+      // TODO:(jl) Need to shore up error handling mechanics.
+      console.error(error);
+    }
+  }
+
+  async removeCardWithId(id: number): Promise<void> {
+    try {
+      let shcVaccinations = [];
+      const storedShcVaccinations = await EncryptedStorage.getItem(
+        this.storageKey,
+      );
+
+      if (storedShcVaccinations) {
+        shcVaccinations = JSON.parse(storedShcVaccinations);
+      }
+
+      shcVaccinations.push({
+        record,
+        id: Date.now(),
+      });
+
+      await EncryptedStorage.setItem(
+        this.storageKey,
+        JSON.stringify(shcVaccinations),
+      );
     } catch (error) {
       // TODO:(jl) Need to shore up error handling mechanics.
       console.error(error);
