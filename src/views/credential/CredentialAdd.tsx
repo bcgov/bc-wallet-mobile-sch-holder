@@ -47,7 +47,6 @@ const iconMargin = css`
 `;
 
 export const CredentialAdd = ({navigation}: Props) => {
-  const credHelper = new CredentialHelper();
   const [state, dispatch] = useContext(Context);
 
   async function uploadImage() {
@@ -73,7 +72,7 @@ export const CredentialAdd = ({navigation}: Props) => {
           if (res.values.length) {
             for (const cred of res.values) {
               const dc = (
-                await credHelper.decodeRecords([
+                await CredentialHelper.decodeRecords([
                   {
                     id: Date.now(),
                     record: cred,

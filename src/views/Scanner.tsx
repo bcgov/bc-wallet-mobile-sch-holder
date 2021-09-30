@@ -12,7 +12,6 @@ import {Context} from '../Store';
 export const Scanner = ({navigation}: Props) => {
   const [active, setActive] = useState(true);
   const [torch, setTorch] = useState(false);
-  const credHelper = new CredentialHelper();
   const [state, dispatch] = useContext(Context);
 
   const container = css`
@@ -67,7 +66,7 @@ export const Scanner = ({navigation}: Props) => {
             setActive(false);
             Vibration.vibrate();
             const dc = (
-              await credHelper.decodeRecords([
+              await CredentialHelper.decodeRecords([
                 {
                   id: Date.now(),
                   record: e.data,
@@ -80,7 +79,6 @@ export const Scanner = ({navigation}: Props) => {
               payload: [{...dc, raw: e.data}],
             });
 
-            // await credHelper.storeCredential(e.data);
             navigation.navigate('Credentials');
           }}>
           <View>

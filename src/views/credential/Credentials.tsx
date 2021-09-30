@@ -74,8 +74,7 @@ export const Credentials = ({navigation}) => {
   // useEffect(() => {
   //   async function wrap() {
   //     try {
-  //       const credHelper = new CredentialHelper();
-  //       const results = await credHelper.credentials();
+  //       const results = await CredentialHelper.credentials();
   //       console.debug(`Found ${results.length} credentials`);
 
   //       if (results?.length) {
