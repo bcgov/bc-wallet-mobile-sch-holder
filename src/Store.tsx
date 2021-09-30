@@ -1,7 +1,8 @@
 import React, {createContext, useReducer} from 'react';
 import Reducer from './Reducer';
+import {State} from './types';
 
-const initialState = {
+const initialState: State = {
   credentials: [],
   error: null,
 };

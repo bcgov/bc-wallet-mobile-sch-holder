@@ -1,3 +1,9 @@
+
+export interface State {
+  credentials: Array<any>;
+  error: Error | null;
+}
+
 export interface JWKSKey {
   kty: string;
   kid: string;

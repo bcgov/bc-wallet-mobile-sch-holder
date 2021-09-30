@@ -1,3 +1,4 @@
+import {State} from './types';
 
 export enum DispatchAction {
   SetCredentials = 'SET_CREDENTIALS',
@@ -6,7 +7,13 @@ export enum DispatchAction {
   SetError = 'SET_ERROR',
 }
 
-const Reducer = (state, action) => {
+export interface ReducerAction {
+  payload: Array<any>;
+  type: DispatchAction;
+}
+
+const Reducer = (state: State, action: ReducerAction) => {
+  console.log(`Reducer action = ${action}, sate = ${JSON.stringify(state)}`);
   switch (action.type) {
     case DispatchAction.SetCredentials:
       return {
@@ -22,7 +29,7 @@ const Reducer = (state, action) => {
       return {
         ...state,
         credentials: state.credentials.filter(
-          credential => credential.id !== action.payload,
+          credential => credential.id !== action.payload.id,
         ),
       };
     case DispatchAction.SetError:
