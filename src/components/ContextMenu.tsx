@@ -50,6 +50,7 @@ export const ContextMenu: React.FC<IModalMenuProps> = ({
   return (
     <ContextView
       onStartShouldSetResponder={() => true}
+      // TODO:(jl) Cleanup magic numbers and layout.
       style={{
         left: loc[0] - (popUpMenuWidth - loc[2] * 1.5),
         top: loc[1] + popUpMenuVerticalOffset,

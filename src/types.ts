@@ -29,6 +29,7 @@ export interface SHCRecord {
 export interface Credential {
   id: number;
   record: SHCRecord;
+  raw: string;
 }
 
 export interface SHCVerifiedCredential {

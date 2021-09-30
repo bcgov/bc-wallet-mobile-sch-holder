@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {TouchableHighlight, Vibration, View} from 'react-native';
 import {RNCamera} from 'react-native-camera';
 import {Props, theme} from '../../App';
@@ -6,11 +6,14 @@ import FlashOn from '../assets/img/flash-on.svg';
 import FlashOff from '../assets/img/flash-off.svg';
 import {CredentialHelper} from '../utils/credhelper';
 import {css} from '@emotion/native';
+import {DispatchAction} from '../Reducer';
+import {Context} from '../Store';
 
 export const Scanner = ({navigation}: Props) => {
   const [active, setActive] = useState(true);
   const [torch, setTorch] = useState(false);
   const credHelper = new CredentialHelper();
+  const [state, dispatch] = useContext(Context);
 
   const container = css`
     flex: 1;
@@ -63,7 +66,21 @@ export const Scanner = ({navigation}: Props) => {
           onBarCodeRead={async e => {
             setActive(false);
             Vibration.vibrate();
-            await credHelper.storeCredential(e.data);
+            const dc = (
+              await credHelper.decodeRecords([
+                {
+                  id: Date.now(),
+                  record: e.data,
+                },
+              ])
+            ).pop();
+
+            dispatch({
+              type: DispatchAction.AddCredential,
+              payload: [{...dc, raw: e.data}],
+            });
+
+            // await credHelper.storeCredential(e.data);
             navigation.navigate('Credentials');
           }}>
           <View>

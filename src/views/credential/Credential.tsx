@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useMemo, useState, useContext} from 'react';
 import QRCode from 'react-native-qrcode-svg';
 import {CredentialHelper} from '../../utils/credhelper';
 import styled from '@emotion/native';
@@ -19,6 +19,8 @@ import {
 } from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {ContextMenu} from '../../components/ContextMenu';
+import {DispatchAction} from '../../Reducer';
+import {Context} from '../../Store';
 
 export interface IRouteProps {
   navigation: any;
@@ -101,39 +103,20 @@ const NormalText = styled.Text`
 `;
 
 export const Credential: React.FC<IRouteProps> = ({route, navigation}) => {
-  const {itemId, record} = route.params;
-  const [data, setData] = useState<string>('no data');
+  const {item} = route.params;
+  // const [data, setData] = useState<string>('no data');
   const contextMenuState = useState(false);
   const [modalIsVisible, setModalIsVisible] = contextMenuState;
   const locationState = useState<any>([0, 0, 0]);
   const [location, setLocation] = locationState;
+  const [state, dispatch] = useContext(Context);
   // let marker: any;
-
-  useMemo(() => {
-    async function wrap() {
-      try {
-        const credHelper = new CredentialHelper();
-        const results = await credHelper.credentialWithId(itemId, true);
-        if (!results) {
-          return;
-        }
-
-        // @ts-ignore
-        setData(results.record);
-      } catch (err) {
-        const msg = 'Unable to fetch credentials';
-        console.error(msg);
-      }
-    }
-    wrap();
-  }, [itemId]);
 
   const deleteCard = () => {
     console.log('Delete card');
 
     try {
-      const ch = new CredentialHelper();
-      ch.clearAllCredentials();
+      dispatch({type: DispatchAction.RemoveCredential, payload: [item]});
       navigation.goBack(null);
     } catch (e) {
       Alert.alert('Yikes!', 'There was a problem removing this card.', [
@@ -221,26 +204,27 @@ export const Credential: React.FC<IRouteProps> = ({route, navigation}) => {
             onShowDetailsTouched={showCardDetails}
           />
           <LargeText>
-            {CredentialHelper.fullNameForCredential(record)}
+            {CredentialHelper.fullNameForCredential(item.record)}
           </LargeText>
           <StatusView
             style={{
               backgroundColor: vaccinationStatusColor(
-                CredentialHelper.immunizationStatus(record),
+                CredentialHelper.immunizationStatus(item.record),
               ),
             }}>
             <LargerText>
               {vaccinationStatusText(
-                CredentialHelper.immunizationStatus(record),
+                CredentialHelper.immunizationStatus(item.record),
               )}
             </LargerText>
             <NormalText>
-              Issued {formatAsIssuedDate(CredentialHelper.issueAtDate(record))}
+              Issued{' '}
+              {formatAsIssuedDate(CredentialHelper.issueAtDate(item.record))}
             </NormalText>
 
             <QRContainerView>
               <QRCode
-                value={data}
+                value={item.raw}
                 quietZone={5}
                 size={Dimensions.get('window').width - 64}
               />

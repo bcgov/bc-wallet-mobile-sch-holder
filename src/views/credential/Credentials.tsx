@@ -71,30 +71,26 @@ export const Credentials = ({navigation}) => {
     }, []),
   );
 
-  useEffect(() => {
-    async function wrap() {
-      try {
-        const credHelper = new CredentialHelper();
-        const results = await credHelper.credentials();
-        console.debug(`Found ${results.length} credentials`);
+  // useEffect(() => {
+  //   async function wrap() {
+  //     try {
+  //       const credHelper = new CredentialHelper();
+  //       const results = await credHelper.credentials();
+  //       console.debug(`Found ${results.length} credentials`);
 
-        if (results?.length) {
-          dispatch({type: DispatchAction.SetCredentials, payload: results});
-        }
-      } catch (err) {
-        const msg = 'Unable to fetch credentials';
-        console.error(msg);
-      }
-    }
-    wrap();
-  }, [isFocused, dispatch]);
+  //       if (results?.length) {
+  //         dispatch({type: DispatchAction.SetCredentials, payload: results});
+  //       }
+  //     } catch (err) {
+  //       const msg = 'Unable to fetch credentials';
+  //       console.error(msg);
+  //     }
+  //   }
+  //   wrap();
+  // }, [isFocused, dispatch]);
 
   const onCredentialSelected = (item: Credential) => {
-    // dispatch({type: DispatchAction.RemoveCredential, payload: [1632959595284]});
-    navigation.navigate('Credential', {
-      itemId: item.id,
-      record: item.record,
-    });
+    navigation.navigate('Credential', {item});
   };
 
   return (

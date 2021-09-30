@@ -1,6 +1,7 @@
-import React, {createContext, useReducer} from 'react';
+import React, {createContext, useReducer, useMemo} from 'react';
 import Reducer from './Reducer';
 import {State} from './types';
+import {CredentialHelper} from './utils/credhelper';
 
 const initialState: State = {
   credentials: [],
@@ -9,6 +10,23 @@ const initialState: State = {
 
 const Store = ({children}: {children: any}) => {
   const [state, dispatch] = useReducer(Reducer, initialState);
+
+  useMemo(() => {
+    async function wrap() {
+      try {
+        const credHelper = new CredentialHelper();
+        const results = await credHelper.credentials();
+
+        initialState.credentials = results;
+        console.debug(`Found ${results.length} credentials`);
+      } catch (err) {
+        const msg = 'Unable to fetch credentials';
+        console.error(msg);
+      }
+    }
+    wrap();
+  }, []);
+
   return (
     <Context.Provider value={[state, dispatch]}>{children}</Context.Provider>
   );

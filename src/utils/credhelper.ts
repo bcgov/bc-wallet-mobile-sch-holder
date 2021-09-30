@@ -6,6 +6,8 @@ import * as SHC from '@pathcheck/shc-sdk';
 import {startCase, isArray} from 'lodash';
 import {fullVaxMinRecordCount} from '../constants';
 
+const key = 'shc_vaccinations';
+
 export enum ImmunizationStatus {
   Partial,
   Full,
@@ -53,6 +55,22 @@ export class CredentialHelper {
     return new Date(item.nbf * 1000);
   }
 
+  public static async save(records: Array<Credential>): Promise<void> {
+    console.log('store credential');
+
+    try {
+      const data = records.map(r => ({
+        id: r.id,
+        record: r.raw,
+      }));
+
+      await EncryptedStorage.setItem(key, JSON.stringify(data));
+    } catch (error) {
+      // TODO:(jl) Need to shore up error handling mechanics.
+      console.error(error);
+    }
+  }
+
   async decodeRecords(records: Array<any>): Promise<Array<Credential>> {
     let credentials: Array<Credential> = [];
 
@@ -70,6 +88,7 @@ export class CredentialHelper {
         credentials.push({
           id: u.id,
           record,
+          raw: u.record,
         });
       }
     } catch (error) {

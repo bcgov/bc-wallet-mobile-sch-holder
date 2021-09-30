@@ -1,4 +1,5 @@
 import {State} from './types';
+import { CredentialHelper } from './utils/credhelper';
 
 export enum DispatchAction {
   SetCredentials = 'SET_CREDENTIALS',
@@ -13,7 +14,6 @@ export interface ReducerAction {
 }
 
 const Reducer = (state: State, action: ReducerAction) => {
-  // console.log(`Reducer action = ${action}, sate = ${JSON.stringify(state)}`);
   switch (action.type) {
     case DispatchAction.SetCredentials:
       return {
@@ -21,17 +21,24 @@ const Reducer = (state: State, action: ReducerAction) => {
         credentials: action.payload,
       };
     case DispatchAction.AddCredential:
-      return {
+      const xState = {
         ...state,
         credentials: state.credentials.concat(action.payload),
       };
+
+      Promise.resolve(CredentialHelper.save(xState.credentials));
+      return xState;
     case DispatchAction.RemoveCredential:
-      return {
+      const item = action.payload.pop();
+      const zState = {
         ...state,
         credentials: state.credentials.filter(
-          credential => credential.id !== action.payload.pop(),
+          credential => credential.id !== item.id,
         ),
       };
+
+      Promise.resolve(CredentialHelper.save(zState.credentials));
+      return zState;
     case DispatchAction.SetError:
       return {
         ...state,
