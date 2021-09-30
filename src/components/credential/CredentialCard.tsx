@@ -11,10 +11,7 @@ import {
 import QrCode from '../../assets/img/qrcode.svg';
 import LargeArrow from '../../assets/img/large-arrow.svg';
 import {formatAsIssuedDate} from '../../utils/date';
-import {Dimensions, View} from 'react-native';
 import {PersonName} from '../../types';
-
-const {width} = Dimensions.get('window');
 
 export interface ICredentialProps {
   name: PersonName | string;
@@ -27,21 +24,15 @@ const qrCodeSize = 48;
 const RowView = styled.View`
   flex-direction: row;
   align-items: center;
+  border-radius: 16px;
 `;
 
 const ColumnView = styled.View`
   flex-direction: column;
-  justify-content: center;
-  border-radius: 16px;
 `;
 
 const IconView = styled.View`
-  padding: 0px 16px;
-`;
-
-const LineView = styled.View`
-  height: 1px;
-  background-color: ${theme.colors.betaYellow};
+  padding: 8px 16px;
 `;
 
 const HeaderText = styled.Text`
@@ -58,30 +49,12 @@ const NormalText = styled.Text`
 
 const NormalBoldText = styled.Text`
   ${boldText}
-  font-size: 16px;
+  font-size: 20px;
   color: ${theme.colors.white};
 `;
 
 const margin = css`
   margin: 8px 16px 8px 16px;
-`;
-
-const textPaddingLeft = css`
-  padding-left: 80px;
-`;
-
-const textPaddingRight = css`
-  padding-right: 48px;
-`;
-
-const paddingTop = css`
-  padding-top: 16px;
-  margin-bottom: -8px;
-`;
-
-const paddingBottom = css`
-  padding-bottom: 16px;
-  margin-top: -8px;
 `;
 
 const CredentialCard: React.FC<ICredentialProps> = ({
@@ -90,30 +63,43 @@ const CredentialCard: React.FC<ICredentialProps> = ({
   issuedAt,
 }) => {
   return (
-    <ColumnView
+    <RowView
       style={[
         margin,
         {
+          justifyContent: 'space-between',
           backgroundColor: vaccinationStatusColor(vaccinationStatus),
         },
       ]}>
-      <View style={[textPaddingLeft, textPaddingRight, paddingTop]}>
-        <HeaderText>
-          {CredentialHelper.familyNameForCredential(name).toUpperCase()},
-        </HeaderText>
-        <HeaderText>
-          {CredentialHelper.givenNameForCredential(name).toUpperCase()}
-        </HeaderText>
-      </View>
-      <RowView>
-        <IconView>
-          <QrCode
-            width={qrCodeSize}
-            height={qrCodeSize}
-            fill={theme.colors.white}
-          />
-        </IconView>
-        <LineView style={{width: width - qrCodeSize - 7 * 16}} />
+      <ColumnView>
+        <RowView style={{paddingTop: 8}}>
+          <IconView>
+            <QrCode
+              width={qrCodeSize}
+              height={qrCodeSize}
+              fill={theme.colors.white}
+            />
+          </IconView>
+          <ColumnView>
+            <HeaderText>
+              {CredentialHelper.familyNameForCredential(name).toUpperCase()},
+            </HeaderText>
+            <HeaderText>
+              {CredentialHelper.givenNameForCredential(name).toUpperCase()}
+            </HeaderText>
+          </ColumnView>
+        </RowView>
+        {/* <RowView>
+          <LineView style={{width: width - 6 * 16, marginLeft: 16}} />
+        </RowView> */}
+        <ColumnView style={{paddingVertical: 16, paddingLeft: 16}}>
+          <NormalBoldText>
+            {vaccinationStatusText(vaccinationStatus)}
+          </NormalBoldText>
+          <NormalText>Issued {formatAsIssuedDate(issuedAt)}</NormalText>
+        </ColumnView>
+      </ColumnView>
+      <ColumnView style={{justifyContent: 'flex-end', alignItems: 'flex-end'}}>
         <IconView>
           <LargeArrow
             height={48}
@@ -122,14 +108,8 @@ const CredentialCard: React.FC<ICredentialProps> = ({
             style={{transform: [{rotate: '180deg'}]}}
           />
         </IconView>
-      </RowView>
-      <View style={[textPaddingLeft, paddingBottom]}>
-        <NormalBoldText>
-          {vaccinationStatusText(vaccinationStatus)}
-        </NormalBoldText>
-        <NormalText>Issued {formatAsIssuedDate(issuedAt)}</NormalText>
-      </View>
-    </ColumnView>
+      </ColumnView>
+    </RowView>
   );
 };
 
