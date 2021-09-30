@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Text, TouchableHighlight, View} from 'react-native';
 import {
   launchImageLibrary,
@@ -16,6 +16,8 @@ import {boldText} from '../../assets/styles';
 import {css} from '@emotion/native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {useTheme} from '@emotion/react';
+import {DispatchAction} from '../../Reducer';
+import {Context} from '../../Store';
 
 const container = css`
   padding: 32px;
@@ -46,6 +48,7 @@ const iconMargin = css`
 
 export const CredentialAdd = ({navigation}: Props) => {
   const credHelper = new CredentialHelper();
+  const [state, dispatch] = useContext(Context);
 
   async function uploadImage() {
     try {
@@ -69,7 +72,18 @@ export const CredentialAdd = ({navigation}: Props) => {
           const res = await RNQRGenerator.detect({uri});
           if (res.values.length) {
             for (const cred of res.values) {
-              await credHelper.storeCredential(cred);
+              const dc = (
+                await credHelper.decodeRecords([
+                  {
+                    id: Date.now(),
+                    record: cred,
+                  },
+                ])
+              ).pop();
+              dispatch({
+                type: DispatchAction.AddCredential,
+                payload: [{...dc, raw: cred}],
+              });
             }
             navigation.navigate('Credentials');
           }

@@ -6,6 +6,8 @@ import * as SHC from '@pathcheck/shc-sdk';
 import {startCase, isArray} from 'lodash';
 import {fullVaxMinRecordCount} from '../constants';
 
+const key = 'shc_vaccinations';
+
 export enum ImmunizationStatus {
   Partial,
   Full,
@@ -53,6 +55,22 @@ export class CredentialHelper {
     return new Date(item.nbf * 1000);
   }
 
+  public static async save(records: Array<Credential>): Promise<void> {
+    console.log('store credential');
+
+    try {
+      const data = records.map(r => ({
+        id: r.id,
+        record: r.raw,
+      }));
+
+      await EncryptedStorage.setItem(key, JSON.stringify(data));
+    } catch (error) {
+      // TODO:(jl) Need to shore up error handling mechanics.
+      console.error(error);
+    }
+  }
+
   async decodeRecords(records: Array<any>): Promise<Array<Credential>> {
     let credentials: Array<Credential> = [];
 
@@ -70,6 +88,7 @@ export class CredentialHelper {
         credentials.push({
           id: u.id,
           record,
+          raw: u.record,
         });
       }
     } catch (error) {
@@ -130,7 +149,6 @@ export class CredentialHelper {
 
       if (storedShcVaccinations) {
         shcVaccinations = JSON.parse(storedShcVaccinations);
-        console.log(`Found ${shcVaccinations.lenght} existing creds`);
       }
 
       shcVaccinations.push({
@@ -151,6 +169,32 @@ export class CredentialHelper {
   async clearAllCredentials(): Promise<void> {
     try {
       await EncryptedStorage.clear();
+    } catch (error) {
+      // TODO:(jl) Need to shore up error handling mechanics.
+      console.error(error);
+    }
+  }
+
+  async removeCardWithId(id: number): Promise<void> {
+    try {
+      let shcVaccinations = [];
+      const storedShcVaccinations = await EncryptedStorage.getItem(
+        this.storageKey,
+      );
+
+      if (storedShcVaccinations) {
+        shcVaccinations = JSON.parse(storedShcVaccinations);
+      }
+
+      shcVaccinations.push({
+        record,
+        id: Date.now(),
+      });
+
+      await EncryptedStorage.setItem(
+        this.storageKey,
+        JSON.stringify(shcVaccinations),
+      );
     } catch (error) {
       // TODO:(jl) Need to shore up error handling mechanics.
       console.error(error);
