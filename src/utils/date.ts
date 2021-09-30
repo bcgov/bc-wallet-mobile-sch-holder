@@ -4,7 +4,7 @@ export const formatAsIssuedDate = (
 ): string => {
   return date.toLocaleDateString('en-ca', {
     year: 'numeric',
-    month: 'long',
+    month: 'short',
     day: 'numeric',
     timeZone,
   });

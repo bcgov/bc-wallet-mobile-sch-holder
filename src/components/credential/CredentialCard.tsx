@@ -32,12 +32,12 @@ const ColumnView = styled.View`
 `;
 
 const IconView = styled.View`
-  padding: 8px 16px;
+  padding: 16px 16px;
 `;
 
 const HeaderText = styled.Text`
   ${text}
-  font-size: 16px;
+  font-size: 18px;
   color: ${theme.colors.white};
 `;
 
@@ -49,7 +49,7 @@ const NormalText = styled.Text`
 
 const NormalBoldText = styled.Text`
   ${boldText}
-  font-size: 20px;
+  font-size: 18px;
   color: ${theme.colors.white};
 `;
 
@@ -72,7 +72,7 @@ const CredentialCard: React.FC<ICredentialProps> = ({
         },
       ]}>
       <ColumnView>
-        <RowView style={{paddingTop: 8}}>
+        <RowView>
           <IconView>
             <QrCode
               width={qrCodeSize}
@@ -80,7 +80,7 @@ const CredentialCard: React.FC<ICredentialProps> = ({
               fill={theme.colors.white}
             />
           </IconView>
-          <ColumnView>
+          <ColumnView style={{paddingTop: 16}}>
             <HeaderText>
               {CredentialHelper.familyNameForCredential(name).toUpperCase()},
             </HeaderText>
@@ -89,17 +89,14 @@ const CredentialCard: React.FC<ICredentialProps> = ({
             </HeaderText>
           </ColumnView>
         </RowView>
-        {/* <RowView>
-          <LineView style={{width: width - 6 * 16, marginLeft: 16}} />
-        </RowView> */}
-        <ColumnView style={{paddingVertical: 16, paddingLeft: 16}}>
+        <ColumnView style={{paddingTop: 0, paddingBottom: 16, paddingLeft: 80}}>
           <NormalBoldText>
             {vaccinationStatusText(vaccinationStatus)}
           </NormalBoldText>
           <NormalText>Issued {formatAsIssuedDate(issuedAt)}</NormalText>
         </ColumnView>
       </ColumnView>
-      <ColumnView style={{justifyContent: 'flex-end', alignItems: 'flex-end'}}>
+      <ColumnView style={{justifyContent: 'flex-end'}}>
         <IconView>
           <LargeArrow
             height={48}
