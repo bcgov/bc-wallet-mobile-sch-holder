@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useState, useContext} from 'react';
 import QRCode from 'react-native-qrcode-svg';
 import {CredentialHelper} from '../../utils/credhelper';
 import styled from '@emotion/native';
@@ -18,7 +18,9 @@ import {
   Alert,
 } from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {ContextMenu} from './ContextMenu';
+import {ContextMenu} from '../../components/ContextMenu';
+import {DispatchAction} from '../../Reducer';
+import {Context} from '../../Store';
 
 export interface IRouteProps {
   navigation: any;
@@ -100,43 +102,45 @@ const NormalText = styled.Text`
   text-align: center;
 `;
 
-export const Credential: React.FC<IRouteProps> = ({route}) => {
-  const {itemId, record} = route.params;
-  const [data, setData] = useState<string>('no data');
-  const myState = useState(false);
-  const [xstate] = myState;
-  const [modalIsVisible, setModalIsVisible] = myState;
+export const Credential: React.FC<IRouteProps> = ({route, navigation}) => {
+  const {item} = route.params;
+  // const [data, setData] = useState<string>('no data');
+  const contextMenuState = useState(false);
+  const [modalIsVisible, setModalIsVisible] = contextMenuState;
+  const locationState = useState<any>([0, 0, 0]);
+  const [location, setLocation] = locationState;
+  const [state, dispatch] = useContext(Context);
+  // let marker: any;
 
-  useMemo(() => {
-    async function wrap() {
-      try {
-        const credHelper = new CredentialHelper();
-        const results = await credHelper.credentialWithId(itemId, true);
-        if (!results) {
-          return;
-        }
+  const deleteCard = () => {
+    console.log('Delete card');
 
-        // @ts-ignore
-        setData(results.record);
-      } catch (err) {
-        const msg = 'Unable to fetch credentials';
-        console.error(msg);
-      }
+    try {
+      dispatch({type: DispatchAction.RemoveCredential, payload: [item]});
+      navigation.goBack(null);
+    } catch (e) {
+      Alert.alert('Yikes!', 'There was a problem removing this card.', [
+        {text: 'OK'},
+      ]);
     }
-    wrap();
-  }, [itemId]);
+  };
 
-  const showContextMenu = () => {
+  const showCardDetails = () => {
+    console.log('Show details touched');
+
     Alert.alert(
       'Coming Soon',
-      'This feature is not implemented yet. Check back later for Delete and Details view functionality.',
+      'This feature is not implemented yet. Check back later for Card Details functionality.',
       [{text: 'OK'}],
     );
-    // if (modalIsVisible) {
-    //   return;
-    // }
+  };
 
-    // setModalIsVisible(true);
+  const showContextMenu = () => {
+    if (modalIsVisible) {
+      return;
+    }
+
+    setModalIsVisible(true);
   };
 
   const hideContextMenu = () => {
@@ -149,11 +153,42 @@ export const Credential: React.FC<IRouteProps> = ({route}) => {
 
   return (
     <ScrollView>
-      <TouchableOpacity activeOpacity={1}>
-        <ContentView>
+      <TouchableOpacity onPress={hideContextMenu} activeOpacity={1}>
+        <ContentView onStartShouldSetResponder={() => !modalIsVisible}>
           <HeaderContainer>
             <HeaderText>BC Vaccination Card</HeaderText>
-            <View onTouchStart={showContextMenu}>
+            <View
+              // style={{
+              //   backgroundColor: '#F00',
+              // }}
+              onLayout={event => {
+                // console.log('btn layout', event.nativeEvent.layout);
+                setLocation([
+                  event.nativeEvent.layout.x,
+                  event.nativeEvent.layout.y,
+                  event.nativeEvent.layout.width,
+                ]);
+              }}
+              // ref={view => {
+              //   marker = view;
+              // }}
+              // onLayout={({event}: {event: any}) => {
+              //   setLocation([
+              //     event.nativeEvent.layout.x,
+              //     event.nativeEvent.layout.y,
+              //     event.nativeEvent.layout.width,
+              //   ]);
+              // if (marker) {
+              //   marker.measure((x, y, width, height, pageX, pageY) => {
+              //     setLocation([
+              //       event.nativeEvent.layout.x,
+              //       event.nativeEvent.layout.y,
+              //     ]);
+              //     console.log('**', x, y, width, height, pageX, pageY);
+              //   });
+              // }
+              // }}
+              onTouchStart={showContextMenu}>
               <FontAwesomeIcon
                 icon="ellipsis-h"
                 size={32}
@@ -162,36 +197,34 @@ export const Credential: React.FC<IRouteProps> = ({route}) => {
             </View>
           </HeaderContainer>
           <LineView />
-          <ContextMenu state={xstate} />
+          <ContextMenu
+            state={contextMenuState}
+            location={locationState}
+            onDeleteTouched={deleteCard}
+            onShowDetailsTouched={showCardDetails}
+          />
           <LargeText>
-            {CredentialHelper.familyNameForCredential(
-              CredentialHelper.nameForCredential(record),
-            )}
-            ,
-          </LargeText>
-          <LargeText>
-            {CredentialHelper.givenNameForCredential(
-              CredentialHelper.nameForCredential(record),
-            )}
+            {CredentialHelper.fullNameForCredential(item.record)}
           </LargeText>
           <StatusView
             style={{
               backgroundColor: vaccinationStatusColor(
-                CredentialHelper.immunizationStatus(record),
+                CredentialHelper.immunizationStatus(item.record),
               ),
             }}>
             <LargerText>
               {vaccinationStatusText(
-                CredentialHelper.immunizationStatus(record),
+                CredentialHelper.immunizationStatus(item.record),
               )}
             </LargerText>
             <NormalText>
-              Issued {formatAsIssuedDate(CredentialHelper.issueAtDate(record))}
+              Issued{' '}
+              {formatAsIssuedDate(CredentialHelper.issueAtDate(item.record))}
             </NormalText>
 
             <QRContainerView>
               <QRCode
-                value={data}
+                value={item.raw}
                 quietZone={5}
                 size={Dimensions.get('window').width - 64}
               />

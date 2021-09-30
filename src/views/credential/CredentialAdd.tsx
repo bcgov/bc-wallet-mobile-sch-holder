@@ -1,12 +1,12 @@
-import React from 'react';
-import {Text, TouchableHighlight, View} from 'react-native';
+import React, {useContext} from 'react';
+import {Alert, Text, TouchableHighlight, View} from 'react-native';
 import {
   launchImageLibrary,
   ImageLibraryOptions,
 } from 'react-native-image-picker';
 import RNQRGenerator from 'rn-qr-generator';
 import {CredentialHelper} from '../../utils/credhelper';
-import {AppTheme, Props} from '../../../App';
+import {AppTheme} from '../../../App';
 
 import QrCodeScan from '../../assets/img/qrcode-scan.svg';
 import Image from '../../assets/img/image.svg';
@@ -16,6 +16,8 @@ import {boldText} from '../../assets/styles';
 import {css} from '@emotion/native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {useTheme} from '@emotion/react';
+import {DispatchAction} from '../../Reducer';
+import {Context} from '../../Store';
 
 const container = css`
   padding: 32px;
@@ -44,8 +46,8 @@ const iconMargin = css`
   margin-left: 9px;
 `;
 
-export const CredentialAdd = ({navigation}: Props) => {
-  const credHelper = new CredentialHelper();
+export const CredentialAdd: React.FC<any> = ({navigation}) => {
+  const [, dispatch] = useContext(Context);
 
   async function uploadImage() {
     try {
@@ -66,12 +68,24 @@ export const CredentialAdd = ({navigation}: Props) => {
             return;
           }
 
-          const res = await RNQRGenerator.detect({uri});
-          if (res.values.length) {
-            for (const cred of res.values) {
-              await credHelper.storeCredential(cred);
+          try {
+            const res = await RNQRGenerator.detect({uri});
+            if (res.values.length) {
+              for (const cred of res.values) {
+                const record = await CredentialHelper.decodeRecord(cred);
+                dispatch({
+                  type: DispatchAction.AddCredential,
+                  payload: [{id: Date.now(), record, raw: cred}],
+                });
+              }
+              navigation.navigate('Credentials');
             }
-            navigation.navigate('Credentials');
+          } catch (err) {
+            Alert.alert(
+              'Yikes!',
+              'There was a problem decoding this QR code.',
+              [{text: 'Ok'}],
+            );
           }
         },
       );

@@ -1,3 +1,8 @@
+export interface State {
+  credentials: Array<any>;
+  error: Error | null;
+}
+
 export interface JWKSKey {
   kty: string;
   kid: string;
@@ -14,18 +19,20 @@ export interface JWKS {
   key: JWKSKey;
 }
 
+// SHC Spec https://spec.smarthealth.cards/#protocol-details
 export interface SHCRecord {
   iss: string; // issuer
   nbf: number; // not before
-  vc: SHCVerifiedCredential; // verified credential
+  vc: SHCVerifiableCredential; // verified credential
 }
 
 export interface Credential {
   id: number;
   record: SHCRecord;
+  raw: string;
 }
 
-export interface SHCVerifiedCredential {
+export interface SHCVerifiableCredential {
   type: Array<string>;
   credentialSubject: any;
 }

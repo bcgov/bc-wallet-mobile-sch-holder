@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useContext} from 'react';
 import {
   BackHandler,
   Dimensions,
@@ -10,16 +10,14 @@ import {
 import {CredentialHelper} from '../../utils/credhelper';
 import {Credential} from '../../types';
 import {AppTheme} from '../../../App';
-
 import {css} from '@emotion/native';
 import {useTheme} from '@emotion/react';
-
 import Wallet from '../../assets/img/wallet.svg';
 import {boldText, text} from '../../assets/styles';
-import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 import CredentialCard from '../../components/credential/CredentialCard';
-
 import {primaryButton, primaryButtonText} from '../../assets/styles';
+import {Context} from '../../Store';
 
 const {width} = Dimensions.get('window');
 
@@ -49,9 +47,9 @@ const extraMarginBottom = css`
   margin-bottom: 24px;
 `;
 
-export const Credentials = ({navigation}) => {
-  const [credentials, setCredentials] = useState<Credential[]>([]);
-  const isFocused = useIsFocused();
+export const Credentials: React.FC<any> = ({navigation}) => {
+  const [state] = useContext(Context);
+  const {credentials} = state;
   const theme = useTheme() as AppTheme;
 
   useFocusEffect(
@@ -66,29 +64,8 @@ export const Credentials = ({navigation}) => {
     }, []),
   );
 
-  useEffect(() => {
-    async function wrap() {
-      try {
-        const credHelper = new CredentialHelper();
-        const results = await credHelper.credentials();
-        console.debug(`Found ${results.length} credentials`);
-        if (results?.length) {
-          setCredentials(results);
-        }
-        // credHelper.clearAllCredentials();
-      } catch (err) {
-        const msg = 'Unable to fetch credentials';
-        console.error(msg);
-      }
-    }
-    wrap();
-  }, [isFocused]);
-
   const onCredentialSelected = (item: Credential) => {
-    navigation.navigate('Credential', {
-      itemId: item.id,
-      record: item.record,
-    });
+    navigation.navigate('Credential', {item});
   };
 
   return (

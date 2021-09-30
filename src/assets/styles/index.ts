@@ -16,12 +16,14 @@ export const vaccinationStatusColor = (status: ImmunizationStatus): string => {
   return theme.colors.headerBlue;
 };
 
+// eslint-disable-next-line no-shadow
 export const primaryButton = (theme: AppTheme) => css`
   padding: 16px 32px;
   border-radius: 4px;
   background-color: ${theme.colors.primaryBlue};
 `;
 
+// eslint-disable-next-line no-shadow
 export const primaryButtonText = (theme: AppTheme) => css`
   font-family: 'BCSans-Regular';
   font-size: 18px;
