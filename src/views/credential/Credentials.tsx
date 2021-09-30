@@ -16,7 +16,7 @@ import {useTheme} from '@emotion/react';
 
 import Wallet from '../../assets/img/wallet.svg';
 import {boldText, text} from '../../assets/styles';
-import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 import CredentialCard from '../../components/credential/CredentialCard';
 
 import {primaryButton, primaryButtonText} from '../../assets/styles';
@@ -53,10 +53,8 @@ const extraMarginBottom = css`
 `;
 
 export const Credentials = ({navigation}) => {
-  // const [credentials, setCredentials] = useState<Credential[]>([]);
   const [state, dispatch] = useContext(Context);
   const {credentials} = state;
-  const isFocused = useIsFocused();
   const theme = useTheme() as AppTheme;
 
   useFocusEffect(
@@ -70,23 +68,6 @@ export const Credentials = ({navigation}) => {
         BackHandler.removeEventListener('hardwareBackPress', onBackPress);
     }, []),
   );
-
-  // useEffect(() => {
-  //   async function wrap() {
-  //     try {
-  //       const results = await CredentialHelper.credentials();
-  //       console.debug(`Found ${results.length} credentials`);
-
-  //       if (results?.length) {
-  //         dispatch({type: DispatchAction.SetCredentials, payload: results});
-  //       }
-  //     } catch (err) {
-  //       const msg = 'Unable to fetch credentials';
-  //       console.error(msg);
-  //     }
-  //   }
-  //   wrap();
-  // }, [isFocused, dispatch]);
 
   const onCredentialSelected = (item: Credential) => {
     navigation.navigate('Credential', {item});
