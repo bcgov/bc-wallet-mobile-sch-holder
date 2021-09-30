@@ -1,4 +1,4 @@
-import React, {useEffect, useContext} from 'react';
+import React, {useCallback, useContext} from 'react';
 import {
   BackHandler,
   Dimensions,
