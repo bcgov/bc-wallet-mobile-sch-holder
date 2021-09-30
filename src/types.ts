@@ -20,6 +20,7 @@ export interface JWKS {
   key: JWKSKey;
 }
 
+// SHC Spec https://spec.smarthealth.cards/#protocol-details
 export interface SHCRecord {
   iss: string; // issuer
   nbf: number; // not before
