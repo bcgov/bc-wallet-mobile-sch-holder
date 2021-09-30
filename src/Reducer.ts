@@ -1,5 +1,5 @@
 import {State} from './types';
-import { CredentialHelper } from './utils/credhelper';
+import {CredentialHelper} from './utils/credhelper';
 
 export enum DispatchAction {
   SetCredentials = 'SET_CREDENTIALS',
