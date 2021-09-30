@@ -3,7 +3,6 @@ import {css} from '@emotion/native';
 import {ActivityIndicator} from 'react-native';
 import {theme} from '../../App';
 import DarkSafeAreaView from '../components/layout/DarkSafeAreaView';
-
 import Logo from '../assets/img/logo-light.svg';
 
 const container = css`

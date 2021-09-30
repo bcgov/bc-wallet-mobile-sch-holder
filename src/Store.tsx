@@ -14,9 +14,7 @@ const Store = ({children}: {children: any}) => {
   useMemo(() => {
     async function wrap() {
       try {
-        const credHelper = new CredentialHelper();
-        const results = await credHelper.credentials();
-
+        const results = await CredentialHelper.credentials();
         initialState.credentials = results;
         console.debug(`Found ${results.length} credentials`);
       } catch (err) {

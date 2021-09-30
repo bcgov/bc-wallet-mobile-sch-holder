@@ -1,4 +1,4 @@
-import React, {useMemo, useState, useContext} from 'react';
+import React, {useState, useContext} from 'react';
 import QRCode from 'react-native-qrcode-svg';
 import {CredentialHelper} from '../../utils/credhelper';
 import styled from '@emotion/native';
