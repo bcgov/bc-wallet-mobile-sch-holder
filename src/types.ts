@@ -23,7 +23,7 @@ export interface JWKS {
 export interface SHCRecord {
   iss: string; // issuer
   nbf: number; // not before
-  vc: SHCVerifiedCredential; // verified credential
+  vc: SHCVerifiableCredential; // verified credential
 }
 
 export interface Credential {
@@ -32,7 +32,7 @@ export interface Credential {
   raw: string;
 }
 
-export interface SHCVerifiedCredential {
+export interface SHCVerifiableCredential {
   type: Array<string>;
   credentialSubject: any;
 }

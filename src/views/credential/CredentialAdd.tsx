@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {Text, TouchableHighlight, View} from 'react-native';
+import {Alert, Text, TouchableHighlight, View} from 'react-native';
 import {
   launchImageLibrary,
   ImageLibraryOptions,
@@ -68,23 +68,24 @@ export const CredentialAdd = ({navigation}: Props) => {
             return;
           }
 
-          const res = await RNQRGenerator.detect({uri});
-          if (res.values.length) {
-            for (const cred of res.values) {
-              const dc = (
-                await CredentialHelper.decodeRecords([
-                  {
-                    id: Date.now(),
-                    record: cred,
-                  },
-                ])
-              ).pop();
-              dispatch({
-                type: DispatchAction.AddCredential,
-                payload: [{...dc, raw: cred}],
-              });
+          try {
+            const res = await RNQRGenerator.detect({uri});
+            if (res.values.length) {
+              for (const cred of res.values) {
+                const record = await CredentialHelper.decodeRecord(cred);
+                dispatch({
+                  type: DispatchAction.AddCredential,
+                  payload: [{id: Date.now(), record, raw: cred}],
+                });
+              }
+              navigation.navigate('Credentials');
             }
-            navigation.navigate('Credentials');
+          } catch (err) {
+            Alert.alert(
+              'Yikes!',
+              'There was a problem decoding this QR code.',
+              [{text: 'Ok'}],
+            );
           }
         },
       );

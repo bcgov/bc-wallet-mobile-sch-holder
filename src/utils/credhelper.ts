@@ -69,33 +69,17 @@ export class CredentialHelper {
     }
   }
 
-  public static async decodeRecords(
-    records: Array<any>,
-  ): Promise<Array<Credential>> {
-    let credentials: Array<Credential> = [];
-
-    if (!records || !isArray(records)) {
-      return [];
-    }
-
+  public static async decodeRecord(record: string): Promise<SHCRecord> {
     try {
-      for (const u of records) {
-        const record: SHCRecord = await SHC.unpackAndVerify(
-          u.record,
-          // PHSAPubKey.key,
-        );
-
-        credentials.push({
-          id: u.id,
-          record,
-          raw: u.record,
-        });
-      }
+      const data: SHCRecord = await SHC.unpackAndVerify(
+        record,
+        // PHSAPubKey.key,
+      );
+      console.log('dddddd', data);
+      return data;
     } catch (error) {
       // TODO:(jl) Need to shore up error handling mechanics.
       console.error(error);
-    } finally {
-      return credentials;
     }
   }
 
@@ -103,10 +87,19 @@ export class CredentialHelper {
     let credentials: Array<Credential> = [];
 
     try {
-      const qrCodeUrls = await EncryptedStorage.getItem(storageKey);
-      if (qrCodeUrls) {
-        const data = JSON.parse(qrCodeUrls);
-        credentials = await this.decodeRecords(data);
+      const records = await EncryptedStorage.getItem(storageKey);
+      if (records) {
+        const items = JSON.parse(records);
+        for (const i of items) {
+          const decoded: SHCRecord = await CredentialHelper.decodeRecord(
+            i.record,
+          );
+          credentials.push({
+            id: i.id,
+            record: decoded,
+            raw: i.record,
+          });
+        }
       }
     } catch (error) {
       // TODO:(jl) Need to shore up error handling mechanics.
