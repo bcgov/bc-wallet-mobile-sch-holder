@@ -54,8 +54,6 @@ export class CredentialHelper {
   }
 
   public static async save(records: Array<Credential>): Promise<void> {
-    console.log('store credential');
-
     try {
       const data = records.map(r => ({
         id: r.id,
@@ -75,7 +73,7 @@ export class CredentialHelper {
         record,
         // PHSAPubKey.key,
       );
-      console.log('dddddd', data);
+
       return data;
     } catch (error) {
       // TODO:(jl) Need to shore up error handling mechanics.
