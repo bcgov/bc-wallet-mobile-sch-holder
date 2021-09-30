@@ -16,22 +16,16 @@ import {
   Theme as NavigationTheme,
   useNavigationContainerRef,
 } from '@react-navigation/native';
-import {
-  createNativeStackNavigator,
-  NativeStackScreenProps,
-} from '@react-navigation/native-stack';
-
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Home} from './src/views/Home';
 import {CredentialAdd} from './src/views/credential/CredentialAdd';
 import {Credential} from './src/views/credential/Credential';
 import {Credentials} from './src/views/credential/Credentials';
 import {Scanner} from './src/views/Scanner';
 import {Splash} from './src/views/Splash';
-
 import {Theme, ThemeProvider} from '@emotion/react';
 import styled from '@emotion/native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-
 import './src/assets/icons';
 import Store from './src/Store';
 
@@ -81,8 +75,6 @@ type RootStackParamList = {
   Splash: undefined;
 };
 
-export type Props = NativeStackScreenProps<RootStackParamList>;
-
 const RightHeaderIcon = styled.View`
   height: 48px;
   width: 48px;
@@ -96,10 +88,7 @@ const App = () => {
 
   useEffect(() => {
     SplashScreen.hide();
-    setTimeout(() => {
-      navigation.navigate('Home');
-    }, 2000);
-  }, [navigation]);
+  }, []);
 
   return (
     <Store>

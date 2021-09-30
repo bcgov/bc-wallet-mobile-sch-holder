@@ -1,34 +1,24 @@
-import React, {createContext, useReducer, useMemo} from 'react';
-import Reducer from './Reducer';
+import React, {createContext, Dispatch, useReducer} from 'react';
+import reducer, {ReducerAction} from './Reducer';
 import {State} from './types';
-import {CredentialHelper} from './utils/credhelper';
 
 const initialState: State = {
   credentials: [],
   error: null,
 };
 
-const Store = ({children}: {children: any}) => {
-  const [state, dispatch] = useReducer(Reducer, initialState);
-
-  useMemo(() => {
-    async function wrap() {
-      try {
-        const results = await CredentialHelper.credentials();
-        initialState.credentials = results;
-        console.debug(`Found ${results.length} credentials`);
-      } catch (err) {
-        const msg = 'Unable to fetch credentials';
-        console.error(msg);
-      }
-    }
-    wrap();
-  }, []);
+const Store: React.FC = ({children}) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   return (
     <Context.Provider value={[state, dispatch]}>{children}</Context.Provider>
   );
 };
 
-export const Context = createContext(initialState);
+export const Context = createContext<[State, Dispatch<ReducerAction>]>([
+  initialState,
+  () => {
+    return;
+  },
+]);
 export default Store;

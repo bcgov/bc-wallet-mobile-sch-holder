@@ -10,19 +10,14 @@ import {
 import {CredentialHelper} from '../../utils/credhelper';
 import {Credential} from '../../types';
 import {AppTheme} from '../../../App';
-
 import {css} from '@emotion/native';
 import {useTheme} from '@emotion/react';
-
 import Wallet from '../../assets/img/wallet.svg';
 import {boldText, text} from '../../assets/styles';
 import {useFocusEffect} from '@react-navigation/native';
 import CredentialCard from '../../components/credential/CredentialCard';
-
 import {primaryButton, primaryButtonText} from '../../assets/styles';
-
 import {Context} from '../../Store';
-import {DispatchAction} from '../../Reducer';
 
 const {width} = Dimensions.get('window');
 
@@ -52,8 +47,8 @@ const extraMarginBottom = css`
   margin-bottom: 24px;
 `;
 
-export const Credentials = ({navigation}) => {
-  const [state, dispatch] = useContext(Context);
+export const Credentials: React.FC<any> = ({navigation}) => {
+  const [state] = useContext(Context);
   const {credentials} = state;
   const theme = useTheme() as AppTheme;
 

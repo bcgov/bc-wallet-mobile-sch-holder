@@ -1,7 +1,7 @@
 import React, {useState, useContext} from 'react';
 import {Alert, TouchableHighlight, Vibration, View} from 'react-native';
 import {RNCamera} from 'react-native-camera';
-import {Props, theme} from '../../App';
+import {theme} from '../../App';
 import FlashOn from '../assets/img/flash-on.svg';
 import FlashOff from '../assets/img/flash-off.svg';
 import {CredentialHelper} from '../utils/credhelper';
@@ -9,10 +9,10 @@ import {css} from '@emotion/native';
 import {DispatchAction} from '../Reducer';
 import {Context} from '../Store';
 
-export const Scanner = ({navigation}: Props) => {
+export const Scanner: React.FC<any> = ({navigation}) => {
   const [active, setActive] = useState(true);
   const [torch, setTorch] = useState(false);
-  const [state, dispatch] = useContext(Context);
+  const [, dispatch] = useContext(Context);
 
   const container = css`
     flex: 1;
