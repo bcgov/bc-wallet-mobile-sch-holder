@@ -90,6 +90,7 @@ export const Credentials = ({navigation}) => {
   }, [isFocused, dispatch]);
 
   const onCredentialSelected = (item: Credential) => {
+    // dispatch({type: DispatchAction.RemoveCredential, payload: [1632959595284]});
     navigation.navigate('Credential', {
       itemId: item.id,
       record: item.record,

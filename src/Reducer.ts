@@ -13,7 +13,7 @@ export interface ReducerAction {
 }
 
 const Reducer = (state: State, action: ReducerAction) => {
-  console.log(`Reducer action = ${action}, sate = ${JSON.stringify(state)}`);
+  // console.log(`Reducer action = ${action}, sate = ${JSON.stringify(state)}`);
   switch (action.type) {
     case DispatchAction.SetCredentials:
       return {
@@ -29,7 +29,7 @@ const Reducer = (state: State, action: ReducerAction) => {
       return {
         ...state,
         credentials: state.credentials.filter(
-          credential => credential.id !== action.payload.id,
+          credential => credential.id !== action.payload.pop(),
         ),
       };
     case DispatchAction.SetError:
