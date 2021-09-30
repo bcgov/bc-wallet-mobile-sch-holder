@@ -204,7 +204,9 @@ export const Credential: React.FC<IRouteProps> = ({route, navigation}) => {
             onShowDetailsTouched={showCardDetails}
           />
           <LargeText>
-            {CredentialHelper.fullNameForCredential(item.record)}
+            {CredentialHelper.fullNameForCredential(
+              CredentialHelper.nameForCredential(item.record),
+            )}
           </LargeText>
           <StatusView
             style={{
