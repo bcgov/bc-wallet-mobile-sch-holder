@@ -81,7 +81,7 @@ const statusPadding = css`
   padding-top: 4px;
 `;
 
-const CredentialCard: React.FC<Props> = ({
+const CredentialCard: React.FC<ICredentialProps> = ({
   name,
   immunizationStatus: vaccinationStatus,
   issuedAt,

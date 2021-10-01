@@ -1,7 +1,7 @@
 import React, {useState, useContext} from 'react';
 import QRCode from 'react-native-qrcode-svg';
 import {CredentialHelper} from '../../utils/credhelper';
-import styled from '@emotion/native';
+import styled, {css} from '@emotion/native';
 import {theme} from '../../../App';
 import {
   boldText,
@@ -92,6 +92,22 @@ const LargeBoldText = styled.Text`
   text-align: center;
 `;
 
+const flexGrow = css`
+  flex-grow: 1;
+`;
+
+const leftPadding = css`
+  padding-left: 16px;
+`;
+
+const topPadding = css`
+  padding-top: 16px;
+`;
+
+const verticalPadding = css`
+  padding-vertical: 8px;
+`;
+
 export const Credential: React.FC<IRouteProps> = ({route, navigation}) => {
   const {item} = route.params;
   // const [data, setData] = useState<string>('no data');
@@ -146,7 +162,7 @@ export const Credential: React.FC<IRouteProps> = ({route, navigation}) => {
       <TouchableOpacity onPress={hideContextMenu} activeOpacity={1}>
         <ContentView onStartShouldSetResponder={() => !modalIsVisible}>
           <HeaderView>
-            <LargeBoldText style={{flexGrow: 1, paddingLeft: 16}}>
+            <LargeBoldText style={[flexGrow, leftPadding]}>
               BC Vaccine Card
             </LargeBoldText>
             <View
@@ -191,7 +207,7 @@ export const Credential: React.FC<IRouteProps> = ({route, navigation}) => {
             onDeleteTouched={deleteCard}
             onShowDetailsTouched={showCardDetails}
           />
-          <View style={{paddingVertical: 8}}>
+          <View style={[verticalPadding]}>
             <LargeText>
               {CredentialHelper.familyNameForCredential(
                 CredentialHelper.nameForCredential(item.record),
@@ -205,12 +221,14 @@ export const Credential: React.FC<IRouteProps> = ({route, navigation}) => {
             </LargeText>
           </View>
           <StatusView
-            style={{
-              backgroundColor: vaccinationStatusColor(
-                CredentialHelper.immunizationStatus(item.record),
-              ),
-              paddingTop: 8,
-            }}>
+            style={[
+              topPadding,
+              {
+                backgroundColor: vaccinationStatusColor(
+                  CredentialHelper.immunizationStatus(item.record),
+                ),
+              },
+            ]}>
             <LargeBoldText>
               {vaccinationStatusText(
                 CredentialHelper.immunizationStatus(item.record),
