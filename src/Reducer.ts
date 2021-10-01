@@ -1,4 +1,4 @@
-import {State} from './types';
+import {Credential, SHCRecord, State} from './types';
 import {CredentialHelper} from './utils/credhelper';
 
 export enum DispatchAction {
@@ -20,25 +20,34 @@ const Reducer = (state: State, action: ReducerAction): State => {
         ...state,
         credentials: action.payload,
       };
-    case DispatchAction.AddCredential:
-      const xState = {
+    case DispatchAction.AddCredential: {
+      const item = action.payload.pop();
+
+      if (CredentialHelper.credentialExists(item, state.credentials)) {
+        return state;
+      }
+
+      const newstate = {
         ...state,
-        credentials: state.credentials.concat(action.payload),
+        credentials: state.credentials.concat([item]),
       };
 
-      Promise.resolve(CredentialHelper.save(xState.credentials));
-      return xState;
-    case DispatchAction.RemoveCredential:
+      Promise.resolve(CredentialHelper.save(newstate.credentials));
+
+      return newstate;
+    }
+    case DispatchAction.RemoveCredential: {
       const item = action.payload.pop();
-      const zState = {
+      const newstate = {
         ...state,
         credentials: state.credentials.filter(
           credential => credential.id !== item.id,
         ),
       };
 
-      Promise.resolve(CredentialHelper.save(zState.credentials));
-      return zState;
+      Promise.resolve(CredentialHelper.save(newstate.credentials));
+      return newstate;
+    }
     case DispatchAction.SetError:
       return {
         ...state,
