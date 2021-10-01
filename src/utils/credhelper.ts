@@ -81,8 +81,6 @@ export class CredentialHelper {
   }
 
   public static async save(records: Array<Credential>): Promise<void> {
-    console.log('store credential');
-
     try {
       const data = records.map(r => ({
         id: r.id,
@@ -104,7 +102,7 @@ export class CredentialHelper {
         record,
         // PHSAPubKey.key,
       );
-      console.log('dddddd', data);
+
       return data;
     } catch (error) {
       // TODO:(jl) Need to shore up error handling mechanics.
@@ -137,5 +135,20 @@ export class CredentialHelper {
     } finally {
       return credentials;
     }
+  }
+
+  public static credentialExists(
+    item: Credential,
+    credentials: Array<Credential>,
+  ): boolean {
+    const matches = credentials.filter(credential => {
+      return credential.raw === item.raw;
+    });
+
+    if (matches.length !== 0) {
+      return true;
+    }
+
+    return false;
   }
 }
