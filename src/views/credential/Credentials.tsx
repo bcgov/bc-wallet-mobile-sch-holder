@@ -63,8 +63,8 @@ export const Credentials: React.FC<any> = ({navigation}) => {
     }, []),
   );
 
-  const onCredentialSelected = (item: Credential) => {
-    navigation.navigate('Credential', {item});
+  const onCredentialSelected = (credential: Credential) => {
+    navigation.navigate('Credential', {credential});
   };
 
   return (

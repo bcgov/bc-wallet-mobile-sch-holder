@@ -25,11 +25,10 @@ export const Splash: React.FC<any> = ({navigation}) => {
         if (results?.length) {
           dispatch({type: DispatchAction.SetCredentials, payload: results});
         }
+      } catch (error) {
+        console.error(error);
+      } finally {
         navigation.navigate('Home');
-      } catch (err) {
-        console.log(err);
-        const msg = 'Unable to fetch credentials';
-        console.error(msg);
       }
     }
     init();

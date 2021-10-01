@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import styled from '@emotion/native';
-import {theme} from '../../App';
+import {theme} from '../../../App';
 import {Alert} from 'react-native';
 
 export interface IModalMenuProps {
@@ -32,7 +32,7 @@ const ContextView = styled.View`
   z-index: 5;
 `;
 
-export const ContextMenu: React.FC<IModalMenuProps> = ({
+export const CrendentialContextMenu: React.FC<IModalMenuProps> = ({
   state,
   location,
   onDeleteTouched,

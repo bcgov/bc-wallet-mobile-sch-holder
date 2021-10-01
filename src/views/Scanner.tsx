@@ -72,7 +72,8 @@ export const Scanner: React.FC<any> = ({navigation}) => {
                 type: DispatchAction.AddCredential,
                 payload: [{id: Date.now(), record, raw: e.data}],
               });
-            } catch (err) {
+            } catch (error) {
+              console.error(error);
               Alert.alert(
                 'Yikes!',
                 'There was a problem decoding this QR code.',

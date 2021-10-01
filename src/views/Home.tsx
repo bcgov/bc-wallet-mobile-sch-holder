@@ -12,6 +12,9 @@ import {
 import {theme} from '../../App';
 import {
   boldText,
+  paginationStyle,
+  paginationStyleItemActive,
+  paginationStyleItemInactive,
   primaryButton,
   primaryButtonText,
   text,
@@ -59,23 +62,6 @@ const headerText = css`
 
 const headerSize = css`
   width: ${width};
-`;
-
-const paginationStyle = css`
-  position: relative;
-`;
-
-const paginationStyleItemActive = css`
-  width: 10px;
-  height: 10px;
-  background-color: ${theme.colors.primaryBlue};
-`;
-
-const paginationStyleItemInactive = css`
-  width: 10px;
-  height: 10px;
-  background-color: ${theme.colors.transparent};
-  border: 1px solid ${theme.colors.primaryBlue};
 `;
 
 const padding = css`

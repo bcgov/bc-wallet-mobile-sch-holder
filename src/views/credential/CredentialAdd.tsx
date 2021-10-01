@@ -79,7 +79,8 @@ export const CredentialAdd: React.FC<any> = ({navigation}) => {
               }
               navigation.navigate('Credentials');
             }
-          } catch (err) {
+          } catch (error) {
+            console.error(error);
             Alert.alert(
               'Yikes!',
               'There was a problem decoding this QR code.',
