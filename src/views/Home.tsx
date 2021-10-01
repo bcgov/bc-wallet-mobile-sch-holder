@@ -7,10 +7,9 @@ import {
   ScrollView,
   Text,
   TouchableHighlight,
-  TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import {Props, theme} from '../../App';
+import {theme} from '../../App';
 import {
   boldText,
   primaryButton,
@@ -111,7 +110,7 @@ const walkthrough: {image: React.FC<SvgProps>; text: string}[] = [
   },
 ];
 
-export const Home = ({navigation}: Props) => {
+export const Home: React.FC<any> = ({navigation}) => {
   useFocusEffect(
     useCallback(() => {
       const onBackPress = () => {
@@ -142,13 +141,11 @@ export const Home = ({navigation}: Props) => {
             </View>
             <View style={[container, flexRow, padding]}>
               {index > 0 ? (
-                <TouchableWithoutFeedback>
-                  <LargeArrow
-                    fill={theme.colors.primaryBlue}
-                    height={48}
-                    width={48}
-                  />
-                </TouchableWithoutFeedback>
+                <LargeArrow
+                  fill={theme.colors.primaryBlue}
+                  height={48}
+                  width={48}
+                />
               ) : (
                 <BlankView />
               )}
@@ -156,14 +153,12 @@ export const Home = ({navigation}: Props) => {
                 {item.text}
               </Text>
               {index < walkthrough.length - 1 ? (
-                <TouchableWithoutFeedback>
-                  <LargeArrow
-                    style={{transform: [{rotate: '180deg'}]}}
-                    fill={theme.colors.primaryBlue}
-                    height={48}
-                    width={48}
-                  />
-                </TouchableWithoutFeedback>
+                <LargeArrow
+                  style={{transform: [{rotate: '180deg'}]}}
+                  fill={theme.colors.primaryBlue}
+                  height={48}
+                  width={48}
+                />
               ) : (
                 <BlankView />
               )}

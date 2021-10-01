@@ -9,9 +9,8 @@ import {
 } from 'react-native';
 import {CredentialHelper} from '../../utils/credhelper';
 import {Credential} from '../../types';
-import {AppTheme} from '../../../App';
+import {theme} from '../../../App';
 import {css} from '@emotion/native';
-import {useTheme} from '@emotion/react';
 import Wallet from '../../assets/img/wallet.svg';
 import {boldText, text} from '../../assets/styles';
 import {useFocusEffect} from '@react-navigation/native';
@@ -22,6 +21,7 @@ import {Context} from '../../Store';
 const {width} = Dimensions.get('window');
 
 const container = css`
+  flex: 1;
   flex-direction: column;
   justify-content:center
   align-items: center;
@@ -50,7 +50,6 @@ const extraMarginBottom = css`
 export const Credentials: React.FC<any> = ({navigation}) => {
   const [state] = useContext(Context);
   const {credentials} = state;
-  const theme = useTheme() as AppTheme;
 
   useFocusEffect(
     useCallback(() => {
@@ -97,8 +96,7 @@ export const Credentials: React.FC<any> = ({navigation}) => {
               <TouchableHighlight
                 key={item.id}
                 onPress={() => onCredentialSelected(item)}
-                activeOpacity={0.5}
-                underlayColor="light-gray">
+                underlayColor={theme.colors.transparent}>
                 <CredentialCard
                   name={CredentialHelper.nameForCredential(item.record)}
                   immunizationStatus={CredentialHelper.immunizationStatus(
