@@ -4,11 +4,13 @@ on:
   push:
     paths:
       - ios/**
+      - android/**
       - src/**
-
-defaults:
-  run:
-    working-directory: ./ios
+  workflow_dispatch:
+    
+# defaults:
+#   run:
+#     working-directory: ./ios
 
 jobs:
   build-ios:
@@ -26,7 +28,6 @@ jobs:
         with:
           node-version: "12.x"
           registry-url: "https://registry.npmjs.org"
-      
       - name: configure ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -57,6 +58,7 @@ jobs:
             ${{ runner.os }}-derived_data
 
       - name: Install dependencies
+        working-directory: ./ios
         run: |
           gem install cocoapods && \
           npm ci && \
@@ -72,6 +74,7 @@ jobs:
           PROFILE_ID: 0b893b6e-9567-4d10-bc4b-cd2ae51224d3
 
       - name: Run debug build
+        working-directory: ./ios
         run: |
           xcodebuild \
           -workspace BCWallet.xcworkspace \
@@ -80,3 +83,61 @@ jobs:
           build \
           CODE_SIGNING_ALLOWED=NO \
           CODE_SIGNING_REQUIRED=NO
+  
+  build-android:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        compile-sdk: [30]
+        build-tools: [30.0.2]
+        sdk-tools:   [4333796]
+    steps:
+      - uses: actions/checkout@v1
+      
+      - name: setup ubuntu
+        run: |
+          sudo apt-get --quiet update --yes
+          sudo apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1
+      
+      - name: setup JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      
+      - name: download Android SDK
+        working-directory: ./android
+        run: |
+          wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/sdk-tools-linux-${{ matrix.sdk-tools }}.zip
+          unzip -d android-sdk-linux android-sdk.zip
+          sudo mkdir -p /root/.android
+          sudo touch /root/.android/repositories.cfg
+          echo y | android-sdk-linux/tools/bin/sdkmanager "platforms;android-${{ matrix.compile-sdk }}" >/dev/null
+          echo y | android-sdk-linux/tools/bin/sdkmanager "platform-tools" >/dev/null
+          echo y | android-sdk-linux/tools/bin/sdkmanager "build-tools;${{ matrix.build-tools }}" >/dev/null
+          export ANDROID_HOME=$PWD/android-sdk-linux
+          export PATH=$PATH:$PWD/android-sdk-linux/platform-tools/
+          chmod +x ./gradlew
+          set +o pipefail
+          yes | android-sdk-linux/tools/bin/sdkmanager --licenses
+          set -o pipefail
+
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: |
+          npm ci
+
+      - name: Android Debug Build
+        working-directory: ./android
+        run: ./gradlew assembleDebug
+
+      # - uses: actions/upload-artifact@master
+      #   with:
+      #     name: outputs
+      #     path: android/app/build/outputs/
