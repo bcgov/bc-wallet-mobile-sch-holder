@@ -30,7 +30,7 @@ const flexRow = css`
 const button = css`
   padding: 32px;
   border: 1px solid black;
-  border-radius: 8px;
+  border-radius: 4px;
   margin-bottom: 16px;
 `;
 

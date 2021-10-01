@@ -31,19 +31,19 @@ const ColumnView = styled.View`
   flex-direction: column;
 `;
 
-const HeaderText = styled.Text`
-  ${text}
-  font-size: 18px;
-  color: ${theme.colors.white};
-`;
-
 const NormalText = styled.Text`
   ${text}
   font-size: 16px;
   color: ${theme.colors.white};
 `;
 
-const NormalBoldText = styled.Text`
+const LargeText = styled.Text`
+  ${text}
+  font-size: 18px;
+  color: ${theme.colors.white};
+`;
+
+const LargeBoldText = styled.Text`
   ${boldText}
   font-size: 18px;
   color: ${theme.colors.white};
@@ -81,7 +81,7 @@ const statusPadding = css`
   padding-top: 4px;
 `;
 
-const CredentialCard: React.FC<ICredentialProps> = ({
+const CredentialCard: React.FC<Props> = ({
   name,
   immunizationStatus: vaccinationStatus,
   issuedAt,
@@ -103,17 +103,17 @@ const CredentialCard: React.FC<ICredentialProps> = ({
       </ColumnView>
       <ColumnView style={[textPadding]}>
         <View style={[namePadding]}>
-          <HeaderText>
+          <LargeText>
             {CredentialHelper.familyNameForCredential(name).toUpperCase()},
-          </HeaderText>
-          <HeaderText>
+          </LargeText>
+          <LargeText>
             {CredentialHelper.givenNameForCredential(name).toUpperCase()}
-          </HeaderText>
+          </LargeText>
         </View>
         <View style={[statusPadding]}>
-          <NormalBoldText>
+          <LargeBoldText>
             {vaccinationStatusText(vaccinationStatus)}
-          </NormalBoldText>
+          </LargeBoldText>
           <NormalText>Issued {formatAsIssuedDate(issuedAt)}</NormalText>
         </View>
       </ColumnView>

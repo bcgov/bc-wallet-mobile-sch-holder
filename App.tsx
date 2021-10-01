@@ -76,10 +76,11 @@ type RootStackParamList = {
 };
 
 const RightHeaderIcon = styled.View`
+  flex-direction: row;
   height: 48px;
   width: 48px;
-  justify-content: center;
-  align-items: flex-end;
+  justify-content: flex-end;
+  align-items: center;
 `;
 
 const App = () => {

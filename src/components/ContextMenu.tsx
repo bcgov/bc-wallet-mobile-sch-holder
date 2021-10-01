@@ -27,7 +27,7 @@ const ContextView = styled.View`
   background-color: ${theme.colors.white};
   opacity: 1;
   width: 200px;
-  border-radius: 10px;
+  border-radius: 4px;
   elevation: 5;
   z-index: 5;
 `;

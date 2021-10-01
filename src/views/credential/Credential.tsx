@@ -27,6 +27,8 @@ export interface IRouteProps {
   route: any;
 }
 
+const {width} = Dimensions.get('window');
+
 const ContentView = styled.View`
   display: flex;
   flex-direction: column;
@@ -37,67 +39,55 @@ const ContentView = styled.View`
   border-radius: 16px;
 `;
 
-const StatusView = styled.View`
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-top: 16px;
-  background-color: ${theme.colors.headerBlue};
-`;
-
-const QRContainerView = styled.View`
-  display: flex;
-  margin-top: 16px;
-  margin-bottom: 32px;
-  align-items: center;
-  justify-content: center;
-`;
-
-const HeaderText = styled.Text`
-  ${boldText}
-  font-size: 21px;
-  color: ${theme.colors.white};
-  text-align: center;
-  margin-left: 55px;
-`;
-
-const HeaderContainer = styled.View`
+const HeaderView = styled.View`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
-  margin-top: 16px;
-  width: 90%;
+  justify-content: center;
+  padding-horizontal: 16px;
+  padding-top: 16px;
+  padding-bottom: 8px;
 `;
 
 const LineView = styled.View`
-  height: 1px;
-  width: 90%;
-  margin-top: 16px;
-  margin-bottom: 16px;
+  height: 2px;
   background-color: ${theme.colors.betaYellow};
 `;
 
-const LargeText = styled.Text`
-  ${text}
-  font-size: 24px;
-  color: ${theme.colors.white};
-  text-align: center;
+const StatusView = styled.View`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: ${theme.colors.headerBlue};
 `;
 
-const LargerText = styled.Text`
-  ${boldText}
-  font-size: 36px;
-  color: ${theme.colors.white};
-  text-align: center;
-  margin-top: 16px;
+const QRCodeView = styled.View`
+  display: flex;
+  margin-top: 8px;
+  margin-bottom: 16px;
+  align-items: center;
+  justify-content: center;
 `;
 
 const NormalText = styled.Text`
   ${text}
   font-size: 16px;
+  color: ${theme.colors.white};
+  text-align: center;
+`;
+
+const LargeText = styled.Text`
+  ${text}
+  font-size: 18px;
+  color: ${theme.colors.white};
+  text-align: center;
+`;
+
+const LargeBoldText = styled.Text`
+  ${boldText}
+  font-size: 18px;
   color: ${theme.colors.white};
   text-align: center;
 `;
@@ -108,8 +98,8 @@ export const Credential: React.FC<IRouteProps> = ({route, navigation}) => {
   const contextMenuState = useState(false);
   const [modalIsVisible, setModalIsVisible] = contextMenuState;
   const locationState = useState<any>([0, 0, 0]);
-  const [location, setLocation] = locationState;
-  const [state, dispatch] = useContext(Context);
+  const [, setLocation] = locationState;
+  const [, dispatch] = useContext(Context);
   // let marker: any;
 
   const deleteCard = () => {
@@ -155,8 +145,10 @@ export const Credential: React.FC<IRouteProps> = ({route, navigation}) => {
     <ScrollView>
       <TouchableOpacity onPress={hideContextMenu} activeOpacity={1}>
         <ContentView onStartShouldSetResponder={() => !modalIsVisible}>
-          <HeaderContainer>
-            <HeaderText>BC Vaccination Card</HeaderText>
+          <HeaderView>
+            <LargeBoldText style={{flexGrow: 1, paddingLeft: 16}}>
+              BC Vaccine Card
+            </LargeBoldText>
             <View
               // style={{
               //   backgroundColor: '#F00',
@@ -189,48 +181,48 @@ export const Credential: React.FC<IRouteProps> = ({route, navigation}) => {
               // }
               // }}
               onTouchStart={showContextMenu}>
-              <FontAwesomeIcon
-                icon="ellipsis-h"
-                size={32}
-                color={theme.colors.white}
-              />
+              <FontAwesomeIcon icon="ellipsis-h" color={theme.colors.white} />
             </View>
-          </HeaderContainer>
-          <LineView />
+          </HeaderView>
+          <LineView style={{width: width - 64}} />
           <ContextMenu
             state={contextMenuState}
             location={locationState}
             onDeleteTouched={deleteCard}
             onShowDetailsTouched={showCardDetails}
           />
-          <LargeText>
-            {CredentialHelper.fullNameForCredential(
-              CredentialHelper.nameForCredential(item.record),
-            )}
-          </LargeText>
+          <View style={{paddingVertical: 8}}>
+            <LargeText>
+              {CredentialHelper.familyNameForCredential(
+                CredentialHelper.nameForCredential(item.record),
+              ).toUpperCase()}
+              ,
+            </LargeText>
+            <LargeText>
+              {CredentialHelper.givenNameForCredential(
+                CredentialHelper.nameForCredential(item.record),
+              ).toUpperCase()}
+            </LargeText>
+          </View>
           <StatusView
             style={{
               backgroundColor: vaccinationStatusColor(
                 CredentialHelper.immunizationStatus(item.record),
               ),
+              paddingTop: 8,
             }}>
-            <LargerText>
+            <LargeBoldText>
               {vaccinationStatusText(
                 CredentialHelper.immunizationStatus(item.record),
               )}
-            </LargerText>
+            </LargeBoldText>
             <NormalText>
               Issued{' '}
               {formatAsIssuedDate(CredentialHelper.issueAtDate(item.record))}
             </NormalText>
-
-            <QRContainerView>
-              <QRCode
-                value={item.raw}
-                quietZone={5}
-                size={Dimensions.get('window').width - 64}
-              />
-            </QRContainerView>
+            <QRCodeView>
+              <QRCode value={item.raw} quietZone={4} size={width - 64} />
+            </QRCodeView>
           </StatusView>
         </ContentView>
       </TouchableOpacity>
