@@ -57,8 +57,17 @@ export const CrendentialContextMenu: React.FC<IModalMenuProps> = ({
       // onLayout={event => {
       //   console.log('cccc', event.nativeEvent.layout);
       // }}
+      accessible={false}
     >
-      <TextButton onPress={onShowDetailsTouched}>Card Details</TextButton>
+      <TextButton
+        onPress={onShowDetailsTouched}
+        accessibilityLabel="Details"
+        accessibilityHint="Show credential details"
+        accessibilityRole="button"
+        accessible={true}
+      >
+        Card Details
+      </TextButton>
       <TextButton
         // eslint-disable-next-line react-native/no-inline-styles
         style={{
@@ -66,6 +75,9 @@ export const CrendentialContextMenu: React.FC<IModalMenuProps> = ({
           marginTop: 10,
         }}
         onPress={onDeleteTouched}
+        accessibilityLabel="Delete"
+        accessibilityHint="Delete this credential"
+        accessibilityRole="button"
       >
         Delete...
       </TextButton>

@@ -99,6 +99,7 @@ export const Credentials: React.FC<any> = ({navigation}) => {
                 key={item.id}
                 onPress={() => onCredentialSelected(item)}
                 underlayColor={theme.colors.transparent}
+                accessibilityLabel={`Card ${index + 1}`}
               >
                 <CredentialCard
                   name={CredentialHelper.nameForCredential(item.record)}

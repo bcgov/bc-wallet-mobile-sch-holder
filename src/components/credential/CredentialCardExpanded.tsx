@@ -152,13 +152,17 @@ export const CredentialCardExpanded: React.FC<any> = ({credential}) => {
       onPress={hideContextMenu}
       underlayColor={theme.colors.transparent}
       activeOpacity={1}
+      accessible={false}
     >
       <ContentView onStartShouldSetResponder={() => !modalIsVisible}>
-        <HeaderView>
+        <HeaderView accessible={false}>
           <LargeBoldText style={[flexGrow, leftPadding]}>
             BC Vaccine Card
           </LargeBoldText>
+
           <View
+            // accessibilityTraits={'button'} // only works in ios
+            // accessibilityComponentType={'button'} // only works in android
             // style={{
             //   backgroundColor: '#F00',
             // }}
@@ -190,6 +194,9 @@ export const CredentialCardExpanded: React.FC<any> = ({credential}) => {
             // }
             // }}
             onTouchStart={showContextMenu}
+            accessibilityRole="button"
+            accessibilityLabel="Menu"
+            accessible
           >
             <FontAwesomeIcon icon="ellipsis-h" color={theme.colors.white} />
           </View>
