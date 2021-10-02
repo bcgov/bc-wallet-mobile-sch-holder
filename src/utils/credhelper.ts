@@ -1,9 +1,14 @@
 import EncryptedStorage from 'react-native-encrypted-storage';
 // import {PHSAPubKey} from '../constants';
-import {SHCRecord, Credential, FhirBundleResourceType} from '../types';
+import {
+  SHCRecord,
+  Credential,
+  FhirBundleResourceType,
+  PersonName,
+} from '../types';
 // @ts-ignore
 import * as SHC from '@pathcheck/shc-sdk';
-import {startCase} from 'lodash';
+import {startCase, isString} from 'lodash';
 import {fullVaxMinRecordCount} from '../constants';
 
 const storageKey = 'shc_vaccinations';
@@ -14,7 +19,34 @@ export enum ImmunizationStatus {
 }
 
 export class CredentialHelper {
-  public static fullNameForCredential(item: SHCRecord): string {
+  private storageKey = 'shc_vaccinations';
+
+  public static familyNameForCredential(name: PersonName | string): string {
+    if (isString(name)) {
+      return name;
+    }
+    const {family} = name;
+    return startCase(family.toLowerCase());
+  }
+
+  public static givenNameForCredential(name: PersonName | string): string {
+    if (isString(name)) {
+      return name;
+    }
+    const {given} = name;
+    return startCase(given.join(' ').toLowerCase());
+  }
+
+  public static fullNameForCredential(name: PersonName | string): string {
+    if (isString(name)) {
+      return name;
+    }
+    return `${this.familyNameForCredential(
+      name,
+    )}, ${this.givenNameForCredential(name)}`;
+  }
+
+  public static nameForCredential(item: SHCRecord): PersonName | string {
     const results = item.vc.credentialSubject.fhirBundle.entry.filter(
       (e: any) => e.resource.resourceType === FhirBundleResourceType.Patient,
     );
@@ -26,12 +58,7 @@ export class CredentialHelper {
 
     const person = results.pop();
     const [name] = person.resource.name;
-    const {family, given} = name;
-    const fullNameAsStartCase = `${startCase(
-      family.toLowerCase(),
-    )}, ${startCase(given.join(' ').toLowerCase())}`;
-
-    return fullNameAsStartCase;
+    return name;
   }
 
   // @ts-ignore
@@ -67,7 +94,9 @@ export class CredentialHelper {
     }
   }
 
-  public static async decodeRecord(record: string): Promise<SHCRecord> {
+  public static async decodeRecord(
+    record: string,
+  ): Promise<SHCRecord | undefined> {
     try {
       const data: SHCRecord = await SHC.unpackAndVerify(
         record,
@@ -78,6 +107,7 @@ export class CredentialHelper {
     } catch (error) {
       // TODO:(jl) Need to shore up error handling mechanics.
       console.error(error);
+      return;
     }
   }
 
@@ -89,14 +119,14 @@ export class CredentialHelper {
       if (records) {
         const items = JSON.parse(records);
         for (const i of items) {
-          const decoded: SHCRecord = await CredentialHelper.decodeRecord(
-            i.record,
-          );
-          credentials.push({
-            id: i.id,
-            record: decoded,
-            raw: i.record,
-          });
+          const decoded = await CredentialHelper.decodeRecord(i.record);
+          if (decoded) {
+            credentials.push({
+              id: i.id,
+              record: decoded,
+              raw: i.record,
+            });
+          }
         }
       }
     } catch (error) {

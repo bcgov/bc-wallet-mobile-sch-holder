@@ -9,7 +9,7 @@
  */
 
 import React, {useEffect} from 'react';
-import {StatusBar, TouchableWithoutFeedback} from 'react-native';
+import {StatusBar, TouchableOpacity} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import {
   NavigationContainer,
@@ -76,10 +76,11 @@ type RootStackParamList = {
 };
 
 const RightHeaderIcon = styled.View`
+  flex-direction: row;
   height: 48px;
   width: 48px;
-  justify-content: center;
-  align-items: flex-end;
+  justify-content: flex-end;
+  align-items: center;
 `;
 
 const App = () => {
@@ -122,7 +123,7 @@ const App = () => {
                   gestureEnabled: false,
                   headerRight: () => {
                     return (
-                      <TouchableWithoutFeedback
+                      <TouchableOpacity
                         onPress={() => navigation.navigate('CredentialAdd')}>
                         <RightHeaderIcon>
                           <FontAwesomeIcon
@@ -130,7 +131,7 @@ const App = () => {
                             color={theme.colors.white}
                           />
                         </RightHeaderIcon>
-                      </TouchableWithoutFeedback>
+                      </TouchableOpacity>
                     );
                   },
                 })}

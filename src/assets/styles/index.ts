@@ -4,7 +4,7 @@ import {ImmunizationStatus} from '../../utils/credhelper';
 
 export const vaccinationStatusText = (status: ImmunizationStatus): string => {
   if (status === ImmunizationStatus.Full) {
-    return 'Fully Vaccinated';
+    return 'Vaccinated';
   }
   return 'Partially Vaccinated';
 };
@@ -36,4 +36,21 @@ export const text = css`
 
 export const boldText = css`
   font-family: 'BCSans-Bold';
+`;
+
+export const paginationStyle = css`
+  position: relative;
+`;
+
+export const paginationStyleItemActive = css`
+  width: 10px;
+  height: 10px;
+  background-color: ${theme.colors.primaryBlue};
+`;
+
+export const paginationStyleItemInactive = css`
+  width: 10px;
+  height: 10px;
+  background-color: ${theme.colors.transparent};
+  border: 1px solid ${theme.colors.primaryBlue};
 `;

@@ -6,7 +6,7 @@ import {
 } from 'react-native-image-picker';
 import RNQRGenerator from 'rn-qr-generator';
 import {CredentialHelper} from '../../utils/credhelper';
-import {AppTheme} from '../../../App';
+import {theme} from '../../../App';
 
 import QrCodeScan from '../../assets/img/qrcode-scan.svg';
 import Image from '../../assets/img/image.svg';
@@ -15,7 +15,6 @@ import {boldText} from '../../assets/styles';
 
 import {css} from '@emotion/native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {useTheme} from '@emotion/react';
 import {DispatchAction} from '../../Reducer';
 import {Context} from '../../Store';
 
@@ -31,7 +30,7 @@ const flexRow = css`
 const button = css`
   padding: 32px;
   border: 1px solid black;
-  border-radius: 8px;
+  border-radius: 4px;
   margin-bottom: 16px;
 `;
 
@@ -80,7 +79,8 @@ export const CredentialAdd: React.FC<any> = ({navigation}) => {
               }
               navigation.navigate('Credentials');
             }
-          } catch (err) {
+          } catch (error) {
+            console.error(error);
             Alert.alert(
               'Yikes!',
               'There was a problem decoding this QR code.',
@@ -93,8 +93,6 @@ export const CredentialAdd: React.FC<any> = ({navigation}) => {
       console.error(error);
     }
   }
-
-  const theme = useTheme() as AppTheme;
 
   return (
     <View style={[container]}>

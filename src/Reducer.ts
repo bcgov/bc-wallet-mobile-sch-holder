@@ -51,7 +51,7 @@ const Reducer = (state: State, action: ReducerAction): State => {
     case DispatchAction.SetError:
       return {
         ...state,
-        error: action.payload,
+        error: {...action.payload.pop()},
       };
     default:
       return state;
