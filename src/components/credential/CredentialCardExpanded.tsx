@@ -15,6 +15,7 @@ import {DispatchAction} from '../../Reducer';
 import {Context} from '../../Store';
 import {CredentialHelper} from '../../utils/credhelper';
 import {formatAsIssuedDate} from '../../utils/date';
+
 import {CrendentialContextMenu} from './CredentialContextMenu';
 
 const {width} = Dimensions.get('window');
@@ -150,7 +151,8 @@ export const CredentialCardExpanded: React.FC<any> = ({credential}) => {
     <TouchableHighlight
       onPress={hideContextMenu}
       underlayColor={theme.colors.transparent}
-      activeOpacity={1}>
+      activeOpacity={1}
+    >
       <ContentView onStartShouldSetResponder={() => !modalIsVisible}>
         <HeaderView>
           <LargeBoldText style={[flexGrow, leftPadding]}>
@@ -187,7 +189,8 @@ export const CredentialCardExpanded: React.FC<any> = ({credential}) => {
             //   });
             // }
             // }}
-            onTouchStart={showContextMenu}>
+            onTouchStart={showContextMenu}
+          >
             <FontAwesomeIcon icon="ellipsis-h" color={theme.colors.white} />
           </View>
         </HeaderView>
@@ -219,7 +222,8 @@ export const CredentialCardExpanded: React.FC<any> = ({credential}) => {
                 CredentialHelper.immunizationStatus(credential.record),
               ),
             },
-          ]}>
+          ]}
+        >
           <LargeBoldText>
             {vaccinationStatusText(
               CredentialHelper.immunizationStatus(credential.record),
