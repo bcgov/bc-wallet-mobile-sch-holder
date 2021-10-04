@@ -93,8 +93,7 @@ const CredentialCard: React.FC<ICredentialProps> = ({
         {
           backgroundColor: vaccinationStatusColor(vaccinationStatus),
         },
-      ]}
-    >
+      ]}>
       <ColumnView style={[qrCodePadding]}>
         <QrCode
           width={qrCodeSize}
