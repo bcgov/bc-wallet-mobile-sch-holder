@@ -1,4 +1,4 @@
-import {Credential, SHCRecord, State} from './types';
+import {State} from './types';
 import {CredentialHelper} from './utils/credhelper';
 
 export enum DispatchAction {

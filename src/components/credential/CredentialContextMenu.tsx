@@ -1,7 +1,6 @@
-import React, {useState} from 'react';
+import React from 'react';
 import styled from '@emotion/native';
 import {theme} from '../../../App';
-import {Alert} from 'react-native';
 
 export interface IModalMenuProps {
   state: any;
@@ -66,7 +65,8 @@ export const CrendentialContextMenu: React.FC<IModalMenuProps> = ({
           color: 'red',
           marginTop: 10,
         }}
-        onPress={onDeleteTouched}>
+        onPress={onDeleteTouched}
+      >
         Delete...
       </TextButton>
     </ContextView>
