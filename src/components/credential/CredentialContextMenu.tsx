@@ -6,10 +6,10 @@ import {theme} from '../../../App';
 import {css} from '@emotion/native';
 
 const menuStyle = css`
-  width: 24px,
-  height: 24px,
-  justifyContent: center;
-  alignItems: flex-end;
+  width: 24px;
+  height: 24px;
+  justify-content: center;
+  align-items: flex-end;
 `;
 
 export interface IModalMenuProps {

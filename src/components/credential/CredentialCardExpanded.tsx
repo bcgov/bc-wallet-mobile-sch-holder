@@ -54,7 +54,7 @@ const StatusView = styled.View`
 
 const QRCodeView = styled.View`
   display: flex;
-  margin-vertical: 8px;
+  margin-top: 8px;
   align-items: center;
   justify-content: center;
 `;
@@ -88,8 +88,17 @@ const leftPadding = css`
   padding-left: 16px;
 `;
 
+const smallerTopPadding = css`
+  padding-top: 4px;
+`;
+
 const topPadding = css`
-  padding-top: 16px;
+  padding-top: 8px;
+`;
+
+const bottomRadius = css`
+  border-bottom-start-radius: 16px;
+  border-bottom-end-radius: 16px;
 `;
 
 const verticalPadding = css`
@@ -101,8 +110,6 @@ export const CredentialCardExpanded: React.FC<any> = ({credential}) => {
   const navigation = useNavigation();
 
   const deleteCard = () => {
-    console.log('Delete card');
-
     try {
       dispatch({type: DispatchAction.RemoveCredential, payload: [credential]});
       navigation.goBack();
@@ -115,8 +122,6 @@ export const CredentialCardExpanded: React.FC<any> = ({credential}) => {
   };
 
   const showCardDetails = () => {
-    console.log('Show details touched');
-
     Alert.alert(
       'Coming Soon',
       'This feature is not implemented yet. Check back later for Card Details functionality.',
@@ -136,7 +141,7 @@ export const CredentialCardExpanded: React.FC<any> = ({credential}) => {
         />
       </HeaderView>
       <LineView style={{width: width - 64}} />
-      <View style={[verticalPadding]}>
+      <View style={[verticalPadding, {maxWidth: width - 64}]}>
         <LargeText>
           {CredentialHelper.familyNameForCredential(
             CredentialHelper.nameForCredential(credential.record),
@@ -157,6 +162,7 @@ export const CredentialCardExpanded: React.FC<any> = ({credential}) => {
               CredentialHelper.immunizationStatus(credential.record),
             ),
           },
+          bottomRadius,
         ]}
       >
         <LargeBoldText>
@@ -168,7 +174,7 @@ export const CredentialCardExpanded: React.FC<any> = ({credential}) => {
           Issued{' '}
           {formatAsIssuedDate(CredentialHelper.issueAtDate(credential.record))}
         </NormalText>
-        <QRCodeView>
+        <QRCodeView style={smallerTopPadding}>
           <QRCode value={credential.raw} quietZone={4} size={width - 64} />
         </QRCodeView>
       </StatusView>
