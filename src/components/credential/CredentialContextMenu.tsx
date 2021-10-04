@@ -1,74 +1,54 @@
-import React, {useState} from 'react';
-import styled from '@emotion/native';
+import React from 'react';
+import {MenuView} from '@react-native-menu/menu';
+import {TouchableOpacity} from 'react-native';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {theme} from '../../../App';
-import {Alert} from 'react-native';
 
 export interface IModalMenuProps {
-  state: any;
-  location: any;
   onDeleteTouched: () => void;
   onShowDetailsTouched: () => void;
 }
 
-const TextButton = styled.Text`
-  color: ${theme.colors.textGray};
-  font-family: 'BCSans-Bold';
-  font-size: 21px;
-  margin-left: 10px;
-  // background-color: #ffff00;
-`;
-
-const ContextView = styled.View`
-  position: absolute;
-  align-items: flex-start;
-  justify-content: flex-start;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  background-color: ${theme.colors.white};
-  opacity: 1;
-  width: 200px;
-  border-radius: 4px;
-  elevation: 5;
-  z-index: 5;
-`;
-
 export const CrendentialContextMenu: React.FC<IModalMenuProps> = ({
-  state,
-  location,
   onDeleteTouched,
   onShowDetailsTouched,
 }) => {
-  const [modalIsVisible] = state;
-  const [loc] = location;
-  const popUpMenuWidth = 200;
-  const popUpMenuVerticalOffset = 68;
-
-  if (!modalIsVisible) {
-    return null;
-  }
-
   return (
-    <ContextView
-      onStartShouldSetResponder={() => true}
-      // TODO:(jl) Cleanup magic numbers and layout.
-      style={{
-        left: loc[0] - (popUpMenuWidth - loc[2] * 1.5),
-        top: loc[1] + popUpMenuVerticalOffset,
+    <MenuView
+      onPressAction={({nativeEvent}) => {
+        const {event} = nativeEvent;
+        switch (event) {
+          case 'details':
+            return onShowDetailsTouched();
+          case 'delete':
+            return onDeleteTouched();
+          default:
+            return;
+        }
       }}
-      // onLayout={event => {
-      //   console.log('cccc', event.nativeEvent.layout);
-      // }}
-    >
-      <TextButton onPress={onShowDetailsTouched}>Card Details</TextButton>
-      <TextButton
-        // eslint-disable-next-line react-native/no-inline-styles
+      actions={[
+        {
+          id: 'details',
+          title: 'Details',
+        },
+        {
+          id: 'delete',
+          title: 'Delete',
+          attributes: {
+            destructive: true,
+          },
+        },
+      ]}
+      shouldOpenOnLongPress={false}>
+      <TouchableOpacity
         style={{
-          color: 'red',
-          marginTop: 10,
-        }}
-        onPress={onDeleteTouched}>
-        Delete...
-      </TextButton>
-    </ContextView>
+          width: 24,
+          height: 24,
+          justifyContent: 'center',
+          alignItems: 'flex-end',
+        }}>
+        <FontAwesomeIcon icon="ellipsis-h" color={theme.colors.white} />
+      </TouchableOpacity>
+    </MenuView>
   );
 };
