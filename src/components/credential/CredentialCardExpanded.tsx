@@ -14,6 +14,7 @@ import {DispatchAction} from '../../Reducer';
 import {Context} from '../../Store';
 import {CredentialHelper} from '../../utils/credhelper';
 import {formatAsIssuedDate} from '../../utils/date';
+
 import {CrendentialContextMenu} from './CredentialContextMenu';
 
 const {width} = Dimensions.get('window');

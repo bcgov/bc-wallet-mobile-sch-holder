@@ -3,6 +3,14 @@ import {MenuView} from '@react-native-menu/menu';
 import {TouchableOpacity} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {theme} from '../../../App';
+import {css} from '@emotion/native';
+
+const menuStyle = css`
+  width: 24px,
+  height: 24px,
+  justifyContent: center;
+  alignItems: flex-end;
+`;
 
 export interface IModalMenuProps {
   onDeleteTouched: () => void;
@@ -40,13 +48,7 @@ export const CrendentialContextMenu: React.FC<IModalMenuProps> = ({
         },
       ]}
       shouldOpenOnLongPress={false}>
-      <TouchableOpacity
-        style={{
-          width: 24,
-          height: 24,
-          justifyContent: 'center',
-          alignItems: 'flex-end',
-        }}>
+      <TouchableOpacity style={menuStyle}>
         <FontAwesomeIcon icon="ellipsis-h" color={theme.colors.white} />
       </TouchableOpacity>
     </MenuView>

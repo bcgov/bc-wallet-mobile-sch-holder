@@ -159,7 +159,8 @@ export const Home: React.FC<any> = ({navigation}) => {
         <TouchableHighlight
           style={[primaryButton(theme)]}
           underlayColor={theme.colors.activeBlue}
-          onPress={() => navigation.navigate('Credentials')}>
+          onPress={() => navigation.navigate('Credentials')}
+        >
           <Text style={[primaryButtonText(theme), boldText]}>Get started</Text>
         </TouchableHighlight>
       </View>
