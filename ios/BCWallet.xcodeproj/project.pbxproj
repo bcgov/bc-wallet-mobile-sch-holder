@@ -560,7 +560,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = amanji.ca.bc.gov.BCWallet;
+				PRODUCT_BUNDLE_IDENTIFIER = ca.bc.gov.BCWallet;
 				PRODUCT_NAME = BCWallet;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
