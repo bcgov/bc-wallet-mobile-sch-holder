@@ -9,7 +9,13 @@ import {
 // @ts-ignore
 import * as SHC from '@pathcheck/shc-sdk';
 import {startCase} from 'lodash';
-import {fullVaxMinRecordCount} from '../constants';
+import {
+  CVXCodes,
+  CVXSystem,
+  fullVaxMinRecordCount,
+  SNOMEDCodes,
+  SNOMEDSystem,
+} from '../constants';
 
 const storageKey = 'shc_vaccinations';
 
@@ -101,6 +107,29 @@ export class CredentialHelper {
     return immunuzation?.resource?.occurrenceDateTime;
   }
 
+  public static vaccineForImmunization(immunuzation?: any): string | undefined {
+    if (!immunuzation) {
+      return;
+    }
+
+    if (!immunuzation?.resource?.vaccineCode) {
+      return;
+    }
+
+    const {coding} = immunuzation.resource.vaccineCode;
+
+    if (!coding.length) {
+      return;
+    }
+
+    const vax: string[] = coding
+      .filter((c: any) => c.system === CVXSystem || c.system === SNOMEDSystem)
+      .map((c: any) => CVXCodes[c.code] || SNOMEDCodes[c.code])
+      .filter((c: string) => !!c);
+
+    return vax.pop();
+  }
+
   public static providerForImmnunization(
     immunuzation?: any,
   ): string | undefined {
@@ -174,7 +203,7 @@ export class CredentialHelper {
       if (records) {
         const items = JSON.parse(records);
         for (const i of items) {
-          const decoded = await CredentialHelper.decodeRecord(i.record);
+          const decoded = await this.decodeRecord(i.record);
           if (decoded) {
             credentials.push({
               id: i.id,

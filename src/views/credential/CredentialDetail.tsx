@@ -105,6 +105,11 @@ export const CredentialDetail: React.FC<any> = ({route}) => {
         title: `Dose ${idx + 1}`,
         data: [
           {
+            label: 'Product',
+            text: CredentialHelper.vaccineForImmunization(immunization) || ' ',
+            child: true,
+          },
+          {
             label: 'Date (YYYY-MMM-DD)',
             text: CredentialHelper.dateForImmnunization(immunization) || ' ',
             child: true,
@@ -149,16 +154,14 @@ export const CredentialDetail: React.FC<any> = ({route}) => {
                 {
                   backgroundColor: theme.colors.backgroundGray,
                 },
-              ]}
-            >
+              ]}>
               <HeaderText>{title}</HeaderText>
             </ListItemContainer>
           ) : null;
         }}
         renderItem={({item}) => (
           <ListItemContainer
-            style={item?.child ? [moreTopPadding, evenMoreLeftPadding] : []}
-          >
+            style={item?.child ? [moreTopPadding, evenMoreLeftPadding] : []}>
             <TextContainer>
               <LargeText style={[bottomPadding]}>{item.label}</LargeText>
               <LargeBoldText>{item.text}</LargeBoldText>
