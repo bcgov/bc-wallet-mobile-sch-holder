@@ -34,8 +34,6 @@ const HeaderView = styled.View`
   align-items: center;
   justify-content: center;
   padding-horizontal: 16px;
-  padding-top: 8px;
-  padding-bottom: 8px;
 `;
 
 const LineView = styled.View`
@@ -85,7 +83,7 @@ const flexGrow = css`
 `;
 
 const leftPadding = css`
-  padding-left: 32px;
+  padding-left: 48px;
 `;
 
 const smallerTopPadding = css`
@@ -165,8 +163,7 @@ export const CredentialCardExpanded: React.FC<any> = ({credential}) => {
             ),
           },
           bottomRadius,
-        ]}
-      >
+        ]}>
         <LargeBoldText>
           {vaccinationStatusText(
             CredentialHelper.immunizationStatus(credential.record),
