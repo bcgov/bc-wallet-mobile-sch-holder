@@ -19,7 +19,7 @@ const swiperListPadding = css`
 `;
 
 export const Credential: React.FC<any> = ({route}) => {
-  const {credential} = route.params || 0;
+  const {credential} = route.params;
   const [state] = useContext(Context);
   const {credentials} = state;
   const index = credentials.findIndex(c => c.id === credential.id);

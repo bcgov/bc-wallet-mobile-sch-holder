@@ -1,74 +1,57 @@
 import React from 'react';
-import styled from '@emotion/native';
+import {MenuView} from '@react-native-menu/menu';
+import {TouchableOpacity} from 'react-native';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {theme} from '../../../App';
+import {css} from '@emotion/native';
+
+const menuStyle = css`
+  width: 48px;
+  height: 48px;
+  justify-content: center;
+  align-items: flex-end;
+`;
 
 export interface IModalMenuProps {
-  state: any;
-  location: any;
   onDeleteTouched: () => void;
   onShowDetailsTouched: () => void;
 }
 
-const TextButton = styled.Text`
-  color: ${theme.colors.textGray};
-  font-family: 'BCSans-Bold';
-  font-size: 21px;
-  margin-left: 10px;
-  // background-color: #ffff00;
-`;
-
-const ContextView = styled.View`
-  position: absolute;
-  align-items: flex-start;
-  justify-content: flex-start;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  background-color: ${theme.colors.white};
-  opacity: 1;
-  width: 200px;
-  border-radius: 4px;
-  elevation: 5;
-  z-index: 5;
-`;
-
 export const CrendentialContextMenu: React.FC<IModalMenuProps> = ({
-  state,
-  location,
   onDeleteTouched,
   onShowDetailsTouched,
 }) => {
-  const [modalIsVisible] = state;
-  const [loc] = location;
-  const popUpMenuWidth = 200;
-  const popUpMenuVerticalOffset = 68;
-
-  if (!modalIsVisible) {
-    return null;
-  }
-
   return (
-    <ContextView
-      onStartShouldSetResponder={() => true}
-      // TODO:(jl) Cleanup magic numbers and layout.
-      style={{
-        left: loc[0] - (popUpMenuWidth - loc[2] * 1.5),
-        top: loc[1] + popUpMenuVerticalOffset,
+    <MenuView
+      onPressAction={({nativeEvent}) => {
+        const {event} = nativeEvent;
+        switch (event) {
+          case 'details':
+            return onShowDetailsTouched();
+          case 'delete':
+            return onDeleteTouched();
+          default:
+            return;
+        }
       }}
-      // onLayout={event => {
-      //   console.log('cccc', event.nativeEvent.layout);
-      // }}
+      actions={[
+        {
+          id: 'details',
+          title: 'Details',
+        },
+        {
+          id: 'delete',
+          title: 'Remove',
+          attributes: {
+            destructive: true,
+          },
+        },
+      ]}
+      shouldOpenOnLongPress={false}
     >
-      <TextButton onPress={onShowDetailsTouched}>Card Details</TextButton>
-      <TextButton
-        // eslint-disable-next-line react-native/no-inline-styles
-        style={{
-          color: 'red',
-          marginTop: 10,
-        }}
-        onPress={onDeleteTouched}
-      >
-        Delete...
-      </TextButton>
-    </ContextView>
+      <TouchableOpacity style={menuStyle}>
+        <FontAwesomeIcon icon="ellipsis-h" color={theme.colors.white} />
+      </TouchableOpacity>
+    </MenuView>
   );
 };

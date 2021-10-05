@@ -1,8 +1,7 @@
 import styled, {css} from '@emotion/native';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {useNavigation} from '@react-navigation/core';
-import React, {useContext, useState} from 'react';
-import {Alert, Dimensions, TouchableHighlight, View} from 'react-native';
+import React, {useContext} from 'react';
+import {Alert, Dimensions, View} from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import {theme} from '../../../App';
 import {
@@ -35,8 +34,6 @@ const HeaderView = styled.View`
   align-items: center;
   justify-content: center;
   padding-horizontal: 16px;
-  padding-top: 16px;
-  padding-bottom: 8px;
 `;
 
 const LineView = styled.View`
@@ -55,7 +52,7 @@ const StatusView = styled.View`
 
 const QRCodeView = styled.View`
   display: flex;
-  margin-vertical: 8px;
+  margin-top: 8px;
   align-items: center;
   justify-content: center;
 `;
@@ -86,11 +83,20 @@ const flexGrow = css`
 `;
 
 const leftPadding = css`
-  padding-left: 16px;
+  padding-left: 48px;
+`;
+
+const smallerTopPadding = css`
+  padding-top: 4px;
 `;
 
 const topPadding = css`
-  padding-top: 16px;
+  padding-top: 8px;
+`;
+
+const bottomRadius = css`
+  border-bottom-start-radius: 16px;
+  border-bottom-end-radius: 16px;
 `;
 
 const verticalPadding = css`
@@ -100,16 +106,8 @@ const verticalPadding = css`
 export const CredentialCardExpanded: React.FC<any> = ({credential}) => {
   const [, dispatch] = useContext(Context);
   const navigation = useNavigation();
-  // const [data, setData] = useState<string>('no data');
-  const contextMenuState = useState(false);
-  const [modalIsVisible, setModalIsVisible] = contextMenuState;
-  const locationState = useState<any>([0, 0, 0]);
-  const [, setLocation] = locationState;
-  // let marker: any;
 
   const deleteCard = () => {
-    console.log('Delete card');
-
     try {
       dispatch({type: DispatchAction.RemoveCredential, payload: [credential]});
       navigation.goBack();
@@ -122,124 +120,64 @@ export const CredentialCardExpanded: React.FC<any> = ({credential}) => {
   };
 
   const showCardDetails = () => {
-    console.log('Show details touched');
-
-    Alert.alert(
-      'Coming Soon',
-      'This feature is not implemented yet. Check back later for Card Details functionality.',
-      [{text: 'OK'}],
-    );
-  };
-
-  const showContextMenu = () => {
-    if (modalIsVisible) {
-      return;
+    try {
+      navigation.navigate('CredentialDetail' as never, {credential} as never);
+    } catch (error) {
+      Alert.alert('Yikes!', 'There was a problem viewing this card.', [
+        {text: 'OK'},
+      ]);
     }
-
-    setModalIsVisible(true);
-  };
-
-  const hideContextMenu = () => {
-    if (!modalIsVisible) {
-      return;
-    }
-
-    setModalIsVisible(false);
   };
 
   return (
-    <TouchableHighlight
-      onPress={hideContextMenu}
-      underlayColor={theme.colors.transparent}
-      activeOpacity={1}
-    >
-      <ContentView onStartShouldSetResponder={() => !modalIsVisible}>
-        <HeaderView>
-          <LargeBoldText style={[flexGrow, leftPadding]}>
-            BC Vaccine Card
-          </LargeBoldText>
-          <View
-            // style={{
-            //   backgroundColor: '#F00',
-            // }}
-            onLayout={event => {
-              // console.log('btn layout', event.nativeEvent.layout);
-              setLocation([
-                event.nativeEvent.layout.x,
-                event.nativeEvent.layout.y,
-                event.nativeEvent.layout.width,
-              ]);
-            }}
-            // ref={view => {
-            //   marker = view;
-            // }}
-            // onLayout={({event}: {event: any}) => {
-            //   setLocation([
-            //     event.nativeEvent.layout.x,
-            //     event.nativeEvent.layout.y,
-            //     event.nativeEvent.layout.width,
-            //   ]);
-            // if (marker) {
-            //   marker.measure((x, y, width, height, pageX, pageY) => {
-            //     setLocation([
-            //       event.nativeEvent.layout.x,
-            //       event.nativeEvent.layout.y,
-            //     ]);
-            //     console.log('**', x, y, width, height, pageX, pageY);
-            //   });
-            // }
-            // }}
-            onTouchStart={showContextMenu}
-          >
-            <FontAwesomeIcon icon="ellipsis-h" color={theme.colors.white} />
-          </View>
-        </HeaderView>
-        <LineView style={{width: width - 64}} />
+    <ContentView>
+      <HeaderView>
+        <LargeBoldText style={[flexGrow, leftPadding]}>
+          BC Vaccine Card
+        </LargeBoldText>
         <CrendentialContextMenu
-          state={contextMenuState}
-          location={locationState}
           onDeleteTouched={deleteCard}
           onShowDetailsTouched={showCardDetails}
         />
-        <View style={[verticalPadding]}>
-          <LargeText>
-            {CredentialHelper.familyNameForCredential(
-              CredentialHelper.nameForCredential(credential.record),
-            ).toUpperCase()}
-            ,
-          </LargeText>
-          <LargeText>
-            {CredentialHelper.givenNameForCredential(
-              CredentialHelper.nameForCredential(credential.record),
-            ).toUpperCase()}
-          </LargeText>
-        </View>
-        <StatusView
-          style={[
-            topPadding,
-            {
-              backgroundColor: vaccinationStatusColor(
-                CredentialHelper.immunizationStatus(credential.record),
-              ),
-            },
-          ]}
-        >
-          <LargeBoldText>
-            {vaccinationStatusText(
+      </HeaderView>
+      <LineView style={{width: width - 64}} />
+      <View style={[verticalPadding, {maxWidth: width - 64}]}>
+        <LargeText>
+          {CredentialHelper.familyNameForCredential(
+            CredentialHelper.nameForCredential(credential.record),
+          )?.toUpperCase() || ' '}
+          ,
+        </LargeText>
+        <LargeText>
+          {CredentialHelper.givenNameForCredential(
+            CredentialHelper.nameForCredential(credential.record),
+          )?.toUpperCase() || ' '}
+        </LargeText>
+      </View>
+      <StatusView
+        style={[
+          topPadding,
+          {
+            backgroundColor: vaccinationStatusColor(
               CredentialHelper.immunizationStatus(credential.record),
-            )}
-          </LargeBoldText>
-          <NormalText>
-            Issued{' '}
-            {formatAsIssuedDate(
-              CredentialHelper.issueAtDate(credential.record),
-            )}
-          </NormalText>
-          <QRCodeView>
-            <QRCode value={credential.raw} quietZone={4} size={width - 64} />
-          </QRCodeView>
-        </StatusView>
-      </ContentView>
-    </TouchableHighlight>
+            ),
+          },
+          bottomRadius,
+        ]}
+      >
+        <LargeBoldText>
+          {vaccinationStatusText(
+            CredentialHelper.immunizationStatus(credential.record),
+          )}
+        </LargeBoldText>
+        <NormalText>
+          Issued{' '}
+          {formatAsIssuedDate(CredentialHelper.issueAtDate(credential.record))}
+        </NormalText>
+        <QRCodeView style={smallerTopPadding}>
+          <QRCode value={credential.raw} quietZone={4} size={width - 64} />
+        </QRCodeView>
+      </StatusView>
+    </ContentView>
   );
 };

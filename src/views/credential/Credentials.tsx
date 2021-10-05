@@ -5,6 +5,7 @@ import {
   FlatList,
   Text,
   TouchableHighlight,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import {CredentialHelper} from '../../utils/credhelper';
@@ -95,10 +96,10 @@ export const Credentials: React.FC<any> = ({navigation}) => {
                 index === credentials.length - 1 && extraMarginBottom,
               ]}
             >
-              <TouchableHighlight
+              <TouchableOpacity
                 key={item.id}
                 onPress={() => onCredentialSelected(item)}
-                underlayColor={theme.colors.transparent}
+                activeOpacity={0.8}
               >
                 <CredentialCard
                   name={CredentialHelper.nameForCredential(item.record)}
@@ -107,7 +108,7 @@ export const Credentials: React.FC<any> = ({navigation}) => {
                   )}
                   issuedAt={CredentialHelper.issueAtDate(item.record)}
                 />
-              </TouchableHighlight>
+              </TouchableOpacity>
             </View>
           )}
         />

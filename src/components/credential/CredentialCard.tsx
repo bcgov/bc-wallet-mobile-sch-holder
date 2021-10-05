@@ -15,7 +15,7 @@ import {PersonName} from '../../types';
 import {View} from 'react-native';
 
 export interface ICredentialProps {
-  name: PersonName | string;
+  name: PersonName | undefined;
   immunizationStatus: ImmunizationStatus;
   issuedAt: Date;
 }
@@ -105,10 +105,13 @@ const CredentialCard: React.FC<ICredentialProps> = ({
       <ColumnView style={[textPadding]}>
         <View style={[namePadding]}>
           <LargeText>
-            {CredentialHelper.familyNameForCredential(name).toUpperCase()},
+            {CredentialHelper.familyNameForCredential(name)?.toUpperCase() ||
+              ' '}
+            ,
           </LargeText>
           <LargeText>
-            {CredentialHelper.givenNameForCredential(name).toUpperCase()}
+            {CredentialHelper.givenNameForCredential(name)?.toUpperCase() ||
+              ' '}
           </LargeText>
         </View>
         <View style={[statusPadding]}>

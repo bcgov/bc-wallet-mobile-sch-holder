@@ -8,7 +8,7 @@ import {
 } from '../types';
 // @ts-ignore
 import * as SHC from '@pathcheck/shc-sdk';
-import {startCase, isString} from 'lodash';
+import {startCase} from 'lodash';
 import {fullVaxMinRecordCount} from '../constants';
 
 const storageKey = 'shc_vaccinations';
@@ -21,52 +21,109 @@ export enum ImmunizationStatus {
 export class CredentialHelper {
   private storageKey = 'shc_vaccinations';
 
-  public static familyNameForCredential(name: PersonName | string): string {
-    if (isString(name)) {
-      return name;
+  public static patientForRecord = (item: SHCRecord) => {
+    return item.vc.credentialSubject.fhirBundle.entry.filter(
+      (e: any) => e.resource.resourceType === FhirBundleResourceType.Patient,
+    );
+  };
+
+  public static immunizationsForRecord = (item: SHCRecord) => {
+    return item.vc.credentialSubject.fhirBundle.entry.filter(
+      (e: any) =>
+        e.resource.resourceType === FhirBundleResourceType.Immunization,
+    );
+  };
+
+  public static familyNameForCredential(name?: PersonName): string | undefined {
+    if (!name) {
+      return;
     }
     const {family} = name;
     return startCase(family.toLowerCase());
   }
 
-  public static givenNameForCredential(name: PersonName | string): string {
-    if (isString(name)) {
-      return name;
+  public static givenNameForCredential(name?: PersonName): string | undefined {
+    if (!name) {
+      return;
     }
     const {given} = name;
     return startCase(given.join(' ').toLowerCase());
   }
 
-  public static fullNameForCredential(name: PersonName | string): string {
-    if (isString(name)) {
-      return name;
+  public static fullNameForCredential(name?: PersonName): string | undefined {
+    if (!name) {
+      return;
     }
     return `${this.familyNameForCredential(
       name,
     )}, ${this.givenNameForCredential(name)}`;
   }
 
-  public static nameForCredential(item: SHCRecord): PersonName | string {
-    const results = item.vc.credentialSubject.fhirBundle.entry.filter(
-      (e: any) => e.resource.resourceType === FhirBundleResourceType.Patient,
-    );
+  public static nameForCredential(item: SHCRecord): PersonName | undefined {
+    const results = this.patientForRecord(item);
 
     if (results.length === 0) {
       console.error('Unable to find Person record');
-      return 'Unknown Name';
     }
 
     const person = results.pop();
-    const [name] = person.resource.name;
+    const [name] = person?.resource?.name;
     return name;
   }
 
-  // @ts-ignore
+  public static dobForCredential(item: SHCRecord): string | undefined {
+    const results = this.patientForRecord(item);
+
+    if (results.length === 0) {
+      console.error('Unable to find Person record');
+      return;
+    }
+
+    const person = results.pop();
+    return person?.resource?.birthDate;
+  }
+
+  public static lotNumberForImmnunization(
+    immunuzation?: any,
+  ): string | undefined {
+    if (!immunuzation) {
+      return;
+    }
+
+    return immunuzation?.resource?.lotNumber;
+  }
+
+  public static dateForImmnunization(immunuzation?: any): string | undefined {
+    if (!immunuzation) {
+      return;
+    }
+
+    console.log(immunuzation?.resource?.vaccineCode);
+
+    return immunuzation?.resource?.occurrenceDateTime;
+  }
+
+  public static providerForImmnunization(
+    immunuzation?: any,
+  ): string | undefined {
+    if (!immunuzation) {
+      return;
+    }
+
+    if (
+      !(
+        immunuzation?.resource?.performer &&
+        immunuzation?.resource?.performer.length
+      )
+    ) {
+      return;
+    }
+
+    return immunuzation?.resource?.performer[0]?.actor?.display;
+  }
+
   public static immunizationStatus(item: SHCRecord): ImmunizationStatus {
-    const results = item.vc.credentialSubject.fhirBundle.entry.filter(
-      (e: any) =>
-        e.resource.resourceType === FhirBundleResourceType.Immunization,
-    );
+    const results = this.immunizationsForRecord(item);
 
     return results.length >= fullVaxMinRecordCount
       ? ImmunizationStatus.Full
