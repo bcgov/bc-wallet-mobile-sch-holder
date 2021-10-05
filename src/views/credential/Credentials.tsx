@@ -78,7 +78,8 @@ export const Credentials: React.FC<any> = ({navigation}) => {
           <TouchableHighlight
             style={[primaryButton(theme)]}
             underlayColor={theme.colors.activeBlue}
-            onPress={() => navigation.navigate('CredentialAdd')}>
+            onPress={() => navigation.navigate('CredentialAdd')}
+          >
             <Text style={[primaryButtonText(theme), boldText]}>
               Add a Vaccine Card
             </Text>
@@ -93,11 +94,13 @@ export const Credentials: React.FC<any> = ({navigation}) => {
               style={[
                 index === 0 && extraMarginTop,
                 index === credentials.length - 1 && extraMarginBottom,
-              ]}>
+              ]}
+            >
               <TouchableOpacity
                 key={item.id}
                 onPress={() => onCredentialSelected(item)}
-                activeOpacity={0.8}>
+                activeOpacity={0.8}
+              >
                 <CredentialCard
                   name={CredentialHelper.nameForCredential(item.record)}
                   immunizationStatus={CredentialHelper.immunizationStatus(
