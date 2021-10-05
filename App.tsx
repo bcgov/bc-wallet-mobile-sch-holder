@@ -28,6 +28,7 @@ import styled from '@emotion/native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import './src/assets/icons';
 import Store from './src/Store';
+import {CredentialDetail} from './src/views/credential/CredentialDetail';
 
 export interface AppTheme extends Theme {
   colors: Record<string, string>;
@@ -51,6 +52,8 @@ export const theme: AppTheme = {
     tabActive: '#38598A',
     tabInactive: '#707070',
     transparent: '#FFFFFF00',
+    messageColor: '#D9EAF7',
+    messageBorderColor: '#B9CEDE',
   },
 };
 
@@ -147,6 +150,11 @@ const App = () => {
                 name="Credential"
                 component={Credential}
                 options={{headerTitle: ''}}
+              />
+              <Stack.Screen
+                name="CredentialDetail"
+                component={CredentialDetail}
+                options={{headerTitle: 'Vaccine Details'}}
               />
             </Stack.Group>
             <Stack.Group screenOptions={{presentation: 'modal'}}>

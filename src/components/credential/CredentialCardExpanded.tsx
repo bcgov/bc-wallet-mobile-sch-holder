@@ -122,11 +122,13 @@ export const CredentialCardExpanded: React.FC<any> = ({credential}) => {
   };
 
   const showCardDetails = () => {
-    Alert.alert(
-      'Coming Soon',
-      'This feature is not implemented yet. Check back later for Card Details functionality.',
-      [{text: 'OK'}],
-    );
+    try {
+      navigation.navigate('CredentialDetail' as never, {credential} as never);
+    } catch (error) {
+      Alert.alert('Yikes!', 'There was a problem viewing this card.', [
+        {text: 'OK'},
+      ]);
+    }
   };
 
   return (
@@ -163,8 +165,7 @@ export const CredentialCardExpanded: React.FC<any> = ({credential}) => {
             ),
           },
           bottomRadius,
-        ]}
-      >
+        ]}>
         <LargeBoldText>
           {vaccinationStatusText(
             CredentialHelper.immunizationStatus(credential.record),

@@ -1,8 +1,16 @@
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {
-  faExternalLinkAlt,
-  faPlus,
+  faCheckCircle,
   faEllipsisH,
+  faExternalLinkAlt,
+  faInfoCircle,
+  faPlus,
 } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faExternalLinkAlt, faPlus, faEllipsisH);
+library.add(
+  faCheckCircle,
+  faEllipsisH,
+  faExternalLinkAlt,
+  faInfoCircle,
+  faPlus,
+);
