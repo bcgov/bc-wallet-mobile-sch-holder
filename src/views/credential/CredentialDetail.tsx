@@ -1,12 +1,10 @@
 import styled, {css} from '@emotion/native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import React from 'react';
-import {Dimensions, SectionList} from 'react-native';
+import {SectionList} from 'react-native';
 import {theme} from '../../../App';
 import {boldText, text} from '../../assets/styles';
 import {CredentialHelper} from '../../utils/credhelper';
-
-const {width} = Dimensions.get('window');
 
 const Container = styled.View`
   flex: 1;
@@ -150,7 +148,7 @@ export const CredentialDetail: React.FC<any> = ({route}) => {
           return title ? (
             <ListItemContainer
               style={[
-                topPadding,
+                moreTopPadding,
                 moreLeftPadding,
                 {
                   backgroundColor: theme.colors.backgroundGray,

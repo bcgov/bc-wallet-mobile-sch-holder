@@ -34,7 +34,7 @@ const HeaderView = styled.View`
   align-items: center;
   justify-content: center;
   padding-horizontal: 16px;
-  padding-top: 16px;
+  padding-top: 8px;
   padding-bottom: 8px;
 `;
 
@@ -85,7 +85,7 @@ const flexGrow = css`
 `;
 
 const leftPadding = css`
-  padding-left: 16px;
+  padding-left: 32px;
 `;
 
 const smallerTopPadding = css`
@@ -147,13 +147,13 @@ export const CredentialCardExpanded: React.FC<any> = ({credential}) => {
         <LargeText>
           {CredentialHelper.familyNameForCredential(
             CredentialHelper.nameForCredential(credential.record),
-          ).toUpperCase()}
+          )?.toUpperCase() || ' '}
           ,
         </LargeText>
         <LargeText>
           {CredentialHelper.givenNameForCredential(
             CredentialHelper.nameForCredential(credential.record),
-          ).toUpperCase()}
+          )?.toUpperCase() || ' '}
         </LargeText>
       </View>
       <StatusView

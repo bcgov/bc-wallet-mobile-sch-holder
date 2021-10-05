@@ -6,8 +6,8 @@ import {theme} from '../../../App';
 import {css} from '@emotion/native';
 
 const menuStyle = css`
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
   justify-content: center;
   align-items: flex-end;
 `;
@@ -47,8 +47,7 @@ export const CrendentialContextMenu: React.FC<IModalMenuProps> = ({
           },
         },
       ]}
-      shouldOpenOnLongPress={false}
-    >
+      shouldOpenOnLongPress={false}>
       <TouchableOpacity style={menuStyle}>
         <FontAwesomeIcon icon="ellipsis-h" color={theme.colors.white} />
       </TouchableOpacity>
