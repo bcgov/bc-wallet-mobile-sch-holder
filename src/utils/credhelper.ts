@@ -98,8 +98,6 @@ export class CredentialHelper {
       return;
     }
 
-    console.log(immunuzation?.resource?.vaccineCode);
-
     return immunuzation?.resource?.occurrenceDateTime;
   }
 

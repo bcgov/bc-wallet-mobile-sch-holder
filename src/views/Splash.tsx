@@ -21,7 +21,6 @@ export const Splash: React.FC<any> = ({navigation}) => {
     async function init() {
       try {
         const results = await CredentialHelper.credentials();
-        console.debug(`Found ${results.length} credentials`);
         if (results?.length) {
           dispatch({type: DispatchAction.SetCredentials, payload: results});
         }

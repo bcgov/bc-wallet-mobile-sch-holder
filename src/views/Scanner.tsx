@@ -68,28 +68,30 @@ export const Scanner: React.FC<any> = ({navigation}) => {
 
             try {
               const record = await CredentialHelper.decodeRecord(e.data);
+              if (!record) {
+                throw new Error('Invalid QR code');
+              }
               dispatch({
                 type: DispatchAction.AddCredential,
                 payload: [{id: Date.now(), record, raw: e.data}],
               });
+              navigation.navigate('Credentials');
             } catch (error) {
               console.error(error);
               Alert.alert(
                 'Yikes!',
                 'There was a problem decoding this QR code.',
                 [{text: 'Ok'}],
+                {cancelable: true},
               );
+              navigation.navigate('CredentialAdd');
             }
-
-            navigation.navigate('Credentials');
-          }}
-        >
+          }}>
           <View>
             <View style={[window]} />
             <TouchableHighlight
               style={[torchButton]}
-              onPress={() => setTorch(!torch)}
-            >
+              onPress={() => setTorch(!torch)}>
               {torch ? (
                 <FlashOff fill="black" width={24} height={24} />
               ) : (
