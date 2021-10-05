@@ -165,7 +165,8 @@ export const CredentialCardExpanded: React.FC<any> = ({credential}) => {
             ),
           },
           bottomRadius,
-        ]}>
+        ]}
+      >
         <LargeBoldText>
           {vaccinationStatusText(
             CredentialHelper.immunizationStatus(credential.record),

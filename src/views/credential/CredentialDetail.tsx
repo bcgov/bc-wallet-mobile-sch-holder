@@ -61,10 +61,6 @@ const evenMoreLeftPadding = css`
   padding-left: 32px;
 `;
 
-const topPadding = css`
-  padding-top: 8px;
-`;
-
 const moreTopPadding = css`
   padding-top: 16px;
 `;
@@ -153,14 +149,16 @@ export const CredentialDetail: React.FC<any> = ({route}) => {
                 {
                   backgroundColor: theme.colors.backgroundGray,
                 },
-              ]}>
+              ]}
+            >
               <HeaderText>{title}</HeaderText>
             </ListItemContainer>
           ) : null;
         }}
         renderItem={({item}) => (
           <ListItemContainer
-            style={item?.child ? [moreTopPadding, evenMoreLeftPadding] : []}>
+            style={item?.child ? [moreTopPadding, evenMoreLeftPadding] : []}
+          >
             <TextContainer>
               <LargeText style={[bottomPadding]}>{item.label}</LargeText>
               <LargeBoldText>{item.text}</LargeBoldText>
