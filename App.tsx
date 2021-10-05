@@ -115,6 +115,7 @@ const App = () => {
                 options={{
                   headerBackVisible: false,
                   gestureEnabled: false,
+                  headerTitle: '',
                 }}
               />
               <Stack.Screen
