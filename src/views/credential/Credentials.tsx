@@ -41,11 +41,11 @@ const largeText = css`
 `;
 
 const extraMarginTop = css`
-  margin-top: 24px;
+  margin-top: 8px;
 `;
 
 const extraMarginBottom = css`
-  margin-bottom: 24px;
+  margin-bottom: 8px;
 `;
 
 export const Credentials: React.FC<any> = ({navigation}) => {
