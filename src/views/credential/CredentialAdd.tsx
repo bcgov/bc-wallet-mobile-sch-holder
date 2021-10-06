@@ -72,12 +72,23 @@ export const CredentialAdd: React.FC<any> = ({navigation}) => {
             if (res.values.length) {
               for (const cred of res.values) {
                 const record = await CredentialHelper.decodeRecord(cred);
+                if (!record) {
+                  throw new Error('Invalid QR code');
+                }
                 dispatch({
                   type: DispatchAction.AddCredential,
                   payload: [{id: Date.now(), record, raw: cred}],
                 });
               }
               navigation.navigate('Credentials');
+            } else {
+              Alert.alert(
+                'Yikes!',
+                "We couldn't find a QR code.",
+                [{text: 'Ok'}],
+                {cancelable: true},
+              );
+              navigation.navigate('CredentialAdd');
             }
           } catch (error) {
             console.error(error);
@@ -85,7 +96,9 @@ export const CredentialAdd: React.FC<any> = ({navigation}) => {
               'Yikes!',
               'There was a problem decoding this QR code.',
               [{text: 'Ok'}],
+              {cancelable: true},
             );
+            navigation.navigate('CredentialAdd');
           }
         },
       );
@@ -99,8 +112,7 @@ export const CredentialAdd: React.FC<any> = ({navigation}) => {
       <TouchableHighlight
         style={[button]}
         underlayColor={theme.colors.activeGray}
-        onPress={() => navigation.navigate('Scanner')}
-      >
+        onPress={() => navigation.navigate('Scanner')}>
         <View style={[flexRow]}>
           <QrCodeScan />
           <Text style={[buttonText]}>Scan a QR Code</Text>
@@ -109,8 +121,7 @@ export const CredentialAdd: React.FC<any> = ({navigation}) => {
       <TouchableHighlight
         style={[button]}
         underlayColor={theme.colors.activeGray}
-        onPress={() => uploadImage()}
-      >
+        onPress={() => uploadImage()}>
         <View style={[flexRow]}>
           <Image />
           <Text style={[buttonText]}>Upload a QR Code</Text>
@@ -119,8 +130,7 @@ export const CredentialAdd: React.FC<any> = ({navigation}) => {
       <TouchableHighlight
         style={[button]}
         underlayColor={theme.colors.activeGray}
-        onPress={_ => _}
-      >
+        onPress={_ => _}>
         <View style={[flexRow]}>
           <Browser />
           <Text style={[buttonText]}>Get from Health Gateway</Text>

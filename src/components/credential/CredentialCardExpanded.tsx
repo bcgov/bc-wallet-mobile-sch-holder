@@ -113,9 +113,12 @@ export const CredentialCardExpanded: React.FC<any> = ({credential}) => {
       navigation.goBack();
     } catch (error) {
       console.error(error);
-      Alert.alert('Yikes!', 'There was a problem removing this card.', [
-        {text: 'OK'},
-      ]);
+      Alert.alert(
+        'Yikes!',
+        'There was a problem removing this card.',
+        [{text: 'OK'}],
+        {cancelable: true},
+      );
     }
   };
 
@@ -123,9 +126,13 @@ export const CredentialCardExpanded: React.FC<any> = ({credential}) => {
     try {
       navigation.navigate('CredentialDetail' as never, {credential} as never);
     } catch (error) {
-      Alert.alert('Yikes!', 'There was a problem viewing this card.', [
-        {text: 'OK'},
-      ]);
+      console.error(error);
+      Alert.alert(
+        'Yikes!',
+        'There was a problem viewing this card.',
+        [{text: 'OK'}],
+        {cancelable: true},
+      );
     }
   };
 
@@ -163,8 +170,7 @@ export const CredentialCardExpanded: React.FC<any> = ({credential}) => {
             ),
           },
           bottomRadius,
-        ]}
-      >
+        ]}>
         <LargeBoldText>
           {vaccinationStatusText(
             CredentialHelper.immunizationStatus(credential.record),
