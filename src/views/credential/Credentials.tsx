@@ -58,11 +58,8 @@ export const Credentials: React.FC<any> = ({navigation}) => {
   const [state] = useContext(Context);
   const {credentials} = state;
   const [, dispatch] = useContext(Context);
-  // const listenerCount = useRef(Linking.listenerCount(listenerEventType));
 
   useEffect(() => {
-    console.log('Setup listener.......');
-
     if (Linking.listenerCount(listenerEventType) >= 1) {
       return;
     }

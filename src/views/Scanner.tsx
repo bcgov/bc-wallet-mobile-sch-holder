@@ -10,6 +10,8 @@ import {DispatchAction} from '../Reducer';
 import {Context} from '../Store';
 
 export const Scanner: React.FC<any> = ({navigation}) => {
+  console.log('Scanner');
+
   const [active, setActive] = useState(true);
   const [torch, setTorch] = useState(false);
   const [, dispatch] = useContext(Context);
