@@ -86,12 +86,14 @@ export const Scanner: React.FC<any> = ({navigation}) => {
               );
               navigation.navigate('CredentialAdd');
             }
-          }}>
+          }}
+        >
           <View>
             <View style={[window]} />
             <TouchableHighlight
               style={[torchButton]}
-              onPress={() => setTorch(!torch)}>
+              onPress={() => setTorch(!torch)}
+            >
               {torch ? (
                 <FlashOff fill="black" width={24} height={24} />
               ) : (

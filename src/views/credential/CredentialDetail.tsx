@@ -154,14 +154,16 @@ export const CredentialDetail: React.FC<any> = ({route}) => {
                 {
                   backgroundColor: theme.colors.backgroundGray,
                 },
-              ]}>
+              ]}
+            >
               <HeaderText>{title}</HeaderText>
             </ListItemContainer>
           ) : null;
         }}
         renderItem={({item}) => (
           <ListItemContainer
-            style={item?.child ? [moreTopPadding, evenMoreLeftPadding] : []}>
+            style={item?.child ? [moreTopPadding, evenMoreLeftPadding] : []}
+          >
             <TextContainer>
               <LargeText style={[bottomPadding]}>{item.label}</LargeText>
               <LargeBoldText>{item.text}</LargeBoldText>
