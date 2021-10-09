@@ -1,5 +1,7 @@
 import {JWKS} from './types';
 
+export const deepLinkProtocol = 'bcwallet';
+
 // JSON Web Key containing the PHSA's key used to sign all
 // vaccination verification records. This is public data
 // located and the `debugPath` URL below.
