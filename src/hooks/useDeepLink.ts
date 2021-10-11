@@ -42,14 +42,15 @@ export const useDeepLinking = () => {
 
   useEffect(() => {
     if (Linking.listenerCount(listenerEventType) > 1) {
-      console.log('Skipping deep link.');
+      console.log('Listening for deep link already. Skipping.');
       return;
     }
 
+    console.log('Adding deep link listener callback');
     Linking.addEventListener(
       listenerEventType,
       async (event: {url: string}): Promise<void> => {
-        console.log('Adding deep link listener callback');
+        console.log('Trigger deep link listener callback');
 
         try {
           const {url} = event;
