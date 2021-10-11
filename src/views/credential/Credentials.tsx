@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useEffect} from 'react';
+import React, {useCallback, useContext} from 'react';
 import {
   BackHandler,
   Dimensions,
@@ -7,7 +7,6 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   View,
-  Linking,
 } from 'react-native';
 import {CredentialHelper} from '../../utils/credhelper';
 import {Credential} from '../../types';
@@ -19,8 +18,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import CredentialCard from '../../components/credential/CredentialCard';
 import {primaryButton, primaryButtonText} from '../../assets/styles';
 import {Context} from '../../Store';
-import {handleDeepLink} from '../../utils/deeplink';
-import {DispatchAction} from '../../Reducer';
+import {useDeepLinking} from '../../hooks/useDeepLink';
 
 const {width} = Dimensions.get('window');
 
@@ -54,39 +52,10 @@ const extraMarginBottom = css`
 export const Credentials: React.FC<any> = ({navigation}) => {
   console.log('Credentials');
 
-  const listenerEventType = 'url';
   const [state] = useContext(Context);
   const {credentials} = state;
-  const [, dispatch] = useContext(Context);
 
-  useEffect(() => {
-    if (Linking.listenerCount(listenerEventType) >= 1) {
-      return;
-    }
-
-    Linking.addEventListener(
-      listenerEventType,
-      async (event: {url: string}): Promise<void> => {
-        try {
-          const {url} = event;
-          const value = await handleDeepLink(url);
-          const record = await CredentialHelper.decodeRecord(value);
-
-          dispatch({
-            type: DispatchAction.AddCredential,
-            payload: [{id: Date.now(), record, raw: value}],
-          });
-        } catch (err) {
-          console.log(err);
-        }
-      },
-    );
-
-    // cleanup
-    return () => {
-      Linking.removeAllListeners(listenerEventType);
-    };
-  }, [dispatch]);
+  useDeepLinking();
 
   useFocusEffect(
     useCallback(() => {
