@@ -163,8 +163,8 @@ export const Home: React.FC<any> = ({navigation}) => {
           style={[primaryButton(theme)]}
           underlayColor={theme.colors.activeBlue}
           onPress={async () => {
-            navigation.navigate('Credentials');
             await setTutorialCompletionStatus(true);
+            navigation.navigate('Credentials');
           }}
         >
           <Text style={[primaryButtonText(theme), boldText]}>Get started</Text>
