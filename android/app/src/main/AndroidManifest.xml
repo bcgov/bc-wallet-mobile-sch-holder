@@ -27,7 +27,7 @@
           <action android:name="android.intent.action.VIEW" />
           <category android:name="android.intent.category.DEFAULT" />
           <category android:name="android.intent.category.BROWSABLE" />
-          <data android:scheme="bcwallet" android:host="foo.com" />
+          <data android:scheme="bcwallet" android:host="healthgateway.gov.bc.ca" />
         </intent-filter>
 
       </activity>
