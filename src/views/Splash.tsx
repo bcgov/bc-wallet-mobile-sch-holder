@@ -7,6 +7,7 @@ import Logo from '../assets/img/logo-light.svg';
 import {CredentialHelper} from '../utils/credhelper';
 import {Context} from '../Store';
 import {DispatchAction} from '../Reducer';
+import {tutorialCompletionStatus} from '../utils/storagehelper';
 
 const container = css`
   flex: 1;
@@ -20,14 +21,24 @@ export const Splash: React.FC<any> = ({navigation}) => {
 
   useMemo(() => {
     async function init() {
+      let results = [];
       try {
-        const results = await CredentialHelper.credentials();
-        if (results?.length) {
+        results = await CredentialHelper.credentials();
+        if (results.length > 0) {
           dispatch({type: DispatchAction.SetCredentials, payload: results});
         }
       } catch (error) {
         console.error(error);
       } finally {
+        // await deleteTutorialCompletionStatus();
+
+        const tutorialState = await tutorialCompletionStatus();
+        console.log(results.length, tutorialState);
+        if (results.length > 0 || tutorialState) {
+          navigation.navigate('Credentials');
+          return;
+        }
+
         navigation.navigate('Home');
       }
     }

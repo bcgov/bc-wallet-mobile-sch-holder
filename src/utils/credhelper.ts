@@ -13,11 +13,10 @@ import {
   CVXCodes,
   CVXSystem,
   fullVaxMinRecordCount,
+  LocalStorageKeys,
   SNOMEDCodes,
   SNOMEDSystem,
 } from '../constants';
-
-const storageKey = 'shc_vaccinations';
 
 export enum ImmunizationStatus {
   Partial,
@@ -25,8 +24,6 @@ export enum ImmunizationStatus {
 }
 
 export class CredentialHelper {
-  private storageKey = 'shc_vaccinations';
-
   public static patientForRecord = (item: SHCRecord) => {
     return item.vc.credentialSubject.fhirBundle.entry.filter(
       (e: any) => e.resource.resourceType === FhirBundleResourceType.Patient,
@@ -171,7 +168,10 @@ export class CredentialHelper {
         record: r.raw,
       }));
 
-      await EncryptedStorage.setItem(storageKey, JSON.stringify(data));
+      await EncryptedStorage.setItem(
+        LocalStorageKeys.SHC,
+        JSON.stringify(data),
+      );
     } catch (error) {
       // TODO:(jl) Need to shore up error handling mechanics.
       console.error(error);
@@ -199,7 +199,7 @@ export class CredentialHelper {
     let credentials: Array<Credential> = [];
 
     try {
-      const records = await EncryptedStorage.getItem(storageKey);
+      const records = await EncryptedStorage.getItem(LocalStorageKeys.SHC);
       if (records) {
         const items = JSON.parse(records);
         for (const i of items) {
