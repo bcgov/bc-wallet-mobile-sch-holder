@@ -97,6 +97,8 @@ const walkthrough: {image: React.FC<SvgProps>; text: string}[] = [
 ];
 
 export const Home: React.FC<any> = ({navigation}) => {
+  console.log('Home');
+
   useFocusEffect(
     useCallback(() => {
       const onBackPress = () => {

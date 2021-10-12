@@ -15,6 +15,7 @@ const container = css`
 `;
 
 export const Splash: React.FC<any> = ({navigation}) => {
+  console.log('Splash');
   const [, dispatch] = useContext(Context);
 
   useMemo(() => {

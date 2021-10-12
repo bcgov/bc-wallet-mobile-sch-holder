@@ -49,6 +49,8 @@ const extraMarginBottom = css`
 `;
 
 export const Credentials: React.FC<any> = ({navigation}) => {
+  console.log('Credentials');
+
   const [state] = useContext(Context);
   const {credentials} = state;
 

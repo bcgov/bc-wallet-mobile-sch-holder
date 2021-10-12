@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {Alert, Text, TouchableHighlight, View} from 'react-native';
+import {Alert, Linking, Text, TouchableHighlight, View} from 'react-native';
 import {
   launchImageLibrary,
   ImageLibraryOptions,
@@ -17,6 +17,8 @@ import {css} from '@emotion/native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {DispatchAction} from '../../Reducer';
 import {Context} from '../../Store';
+import {useDeepLinking} from '../../hooks/useDeepLink';
+import {healthGatewayURL} from '../../constants';
 
 const container = css`
   padding: 32px;
@@ -47,6 +49,8 @@ const iconMargin = css`
 
 export const CredentialAdd: React.FC<any> = ({navigation}) => {
   const [, dispatch] = useContext(Context);
+
+  useDeepLinking();
 
   async function uploadImage() {
     try {
@@ -112,7 +116,8 @@ export const CredentialAdd: React.FC<any> = ({navigation}) => {
       <TouchableHighlight
         style={[button]}
         underlayColor={theme.colors.activeGray}
-        onPress={() => navigation.navigate('Scanner')}>
+        onPress={() => navigation.navigate('Scanner')}
+      >
         <View style={[flexRow]}>
           <QrCodeScan />
           <Text style={[buttonText]}>Scan a QR Code</Text>
@@ -121,7 +126,8 @@ export const CredentialAdd: React.FC<any> = ({navigation}) => {
       <TouchableHighlight
         style={[button]}
         underlayColor={theme.colors.activeGray}
-        onPress={() => uploadImage()}>
+        onPress={() => uploadImage()}
+      >
         <View style={[flexRow]}>
           <Image />
           <Text style={[buttonText]}>Upload a QR Code</Text>
@@ -130,7 +136,17 @@ export const CredentialAdd: React.FC<any> = ({navigation}) => {
       <TouchableHighlight
         style={[button]}
         underlayColor={theme.colors.activeGray}
-        onPress={_ => _}>
+        onPress={() => {
+          Linking.openURL(healthGatewayURL).catch(_ => {
+            Alert.alert(
+              'Yikes!',
+              'There was a problem opening the Health Gateway.',
+              [{text: 'OK'}],
+              {cancelable: true},
+            );
+          });
+        }}
+      >
         <View style={[flexRow]}>
           <Browser />
           <Text style={[buttonText]}>Get from Health Gateway</Text>

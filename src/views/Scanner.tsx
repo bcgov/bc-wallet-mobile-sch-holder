@@ -10,6 +10,8 @@ import {DispatchAction} from '../Reducer';
 import {Context} from '../Store';
 
 export const Scanner: React.FC<any> = ({navigation}) => {
+  console.log('Scanner');
+
   const [active, setActive] = useState(true);
   const [torch, setTorch] = useState(false);
   const [, dispatch] = useContext(Context);
@@ -86,12 +88,14 @@ export const Scanner: React.FC<any> = ({navigation}) => {
               );
               navigation.navigate('CredentialAdd');
             }
-          }}>
+          }}
+        >
           <View>
             <View style={[window]} />
             <TouchableHighlight
               style={[torchButton]}
-              onPress={() => setTorch(!torch)}>
+              onPress={() => setTorch(!torch)}
+            >
               {torch ? (
                 <FlashOff fill="black" width={24} height={24} />
               ) : (
