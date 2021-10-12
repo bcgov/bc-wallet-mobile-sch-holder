@@ -18,7 +18,6 @@ import {useFocusEffect} from '@react-navigation/native';
 import CredentialCard from '../../components/credential/CredentialCard';
 import {primaryButton, primaryButtonText} from '../../assets/styles';
 import {Context} from '../../Store';
-import {useDeepLinking} from '../../hooks/useDeepLink';
 
 const {width} = Dimensions.get('window');
 
@@ -54,8 +53,6 @@ export const Credentials: React.FC<any> = ({navigation}) => {
 
   const [state] = useContext(Context);
   const {credentials} = state;
-
-  useDeepLinking();
 
   useFocusEffect(
     useCallback(() => {
