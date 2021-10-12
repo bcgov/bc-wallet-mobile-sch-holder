@@ -5,6 +5,7 @@ import {Context} from '../Store';
 import {DispatchAction} from '../Reducer';
 import RNQRGenerator from 'rn-qr-generator';
 import {deepLinkProtocol} from '../constants';
+import {useNavigation} from '@react-navigation/core';
 
 export const handleDeepLink = async (aUrl: string): Promise<string> => {
   try {
@@ -34,11 +35,12 @@ export const handleDeepLink = async (aUrl: string): Promise<string> => {
   }
 };
 
-export const useDeepLinking = () => {
+export const useDeepLinking = (navigateBackAfterAdd: boolean = false) => {
   console.log('Using deep linking');
 
   const listenerEventType = 'url';
   const [, dispatch] = useContext(Context);
+  const navigation = useNavigation();
 
   useEffect(() => {
     if (Linking.listenerCount(listenerEventType) > 1) {
@@ -62,6 +64,10 @@ export const useDeepLinking = () => {
             type: DispatchAction.AddCredential,
             payload: [{id: Date.now(), record, raw: value}],
           });
+
+          if (navigateBackAfterAdd) {
+            navigation.goBack();
+          }
         } catch (err) {
           console.log(err);
         }
@@ -73,5 +79,5 @@ export const useDeepLinking = () => {
       console.log('Cleanup deep link');
       Linking.removeAllListeners(listenerEventType);
     };
-  }, [dispatch]);
+  }, [dispatch, navigation, navigateBackAfterAdd]);
 };

@@ -49,8 +49,9 @@ const iconMargin = css`
 
 export const CredentialAdd: React.FC<any> = ({navigation}) => {
   const [, dispatch] = useContext(Context);
+  const navigateBackAfterAdd = true;
 
-  useDeepLinking();
+  useDeepLinking(navigateBackAfterAdd);
 
   async function uploadImage() {
     try {
