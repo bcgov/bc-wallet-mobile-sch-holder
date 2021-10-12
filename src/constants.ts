@@ -2,6 +2,13 @@ import {JWKS} from './types';
 
 export const deepLinkProtocol = 'bcwallet';
 
+export const shcStorageKey = 'shc_vaccinations';
+
+export enum LocalStorageKeys {
+  SHC = 'shc_vaccinations',
+  TutorialStatus = 'tutorial_status',
+}
+
 export const healthGatewayURL =
   'https://www.healthgateway.gov.bc.ca/vaccinecard';
 

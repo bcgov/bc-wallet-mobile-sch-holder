@@ -30,6 +30,7 @@ import WelcomeFour from '../assets/img/welcome-4.svg';
 
 import {SvgProps} from 'react-native-svg';
 import {useFocusEffect} from '@react-navigation/native';
+import {setTutorialCompletionStatus} from '../utils/storagehelper';
 
 const {width} = Dimensions.get('window');
 
@@ -161,7 +162,10 @@ export const Home: React.FC<any> = ({navigation}) => {
         <TouchableHighlight
           style={[primaryButton(theme)]}
           underlayColor={theme.colors.activeBlue}
-          onPress={() => navigation.navigate('Credentials')}
+          onPress={async () => {
+            navigation.navigate('Credentials');
+            await setTutorialCompletionStatus(true);
+          }}
         >
           <Text style={[primaryButtonText(theme), boldText]}>Get started</Text>
         </TouchableHighlight>
