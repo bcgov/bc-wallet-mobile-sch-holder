@@ -51,7 +51,7 @@ export const CredentialAdd: React.FC<any> = ({navigation}) => {
   async function uploadImage() {
     try {
       launchImageLibrary(
-        {mediaType: 'photo', base64: true} as ImageLibraryOptions,
+        {mediaType: 'photo', base64: true, quality: 0} as ImageLibraryOptions,
         async image => {
           if (image.didCancel) {
             return;
@@ -112,8 +112,7 @@ export const CredentialAdd: React.FC<any> = ({navigation}) => {
       <TouchableHighlight
         style={[button]}
         underlayColor={theme.colors.activeGray}
-        onPress={() => navigation.navigate('Scanner')}
-      >
+        onPress={() => navigation.navigate('Scanner')}>
         <View style={[flexRow]}>
           <QrCodeScan />
           <Text style={[buttonText]}>Scan a QR Code</Text>
@@ -122,8 +121,7 @@ export const CredentialAdd: React.FC<any> = ({navigation}) => {
       <TouchableHighlight
         style={[button]}
         underlayColor={theme.colors.activeGray}
-        onPress={() => uploadImage()}
-      >
+        onPress={() => uploadImage()}>
         <View style={[flexRow]}>
           <Image />
           <Text style={[buttonText]}>Upload a QR Code</Text>
@@ -132,8 +130,7 @@ export const CredentialAdd: React.FC<any> = ({navigation}) => {
       <TouchableHighlight
         style={[button]}
         underlayColor={theme.colors.activeGray}
-        onPress={_ => _}
-      >
+        onPress={_ => _}>
         <View style={[flexRow]}>
           <Browser />
           <Text style={[buttonText]}>Get from Health Gateway</Text>
