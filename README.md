@@ -27,3 +27,5 @@ We welcome issues submitted about technical or User Experience problems you enco
 
 [Apache License Version 2.0](https://github.com/bcgov/bc-wallet-mobile/blob/main/LICENSE)
 
+## Supporters
+[![Testing Powered By SauceLabs](https://opensource.saucelabs.com/images/opensauce/powered-by-saucelabs-badge-gray.png?sanitize=true "Testing Powered By SauceLabs")](https://saucelabs.com)
