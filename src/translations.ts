@@ -54,6 +54,18 @@ const strings = {
         title: 'Yikes!',
         message: 'There was a problem opening the Health Gateway.',
       },
+      RemoveCardFail: {
+        title: 'Yikes!',
+        message: 'There was a problem removing this card.',
+      },
+      ViewCardFail: {
+        title: 'Yikes!',
+        message: 'There was a problem viewing this card.',
+      },
+      SaveFromDeepLink: {
+        title: 'Yikes!',
+        message: 'There was a problem saving this record.',
+      },
     },
   },
 };

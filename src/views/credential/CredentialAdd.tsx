@@ -56,8 +56,8 @@ export const CredentialAdd: React.FC<any> = ({navigation}) => {
 
   const handleDeepLinkError = () => {
     Alert.alert(
-      'Yikes!',
-      'There was a problem saving this record.',
+      translations.Alerts.SaveFromDeepLink.title,
+      translations.Alerts.SaveFromDeepLink.message,
       [{text: 'OK'}],
       {cancelable: false},
     );
