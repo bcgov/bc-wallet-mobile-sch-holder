@@ -1,5 +1,7 @@
 import {JWKS} from './types';
 
+export const defaultLanguage = 'en';
+
 export const deepLinkProtocol = 'bcwallet';
 
 export enum LocalStorageKeys {

@@ -1,5 +1,5 @@
 import styled, {css} from '@emotion/native';
-import React, {useCallback} from 'react';
+import React, {useCallback, useContext} from 'react';
 import {
   BackHandler,
   Dimensions,
@@ -31,6 +31,7 @@ import WelcomeFour from '../assets/img/welcome-4.svg';
 import {SvgProps} from 'react-native-svg';
 import {useFocusEffect} from '@react-navigation/native';
 import {setTutorialCompletionStatus} from '../utils/storagehelper';
+import {LocalizationContext} from '../LocalizationProvider';
 
 const {width} = Dimensions.get('window');
 
@@ -78,27 +79,28 @@ const BlankView = styled.View`
   height: 48px;
 `;
 
-const walkthrough: {image: React.FC<SvgProps>; text: string}[] = [
-  {
-    image: WelcomeOne,
-    text: 'Keep your BC Vaccine Cards on your smartphone',
-  },
-  {
-    image: WelcomeTwo,
-    text: 'Update it from a QR Code or from Health Gateway',
-  },
-  {
-    image: WelcomeThree,
-    text: 'Add multiple Vaccine Cards and quickly swipe through them',
-  },
-  {
-    image: WelcomeFour,
-    text: 'In the future, keep other credentials securely in your wallet',
-  },
-];
-
 export const Home: React.FC<any> = ({navigation}) => {
   console.log('Home');
+
+  const {translations} = useContext(LocalizationContext);
+  const walkthrough: {image: React.FC<SvgProps>; text: string}[] = [
+    {
+      image: WelcomeOne,
+      text: translations.WalkthroughOne,
+    },
+    {
+      image: WelcomeTwo,
+      text: translations.WalkthroughTwo,
+    },
+    {
+      image: WelcomeThree,
+      text: translations.WalkthroughThree,
+    },
+    {
+      image: WelcomeFour,
+      text: translations.WalkthroughFour,
+    },
+  ];
 
   useFocusEffect(
     useCallback(() => {
@@ -115,7 +117,7 @@ export const Home: React.FC<any> = ({navigation}) => {
   return (
     <ScrollView contentContainerStyle={container}>
       <Logo style={[headerSize as ImageStyle]} width={205} height={80} />
-      <Text style={[headerText]}>BC Wallet</Text>
+      <Text style={[headerText]}>{translations.AppFullName}</Text>
       <SwiperFlatList
         showPagination
         data={walkthrough}
@@ -167,7 +169,9 @@ export const Home: React.FC<any> = ({navigation}) => {
             navigation.navigate('Credentials');
           }}
         >
-          <Text style={[primaryButtonText(theme), boldText]}>Get started</Text>
+          <Text style={[primaryButtonText(theme), boldText]}>
+            {translations.GetStarted}
+          </Text>
         </TouchableHighlight>
       </View>
     </ScrollView>

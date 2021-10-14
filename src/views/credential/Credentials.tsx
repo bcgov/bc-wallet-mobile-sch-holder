@@ -18,6 +18,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import CredentialCard from '../../components/credential/CredentialCard';
 import {primaryButton, primaryButtonText} from '../../assets/styles';
 import {Context} from '../../Store';
+import {LocalizationContext} from '../../LocalizationProvider';
 
 const {width} = Dimensions.get('window');
 
@@ -51,6 +52,7 @@ const extraMarginBottom = css`
 export const Credentials: React.FC<any> = ({navigation}) => {
   console.log('Credentials');
 
+  const {translations} = useContext(LocalizationContext);
   const [state] = useContext(Context);
   const {credentials} = state;
 
@@ -75,15 +77,15 @@ export const Credentials: React.FC<any> = ({navigation}) => {
       {!(credentials && credentials.length) ? (
         <View style={[container]}>
           <Wallet width={180} height={180} />
-          <Text style={[largeText]}>Welcome to your wallet!</Text>
-          <Text style={[paragraphText]}>Add your first Vaccine Card</Text>
+          <Text style={[largeText]}>{translations.Welcome}</Text>
+          <Text style={[paragraphText]}>{translations.AddFirst}</Text>
           <TouchableHighlight
             style={[primaryButton(theme)]}
             underlayColor={theme.colors.activeBlue}
             onPress={() => navigation.navigate('CredentialAdd')}
           >
             <Text style={[primaryButtonText(theme), boldText]}>
-              Add a Vaccine Card
+              {translations.AddVaccineCard}
             </Text>
           </TouchableHighlight>
         </View>
