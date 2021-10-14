@@ -18,14 +18,32 @@ import {useFocusEffect} from '@react-navigation/native';
 import CredentialCard from '../../components/credential/CredentialCard';
 import {primaryButton, primaryButtonText} from '../../assets/styles';
 import {Context} from '../../Store';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const {width} = Dimensions.get('window');
 
-const container = css`
+const flex = css`
   flex: 1;
-  flex-direction: column;
-  justify-content:center
+`;
+
+const container = css`
   align-items: center;
+`;
+
+const containerCenter = css`
+  ${container}
+  justify-content: center;
+`;
+
+const containerFlex = css`
+  ${flex}
+  ${container}
+`;
+
+const containerMargin = css`
+  margin-top: 16px;
+  margin-bottom: 32px;
+  ${container}
 `;
 
 const paragraphText = css`
@@ -41,11 +59,11 @@ const largeText = css`
 `;
 
 const extraMarginTop = css`
-  margin-top: 8px;
+  margin-top: 24px;
 `;
 
 const extraMarginBottom = css`
-  margin-bottom: 8px;
+  margin-bottom: 24px;
 `;
 
 export const Credentials: React.FC<any> = ({navigation}) => {
@@ -68,24 +86,29 @@ export const Credentials: React.FC<any> = ({navigation}) => {
     navigation.navigate('Credential', {credential});
   };
 
-  return (
-    <View style={[container]}>
-      {!(credentials && credentials.length) ? (
-        <View style={[container]}>
+  if (!(credentials && credentials.length)) {
+    return (
+      <SafeAreaView style={[containerFlex]}>
+        <View style={[flex, containerCenter]}>
           <Wallet width={180} height={180} />
           <Text style={[largeText]}>Welcome to your wallet!</Text>
           <Text style={[paragraphText]}>Add your first Vaccine Card</Text>
+        </View>
+        <View style={[containerMargin]}>
           <TouchableHighlight
             style={[primaryButton(theme)]}
             underlayColor={theme.colors.activeBlue}
-            onPress={() => navigation.navigate('CredentialAdd')}
-          >
+            onPress={() => navigation.navigate('CredentialAdd')}>
             <Text style={[primaryButtonText(theme), boldText]}>
               Add a Vaccine Card
             </Text>
           </TouchableHighlight>
         </View>
-      ) : (
+      </SafeAreaView>
+    );
+  } else {
+    return (
+      <View style={[containerFlex]}>
         <FlatList
           style={[{width}]}
           data={credentials}
@@ -94,13 +117,11 @@ export const Credentials: React.FC<any> = ({navigation}) => {
               style={[
                 index === 0 && extraMarginTop,
                 index === credentials.length - 1 && extraMarginBottom,
-              ]}
-            >
+              ]}>
               <TouchableOpacity
                 key={item.id}
                 onPress={() => onCredentialSelected(item)}
-                activeOpacity={0.8}
-              >
+                activeOpacity={0.8}>
                 <CredentialCard
                   name={CredentialHelper.nameForCredential(item.record)}
                   immunizationStatus={CredentialHelper.immunizationStatus(
@@ -112,7 +133,7 @@ export const Credentials: React.FC<any> = ({navigation}) => {
             </View>
           )}
         />
-      )}
-    </View>
-  );
+      </View>
+    );
+  }
 };

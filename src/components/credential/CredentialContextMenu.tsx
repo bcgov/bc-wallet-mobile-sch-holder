@@ -47,8 +47,7 @@ export const CrendentialContextMenu: React.FC<IModalMenuProps> = ({
           },
         },
       ]}
-      shouldOpenOnLongPress={false}
-    >
+      shouldOpenOnLongPress={false}>
       <TouchableOpacity style={menuStyle}>
         <FontAwesomeIcon icon="ellipsis-h" color={theme.colors.white} />
       </TouchableOpacity>
