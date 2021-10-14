@@ -51,7 +51,16 @@ export const CredentialAdd: React.FC<any> = ({navigation}) => {
   const [, dispatch] = useContext(Context);
   const navigateBackAfterAdd = true;
 
-  useDeepLinking(navigateBackAfterAdd);
+  const handleDeepLinkError = () => {
+    Alert.alert(
+      'Yikes!',
+      'There was a problem saving this record.',
+      [{text: 'OK'}],
+      {cancelable: false},
+    );
+  };
+
+  useDeepLinking(navigateBackAfterAdd, handleDeepLinkError);
 
   async function uploadImage() {
     try {

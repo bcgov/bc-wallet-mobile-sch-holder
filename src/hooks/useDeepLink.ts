@@ -30,12 +30,17 @@ export const handleDeepLink = async (aUrl: string): Promise<string> => {
     }
 
     return values.pop()!;
-  } catch (err) {
+  } catch (err: any) {
+    console.log(err.message);
+
     throw err;
   }
 };
 
-export const useDeepLinking = (navigateBackAfterAdd: boolean = false) => {
+export const useDeepLinking = (
+  navigateBackAfterAdd: boolean = false,
+  onError: any = undefined,
+) => {
   console.log('Using deep linking');
 
   const listenerEventType = 'url';
@@ -70,6 +75,7 @@ export const useDeepLinking = (navigateBackAfterAdd: boolean = false) => {
           }
         } catch (err) {
           console.log(err);
+          onError();
         }
       },
     );
@@ -79,5 +85,5 @@ export const useDeepLinking = (navigateBackAfterAdd: boolean = false) => {
       console.log('Cleanup deep link');
       Linking.removeAllListeners(listenerEventType);
     };
-  }, [dispatch, navigation, navigateBackAfterAdd]);
+  }, [dispatch, navigation, navigateBackAfterAdd, onError]);
 };
