@@ -19,6 +19,7 @@ import {DispatchAction} from '../../Reducer';
 import {Context} from '../../Store';
 import {useDeepLinking} from '../../hooks/useDeepLink';
 import {healthGatewayURL} from '../../constants';
+import {LocalizationContext} from '../../LocalizationProvider';
 
 const container = css`
   padding: 32px;
@@ -49,6 +50,8 @@ const iconMargin = css`
 
 export const CredentialAdd: React.FC<any> = ({navigation}) => {
   const [, dispatch] = useContext(Context);
+  const {translations} = useContext(LocalizationContext);
+
   const navigateBackAfterAdd = true;
 
   useDeepLinking(navigateBackAfterAdd);
@@ -88,8 +91,8 @@ export const CredentialAdd: React.FC<any> = ({navigation}) => {
               navigation.navigate('Credentials');
             } else {
               Alert.alert(
-                'Yikes!',
-                "We couldn't find a QR code.",
+                translations.Alerts.DecodeQRFail.title,
+                translations.Alerts.DecodeQRFail.message,
                 [{text: 'Ok'}],
                 {cancelable: true},
               );
@@ -98,8 +101,8 @@ export const CredentialAdd: React.FC<any> = ({navigation}) => {
           } catch (error) {
             console.error(error);
             Alert.alert(
-              'Yikes!',
-              'There was a problem decoding this QR code.',
+              translations.Alerts.AddFromLibrary.title,
+              translations.Alerts.AddFromLibrary.message,
               [{text: 'Ok'}],
               {cancelable: true},
             );
@@ -121,7 +124,7 @@ export const CredentialAdd: React.FC<any> = ({navigation}) => {
       >
         <View style={[flexRow]}>
           <QrCodeScan />
-          <Text style={[buttonText]}>Scan a QR Code</Text>
+          <Text style={[buttonText]}>{translations.ScanQR}</Text>
         </View>
       </TouchableHighlight>
       <TouchableHighlight
@@ -131,7 +134,7 @@ export const CredentialAdd: React.FC<any> = ({navigation}) => {
       >
         <View style={[flexRow]}>
           <Image />
-          <Text style={[buttonText]}>Upload a QR Code</Text>
+          <Text style={[buttonText]}>{translations.UploadQR}</Text>
         </View>
       </TouchableHighlight>
       <TouchableHighlight
@@ -140,8 +143,8 @@ export const CredentialAdd: React.FC<any> = ({navigation}) => {
         onPress={() => {
           Linking.openURL(healthGatewayURL).catch(_ => {
             Alert.alert(
-              'Yikes!',
-              'There was a problem opening the Health Gateway.',
+              translations.Alerts.OpenHealthGateway.title,
+              translations.Alerts.OpenHealthGateway.message,
               [{text: 'OK'}],
               {cancelable: true},
             );
@@ -150,7 +153,7 @@ export const CredentialAdd: React.FC<any> = ({navigation}) => {
       >
         <View style={[flexRow]}>
           <Browser />
-          <Text style={[buttonText]}>Get from Health Gateway</Text>
+          <Text style={[buttonText]}>{translations.AddFromHeathGateway}</Text>
           <FontAwesomeIcon
             style={[iconMargin]}
             size={16}

@@ -8,7 +8,7 @@
  * @format
  */
 
-import React, {useEffect} from 'react';
+import React, {useEffect, useContext} from 'react';
 import {StatusBar, TouchableOpacity} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import {
@@ -29,7 +29,10 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import './src/assets/icons';
 import Store from './src/Store';
 import {CredentialDetail} from './src/views/credential/CredentialDetail';
-import {LocalizationProvider} from './src/LocalizationProvider';
+import {
+  LocalizationContext,
+  LocalizationProvider,
+} from './src/LocalizationProvider';
 
 export interface AppTheme extends Theme {
   colors: Record<string, string>;
@@ -90,6 +93,7 @@ const RightHeaderIcon = styled.View`
 const App = () => {
   const navigation = useNavigationContainerRef<RootStackParamList>();
   const Stack = createNativeStackNavigator();
+  const {translations} = useContext(LocalizationContext);
 
   useEffect(() => {
     SplashScreen.hide();
@@ -124,7 +128,7 @@ const App = () => {
                   name="Credentials"
                   component={Credentials}
                   options={() => ({
-                    headerTitle: 'Cards',
+                    headerTitle: translations.Navigation.CardsTitle,
                     headerBackVisible: false,
                     gestureEnabled: false,
                     headerRight: () => {
@@ -146,7 +150,7 @@ const App = () => {
                   name="CredentialAdd"
                   component={CredentialAdd}
                   options={{
-                    headerTitle: 'Add Vaccine Card',
+                    headerTitle: translations.Navigation.CredentialAddTitle,
                   }}
                 />
                 <Stack.Screen
@@ -157,14 +161,19 @@ const App = () => {
                 <Stack.Screen
                   name="CredentialDetail"
                   component={CredentialDetail}
-                  options={{headerTitle: 'Vaccine Details'}}
+                  options={{
+                    headerTitle: translations.Navigation.CredentialDetailTitle,
+                  }}
                 />
               </Stack.Group>
               <Stack.Group screenOptions={{presentation: 'modal'}}>
                 <Stack.Screen
                   name="Scanner"
                   component={Scanner}
-                  options={{headerTitle: 'Scan a QR Code', headerShown: false}}
+                  options={{
+                    headerTitle: translations.Navigation.ScannerTitle,
+                    headerShown: false,
+                  }}
                 />
               </Stack.Group>
             </Stack.Navigator>
