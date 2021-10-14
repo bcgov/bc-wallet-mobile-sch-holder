@@ -29,6 +29,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import './src/assets/icons';
 import Store from './src/Store';
 import {CredentialDetail} from './src/views/credential/CredentialDetail';
+import {LocalizationProvider} from './src/LocalizationProvider';
 
 export interface AppTheme extends Theme {
   colors: Record<string, string>;
@@ -97,76 +98,78 @@ const App = () => {
   return (
     <Store>
       <ThemeProvider theme={theme}>
-        <StatusBar
-          backgroundColor={theme.colors.primaryBlue}
-          barStyle="light-content"
-        />
-        <NavigationContainer theme={navigationTheme} ref={navigation}>
-          <Stack.Navigator initialRouteName="Splash">
-            <Stack.Group>
-              <Stack.Screen
-                name="Splash"
-                component={Splash}
-                options={{headerShown: false}}
-              />
-              <Stack.Screen
-                name="Home"
-                component={Home}
-                options={{
-                  headerBackVisible: false,
-                  gestureEnabled: false,
-                  headerTitle: '',
-                }}
-              />
-              <Stack.Screen
-                name="Credentials"
-                component={Credentials}
-                options={() => ({
-                  headerTitle: 'Cards',
-                  headerBackVisible: false,
-                  gestureEnabled: false,
-                  headerRight: () => {
-                    return (
-                      <TouchableOpacity
-                        onPress={() => navigation.navigate('CredentialAdd')}>
-                        <RightHeaderIcon>
-                          <FontAwesomeIcon
-                            icon="plus"
-                            color={theme.colors.white}
-                          />
-                        </RightHeaderIcon>
-                      </TouchableOpacity>
-                    );
-                  },
-                })}
-              />
-              <Stack.Screen
-                name="CredentialAdd"
-                component={CredentialAdd}
-                options={{
-                  headerTitle: 'Add Vaccine Card',
-                }}
-              />
-              <Stack.Screen
-                name="Credential"
-                component={Credential}
-                options={{headerTitle: ''}}
-              />
-              <Stack.Screen
-                name="CredentialDetail"
-                component={CredentialDetail}
-                options={{headerTitle: 'Vaccine Details'}}
-              />
-            </Stack.Group>
-            <Stack.Group screenOptions={{presentation: 'modal'}}>
-              <Stack.Screen
-                name="Scanner"
-                component={Scanner}
-                options={{headerTitle: 'Scan a QR Code', headerShown: false}}
-              />
-            </Stack.Group>
-          </Stack.Navigator>
-        </NavigationContainer>
+        <LocalizationProvider>
+          <StatusBar
+            backgroundColor={theme.colors.primaryBlue}
+            barStyle="light-content"
+          />
+          <NavigationContainer theme={navigationTheme} ref={navigation}>
+            <Stack.Navigator initialRouteName="Splash">
+              <Stack.Group>
+                <Stack.Screen
+                  name="Splash"
+                  component={Splash}
+                  options={{headerShown: false}}
+                />
+                <Stack.Screen
+                  name="Home"
+                  component={Home}
+                  options={{
+                    headerBackVisible: false,
+                    gestureEnabled: false,
+                    headerTitle: '',
+                  }}
+                />
+                <Stack.Screen
+                  name="Credentials"
+                  component={Credentials}
+                  options={() => ({
+                    headerTitle: 'Cards',
+                    headerBackVisible: false,
+                    gestureEnabled: false,
+                    headerRight: () => {
+                      return (
+                        <TouchableOpacity
+                          onPress={() => navigation.navigate('CredentialAdd')}>
+                          <RightHeaderIcon>
+                            <FontAwesomeIcon
+                              icon="plus"
+                              color={theme.colors.white}
+                            />
+                          </RightHeaderIcon>
+                        </TouchableOpacity>
+                      );
+                    },
+                  })}
+                />
+                <Stack.Screen
+                  name="CredentialAdd"
+                  component={CredentialAdd}
+                  options={{
+                    headerTitle: 'Add Vaccine Card',
+                  }}
+                />
+                <Stack.Screen
+                  name="Credential"
+                  component={Credential}
+                  options={{headerTitle: ''}}
+                />
+                <Stack.Screen
+                  name="CredentialDetail"
+                  component={CredentialDetail}
+                  options={{headerTitle: 'Vaccine Details'}}
+                />
+              </Stack.Group>
+              <Stack.Group screenOptions={{presentation: 'modal'}}>
+                <Stack.Screen
+                  name="Scanner"
+                  component={Scanner}
+                  options={{headerTitle: 'Scan a QR Code', headerShown: false}}
+                />
+              </Stack.Group>
+            </Stack.Navigator>
+          </NavigationContainer>
+        </LocalizationProvider>
       </ThemeProvider>
     </Store>
   );
