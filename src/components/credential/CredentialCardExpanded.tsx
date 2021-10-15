@@ -1,7 +1,7 @@
 import styled, {css} from '@emotion/native';
 import {useNavigation} from '@react-navigation/core';
 import React, {useContext} from 'react';
-import {Alert, Dimensions, ScrollView, View} from 'react-native';
+import {Alert, Dimensions, View} from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import {theme} from '../../../App';
 import {
@@ -122,7 +122,7 @@ export const CredentialCardExpanded: React.FC<any> = ({credential}) => {
   };
 
   return (
-    <ScrollView style={[{width}]}>
+    <View style={[{width}]}>
       <StatusView
         style={[
           topPadding,
@@ -166,6 +166,6 @@ export const CredentialCardExpanded: React.FC<any> = ({credential}) => {
           <QRCode value={credential.raw} quietZone={4} size={width - 32} />
         </QRCodeView>
       </StatusView>
-    </ScrollView>
+    </View>
   );
 };

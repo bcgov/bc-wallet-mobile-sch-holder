@@ -27,6 +27,7 @@
     "lodash": "^4.17.21",
     "react": "17.0.2",
     "react-native": "0.65.1",
+    "react-native-animated-pagination-dots": "^0.1.72",
     "react-native-camera": "^4.2.0",
     "react-native-encrypted-storage": "^4.0.2",
     "react-native-image-picker": "^4.0.6",

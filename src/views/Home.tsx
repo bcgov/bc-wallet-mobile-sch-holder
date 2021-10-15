@@ -1,7 +1,7 @@
-// import styled, {css} from '@emotion/native';
 import {css} from '@emotion/native';
 import React, {useCallback} from 'react';
 import {
+  Animated,
   BackHandler,
   Dimensions,
   FlatList,
@@ -13,16 +13,12 @@ import {
 import {theme} from '../../App';
 import {
   boldText,
-  // paginationStyle,
-  // paginationStyleItemActive,
-  // paginationStyleItemInactive,
   primaryButton,
   primaryButtonText,
   text,
 } from '../assets/styles';
 
 import Logo from '../assets/img/logo-banner.svg';
-// import LargeArrow from '../assets/img/large-arrow.svg';
 import WelcomeOne from '../assets/img/welcome-1.svg';
 import WelcomeTwo from '../assets/img/welcome-2.svg';
 import WelcomeThree from '../assets/img/welcome-3.svg';
@@ -31,6 +27,7 @@ import WelcomeFour from '../assets/img/welcome-4.svg';
 import {SvgProps} from 'react-native-svg';
 import {useFocusEffect} from '@react-navigation/native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {ScalingDot} from 'react-native-animated-pagination-dots';
 
 const {width} = Dimensions.get('window');
 
@@ -74,26 +71,13 @@ const headerSize = css`
   width: ${width};
 `;
 
-// const padding = css`
-//   padding: 16px;
-// `;
-
 const margin = css`
   margin: 16px;
-`;
-
-const marginHorizontal = css`
-  margin-horizontal: 16px;
 `;
 
 const centeredText = css`
   text-align: center;
 `;
-
-// const BlankView = styled.View`
-//   width: 48px;
-//   height: 48px;
-// `;
 
 const data: {image: React.FC<SvgProps>; text: string}[] = [
   {
@@ -115,6 +99,32 @@ const data: {image: React.FC<SvgProps>; text: string}[] = [
 ];
 
 export const Home: React.FC<any> = ({navigation}) => {
+  const scrollX = React.useRef(new Animated.Value(0)).current;
+
+  const onScroll = Animated.event(
+    [{nativeEvent: {contentOffset: {x: scrollX}}}],
+    {
+      useNativeDriver: false,
+    },
+  );
+
+  const renderItem = ({
+    item,
+    index,
+  }: {
+    item: {image: React.FC<SvgProps>; text: string};
+    index: number;
+  }) => (
+    <View key={index} style={[{width}, container]}>
+      {item.image({
+        fill: theme.colors.textGray,
+        height: 180,
+        width: 180,
+      })}
+      <Text style={[largeText, centeredText, margin]}>{item.text}</Text>
+    </View>
+  );
+
   useFocusEffect(
     useCallback(() => {
       const onBackPress = () => {
@@ -137,19 +147,17 @@ export const Home: React.FC<any> = ({navigation}) => {
         showsHorizontalScrollIndicator={false}
         style={[{width}]}
         data={data}
-        renderItem={({item, index}) => (
-          <View key={index} style={[{width}, container]}>
-            {item.image({
-              fill: theme.colors.textGray,
-              height: 180,
-              width: 180,
-            })}
-            <Text style={[largeText, centeredText, margin]}>{item.text}</Text>
-          </View>
-        )}
+        renderItem={renderItem}
+        onScroll={onScroll}
       />
       <View>
-        <Text style={[centeredText]}>TODO: Arrows go here</Text>
+        <ScalingDot
+          data={data}
+          scrollX={scrollX}
+          inActiveDotColor={theme.colors.primaryBlue}
+          activeDotColor={theme.colors.primaryBlue}
+          activeDotScale={1}
+        />
       </View>
       <View style={[containerMargin]}>
         <TouchableHighlight

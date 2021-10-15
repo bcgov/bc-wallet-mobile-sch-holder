@@ -1,9 +1,11 @@
-import React, {Ref, useContext, useRef} from 'react';
-import {Dimensions, FlatList, Text, View} from 'react-native';
+import React, {useContext} from 'react';
+import {Animated, Dimensions, FlatList, View} from 'react-native';
 import {Context} from '../../Store';
 import {CredentialCardExpanded} from '../../components/credential/CredentialCardExpanded';
 import {css} from '@emotion/native';
-import {Credential as C} from '../../types';
+import {Credential} from '../../types';
+import {ScalingDot} from 'react-native-animated-pagination-dots';
+import {theme} from '../../../App';
 
 const {width} = Dimensions.get('window');
 
@@ -11,35 +13,52 @@ const flex = css`
   flex: 1;
 `;
 
-const centeredText = css`
-  text-align: center;
-`;
+// const centeredText = css`
+//   text-align: center;
+// `;
 
 const marginLeft = css`
   margin-left: 16px;
 `;
 
 export const CredentialsExpanded: React.FC<any> = ({route}) => {
-  const flatListRef: Ref<FlatList> = useRef(null);
   const [state] = useContext(Context);
   const {credentials} = state;
   const {credential} = route.params;
 
-  const renderItem = ({item, index}: {item: C; index: number}) => (
-    <View style={[index > 0 && marginLeft]}>
-      <CredentialCardExpanded key={item.id} credential={item} />
-    </View>
+  const [activeData, setActiveData] = React.useState({index: 0, credential});
+  const scrollX = React.useRef(new Animated.Value(0)).current;
+  const onViewableItemsChangedRef = React.useRef(({viewableItems}: any) => {
+    setActiveData(viewableItems[0]);
+  });
+  const viewabilityConfigRef = React.useRef({
+    viewAreaCoveragePercentThreshold: 50,
+  });
+
+  const onScroll = Animated.event(
+    [{nativeEvent: {contentOffset: {x: scrollX}}}],
+    {
+      useNativeDriver: false,
+    },
+  );
+
+  const renderItem = React.useCallback(
+    ({item, index}: {item: Credential; index: number}) => (
+      <View style={[index > 0 && marginLeft]}>
+        <CredentialCardExpanded key={item.id} credential={item} />
+      </View>
+    ),
+    [],
   );
 
   const data = [
     credential,
-    ...credentials.filter((c: C) => c.id !== credential.id),
+    ...credentials.filter((c: Credential) => c.id !== credential.id),
   ];
 
   return (
     <View style={[flex]}>
       <FlatList
-        ref={flatListRef}
         horizontal
         showsHorizontalScrollIndicator={false}
         style={[{width}]}
@@ -53,9 +72,19 @@ export const CredentialsExpanded: React.FC<any> = ({route}) => {
             .slice(1),
         ]}
         decelerationRate="fast"
+        viewabilityConfig={viewabilityConfigRef.current}
+        onViewableItemsChanged={onViewableItemsChangedRef.current}
+        onScroll={onScroll}
+        scrollEventThrottle={16}
       />
       <View>
-        <Text style={[centeredText]}>TODO: Arrows go here</Text>
+        <ScalingDot
+          data={data}
+          scrollX={scrollX}
+          inActiveDotColor={theme.colors.primaryBlue}
+          activeDotColor={theme.colors.primaryBlue}
+          activeDotScale={1}
+        />
       </View>
     </View>
   );
