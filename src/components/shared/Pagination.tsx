@@ -21,6 +21,10 @@ const relativePosition = css`
   top: 0;
 `;
 
+const dotStyle = css`
+  border: 1px solid ${theme.colors.primaryBlue};
+`;
+
 export const Pagination: React.FC<any> = ({data, scrollX, next, previous}) => {
   return (
     <View style={[flex, paginationStyle]}>
@@ -30,9 +34,11 @@ export const Pagination: React.FC<any> = ({data, scrollX, next, previous}) => {
       <ScalingDot
         data={data}
         scrollX={scrollX}
-        inActiveDotColor={theme.colors.primaryBlue}
+        inActiveDotColor={theme.colors.transparent}
+        inActiveDotOpacity={1}
         activeDotColor={theme.colors.primaryBlue}
         activeDotScale={1}
+        dotStyle={dotStyle}
         containerStyle={relativePosition}
       />
       <TouchableOpacity onPress={next}>

@@ -152,12 +152,14 @@ export const CredentialsExpanded: React.FC<any> = ({route, navigation}) => {
         onScroll={onScroll}
         scrollEventThrottle={16}
       />
-      <Pagination
-        data={data}
-        scrollX={scrollX}
-        next={next}
-        previous={previous}
-      />
+      {data.length > 1 && (
+        <Pagination
+          data={data}
+          scrollX={scrollX}
+          next={next}
+          previous={previous}
+        />
+      )}
     </View>
   );
 };
