@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {Alert, Text, TouchableHighlight, View} from 'react-native';
+import {Alert, Linking, Text, TouchableHighlight, View} from 'react-native';
 import {
   launchImageLibrary,
   ImageLibraryOptions,
@@ -17,6 +17,9 @@ import {css} from '@emotion/native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {DispatchAction} from '../../Reducer';
 import {Context} from '../../Store';
+import {useDeepLinking} from '../../hooks/useDeepLink';
+import {healthGatewayURL} from '../../constants';
+import {LocalizationContext} from '../../LocalizationProvider';
 
 const container = css`
   padding: 32px;
@@ -47,6 +50,20 @@ const iconMargin = css`
 
 export const CredentialAdd: React.FC<any> = ({navigation}) => {
   const [, dispatch] = useContext(Context);
+  const {translations} = useContext(LocalizationContext);
+
+  const navigateBackAfterAdd = true;
+
+  const handleDeepLinkError = () => {
+    Alert.alert(
+      'Yikes!',
+      'There was a problem saving this record.',
+      [{text: 'OK'}],
+      {cancelable: false},
+    );
+  };
+
+  useDeepLinking(navigateBackAfterAdd, handleDeepLinkError);
 
   async function uploadImage() {
     try {
@@ -83,8 +100,8 @@ export const CredentialAdd: React.FC<any> = ({navigation}) => {
               navigation.navigate('Credentials');
             } else {
               Alert.alert(
-                'Yikes!',
-                "We couldn't find a QR code.",
+                translations.Alerts.DecodeQRFail.title,
+                translations.Alerts.DecodeQRFail.message,
                 [{text: 'Ok'}],
                 {cancelable: true},
               );
@@ -93,8 +110,8 @@ export const CredentialAdd: React.FC<any> = ({navigation}) => {
           } catch (error) {
             console.error(error);
             Alert.alert(
-              'Yikes!',
-              'There was a problem decoding this QR code.',
+              translations.Alerts.AddFromLibrary.title,
+              translations.Alerts.AddFromLibrary.message,
               [{text: 'Ok'}],
               {cancelable: true},
             );
@@ -112,28 +129,40 @@ export const CredentialAdd: React.FC<any> = ({navigation}) => {
       <TouchableHighlight
         style={[button]}
         underlayColor={theme.colors.activeGray}
-        onPress={() => navigation.navigate('Scanner')}>
+        onPress={() => navigation.navigate('Scanner')}
+      >
         <View style={[flexRow]}>
           <QrCodeScan />
-          <Text style={[buttonText]}>Scan a QR Code</Text>
+          <Text style={[buttonText]}>{translations.ScanQR}</Text>
         </View>
       </TouchableHighlight>
       <TouchableHighlight
         style={[button]}
         underlayColor={theme.colors.activeGray}
-        onPress={() => uploadImage()}>
+        onPress={() => uploadImage()}
+      >
         <View style={[flexRow]}>
           <Image />
-          <Text style={[buttonText]}>Upload a QR Code</Text>
+          <Text style={[buttonText]}>{translations.UploadQR}</Text>
         </View>
       </TouchableHighlight>
       <TouchableHighlight
         style={[button]}
         underlayColor={theme.colors.activeGray}
-        onPress={_ => _}>
+        onPress={() => {
+          Linking.openURL(healthGatewayURL).catch(_ => {
+            Alert.alert(
+              translations.Alerts.OpenHealthGateway.title,
+              translations.Alerts.OpenHealthGateway.message,
+              [{text: 'OK'}],
+              {cancelable: true},
+            );
+          });
+        }}
+      >
         <View style={[flexRow]}>
           <Browser />
-          <Text style={[buttonText]}>Get from Health Gateway</Text>
+          <Text style={[buttonText]}>{translations.AddFromHeathGateway}</Text>
           <FontAwesomeIcon
             style={[iconMargin]}
             size={16}

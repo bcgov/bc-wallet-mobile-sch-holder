@@ -1,10 +1,11 @@
 import styled, {css} from '@emotion/native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import React from 'react';
+import React, {useContext} from 'react';
 import {View} from 'react-native';
 import {theme} from '../../../App';
 import {boldText, text} from '../../assets/styles';
 import {CredentialHelper} from '../../utils/credhelper';
+import {LocalizationContext} from '../../LocalizationProvider';
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -76,6 +77,7 @@ const bottomPadding = css`
 export const CredentialDetail: React.FC<any> = ({route}) => {
   const {credential} = route.params;
   const {record} = credential;
+  const {translations} = useContext(LocalizationContext);
 
   // Ideally these will be formatted directly from the credential.
   // There wouldn't be any assumptions of how the data should be formatted.
@@ -84,7 +86,7 @@ export const CredentialDetail: React.FC<any> = ({route}) => {
       title: '',
       data: [
         {
-          label: 'Name',
+          label: translations.CredentialDetails.Name,
           text:
             CredentialHelper.fullNameForCredential(
               CredentialHelper.nameForCredential(record),
@@ -92,12 +94,12 @@ export const CredentialDetail: React.FC<any> = ({route}) => {
           child: false,
         },
         {
-          label: 'Date of Birth (YYYY-MMM-DD)',
+          label: `${translations.CredentialDetails.DoB} (YYYY-MMM-DD)`,
           text: CredentialHelper.dobForCredential(record) || ' ',
           child: false,
         },
         {
-          label: 'Immunization',
+          label: translations.CredentialDetails.Immunization,
           text: 'COVID-19',
           child: false,
         },
@@ -109,23 +111,23 @@ export const CredentialDetail: React.FC<any> = ({route}) => {
         title: `Dose ${idx + 1}`,
         data: [
           {
-            label: 'Product',
+            label: translations.CredentialDetails.Product,
             text: CredentialHelper.vaccineForImmunization(immunization) || ' ',
             child: true,
           },
           {
-            label: 'Date (YYYY-MMM-DD)',
+            label: `${translations.CredentialDetails.Date} (YYYY-MMM-DD)`,
             text: CredentialHelper.dateForImmnunization(immunization) || ' ',
             child: true,
           },
           {
-            label: 'Lot Number',
+            label: translations.CredentialDetails.Lot,
             text:
               CredentialHelper.lotNumberForImmnunization(immunization) || ' ',
             child: true,
           },
           {
-            label: 'Provider or Clinic',
+            label: translations.CredentialDetails.Provider,
             text:
               CredentialHelper.providerForImmnunization(immunization) || ' ',
             child: true,
@@ -143,7 +145,7 @@ export const CredentialDetail: React.FC<any> = ({route}) => {
         </IconContainer>
         <MessageTextContainer>
           <LargeBoldText>
-            You do not need to share this information with anyone
+            {translations.CredentialDetails.PrivacyMessage}
           </LargeBoldText>
         </MessageTextContainer>
       </MessageContainer>
@@ -157,16 +159,14 @@ export const CredentialDetail: React.FC<any> = ({route}) => {
                 {
                   backgroundColor: theme.colors.backgroundGray,
                 },
-              ]}
-            >
+              ]}>
               <HeaderText>{datum.title}</HeaderText>
             </ListItemContainer>
           ) : null}
           {datum.data.map(item => (
             <ListItemContainer
               key={datum.title + item.label + index}
-              style={item?.child ? [moreTopPadding, evenMoreLeftPadding] : []}
-            >
+              style={item?.child ? [moreTopPadding, evenMoreLeftPadding] : []}>
               <TextContainer>
                 <LargeText style={[bottomPadding]}>{item.label}</LargeText>
                 <LargeBoldText>{item.text}</LargeBoldText>

@@ -1,5 +1,5 @@
 import {css} from '@emotion/native';
-import React, {Ref, useCallback, useRef} from 'react';
+import React, {Ref, useCallback, useContext, useRef} from 'react';
 import {
   Animated,
   BackHandler,
@@ -28,6 +28,8 @@ import {SvgProps} from 'react-native-svg';
 import {useFocusEffect} from '@react-navigation/native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {Pagination} from '../components/shared/Pagination';
+import {LocalizationContext} from '../LocalizationProvider';
+import {setTutorialCompletionStatus} from '../utils/storagehelper';
 
 const {width} = Dimensions.get('window');
 
@@ -74,26 +76,8 @@ const centeredText = css`
   text-align: center;
 `;
 
-const data: {image: React.FC<SvgProps>; text: string}[] = [
-  {
-    image: WelcomeOne,
-    text: 'Keep your BC Vaccine Cards on your smartphone',
-  },
-  {
-    image: WelcomeTwo,
-    text: 'Update it from a QR Code or from Health Gateway',
-  },
-  {
-    image: WelcomeThree,
-    text: 'Add multiple Vaccine Cards and quickly swipe through them',
-  },
-  {
-    image: WelcomeFour,
-    text: 'In the future, keep other credentials securely in your wallet',
-  },
-];
-
 export const Home: React.FC<any> = ({navigation}) => {
+  const {translations} = useContext(LocalizationContext);
   const [activeIndex, setActiveIndex] = React.useState(0);
   const flatList: Ref<FlatList> = useRef(null);
   const scrollX = React.useRef(new Animated.Value(0)).current;
@@ -157,6 +141,25 @@ export const Home: React.FC<any> = ({navigation}) => {
     }, []),
   );
 
+  const data: {image: React.FC<SvgProps>; text: string}[] = [
+    {
+      image: WelcomeOne,
+      text: translations.WalkthroughOne,
+    },
+    {
+      image: WelcomeTwo,
+      text: translations.WalkthroughTwo,
+    },
+    {
+      image: WelcomeThree,
+      text: translations.WalkthroughThree,
+    },
+    {
+      image: WelcomeFour,
+      text: translations.WalkthroughFour,
+    },
+  ];
+
   return (
     <SafeAreaView style={[containerFlex]}>
       <Logo style={[headerSize as ImageStyle]} width={205} height={80} />
@@ -184,7 +187,10 @@ export const Home: React.FC<any> = ({navigation}) => {
         <TouchableHighlight
           style={[primaryButton(theme)]}
           underlayColor={theme.colors.activeBlue}
-          onPress={() => navigation.navigate('Credentials')}>
+          onPress={async () => {
+            await setTutorialCompletionStatus(true);
+            navigation.navigate('Credentials');
+          }}>
           <Text style={[primaryButtonText(theme), boldText]}>Get started</Text>
         </TouchableHighlight>
       </View>

@@ -8,11 +8,15 @@ import {CredentialHelper} from '../utils/credhelper';
 import {css} from '@emotion/native';
 import {DispatchAction} from '../Reducer';
 import {Context} from '../Store';
+import {LocalizationContext} from '../LocalizationProvider';
 
 export const Scanner: React.FC<any> = ({navigation}) => {
+  console.log('Scanner');
+
   const [active, setActive] = useState(true);
   const [torch, setTorch] = useState(false);
   const [, dispatch] = useContext(Context);
+  const {translations} = useContext(LocalizationContext);
 
   const container = css`
     flex: 1;
@@ -56,8 +60,8 @@ export const Scanner: React.FC<any> = ({navigation}) => {
           }
           captureAudio={false}
           androidCameraPermissionOptions={{
-            title: 'Permission to use camera',
-            message: 'We need your permission to use your camera',
+            title: translations.Android.UseCameraTitle,
+            message: translations.Android.UseCameraMessage,
             buttonPositive: 'Ok',
             buttonNegative: 'Cancel',
           }}
@@ -79,8 +83,8 @@ export const Scanner: React.FC<any> = ({navigation}) => {
             } catch (error) {
               console.error(error);
               Alert.alert(
-                'Yikes!',
-                'There was a problem decoding this QR code.',
+                translations.Alerts.ScannerFail.title,
+                translations.Alerts.ScannerFail.message,
                 [{text: 'Ok'}],
                 {cancelable: true},
               );

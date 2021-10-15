@@ -1,5 +1,17 @@
 import {JWKS} from './types';
 
+export const defaultLanguage = 'en';
+
+export const deepLinkProtocol = 'bcwallet';
+
+export enum LocalStorageKeys {
+  SHC = 'shc_vaccinations',
+  TutorialStatus = 'tutorial_status',
+}
+
+export const healthGatewayURL =
+  'https://www.healthgateway.gov.bc.ca/vaccinecard';
+
 // JSON Web Key containing the PHSA's key used to sign all
 // vaccination verification records. This is public data
 // located and the `debugPath` URL below.
