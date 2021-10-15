@@ -19,7 +19,7 @@ import {
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {Home} from './src/views/Home';
 import {CredentialAdd} from './src/views/credential/CredentialAdd';
-import {Credential} from './src/views/credential/Credential';
+import {CredentialsExpanded} from './src/views/credential/CredentialsExpanded';
 import {Credentials} from './src/views/credential/Credentials';
 import {Scanner} from './src/views/Scanner';
 import {Splash} from './src/views/Splash';
@@ -155,7 +155,7 @@ const App = () => {
                 />
                 <Stack.Screen
                   name="Credential"
-                  component={Credential}
+                  component={CredentialsExpanded}
                   options={{headerTitle: ''}}
                 />
                 <Stack.Screen

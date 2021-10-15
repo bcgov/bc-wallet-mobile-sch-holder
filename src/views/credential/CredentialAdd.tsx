@@ -68,7 +68,7 @@ export const CredentialAdd: React.FC<any> = ({navigation}) => {
   async function uploadImage() {
     try {
       launchImageLibrary(
-        {mediaType: 'photo', base64: true} as ImageLibraryOptions,
+        {mediaType: 'photo', base64: true, quality: 0} as ImageLibraryOptions,
         async image => {
           if (image.didCancel) {
             return;

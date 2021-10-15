@@ -18,15 +18,33 @@ import {useFocusEffect} from '@react-navigation/native';
 import CredentialCard from '../../components/credential/CredentialCard';
 import {primaryButton, primaryButtonText} from '../../assets/styles';
 import {Context} from '../../Store';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {LocalizationContext} from '../../LocalizationProvider';
 
 const {width} = Dimensions.get('window');
 
-const container = css`
+const flex = css`
   flex: 1;
-  flex-direction: column;
-  justify-content:center
+`;
+
+const container = css`
   align-items: center;
+`;
+
+const containerCenter = css`
+  ${container}
+  justify-content: center;
+`;
+
+const containerFlex = css`
+  ${flex}
+  ${container}
+`;
+
+const containerMargin = css`
+  margin-top: 16px;
+  margin-bottom: 32px;
+  ${container}
 `;
 
 const paragraphText = css`
@@ -72,13 +90,15 @@ export const Credentials: React.FC<any> = ({navigation}) => {
     navigation.navigate('Credential', {credential});
   };
 
-  return (
-    <View style={[container]}>
-      {!(credentials && credentials.length) ? (
-        <View style={[container]}>
+  if (!(credentials && credentials.length)) {
+    return (
+      <SafeAreaView style={[containerFlex]}>
+        <View style={[flex, containerCenter]}>
           <Wallet width={180} height={180} />
           <Text style={[largeText]}>{translations.Welcome}</Text>
           <Text style={[paragraphText]}>{translations.AddFirst}</Text>
+        </View>
+        <View style={[containerMargin]}>
           <TouchableHighlight
             style={[primaryButton(theme)]}
             underlayColor={theme.colors.activeBlue}
@@ -89,7 +109,11 @@ export const Credentials: React.FC<any> = ({navigation}) => {
             </Text>
           </TouchableHighlight>
         </View>
-      ) : (
+      </SafeAreaView>
+    );
+  } else {
+    return (
+      <View style={[containerFlex]}>
         <FlatList
           style={[{width}]}
           data={credentials}
@@ -116,7 +140,7 @@ export const Credentials: React.FC<any> = ({navigation}) => {
             </View>
           )}
         />
-      )}
-    </View>
-  );
+      </View>
+    );
+  }
 };

@@ -1,13 +1,13 @@
 import styled, {css} from '@emotion/native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import React, {useContext} from 'react';
-import {SectionList} from 'react-native';
+import {View} from 'react-native';
 import {theme} from '../../../App';
 import {boldText, text} from '../../assets/styles';
 import {CredentialHelper} from '../../utils/credhelper';
 import {LocalizationContext} from '../../LocalizationProvider';
 
-const Container = styled.View`
+const Container = styled.ScrollView`
   flex: 1;
 `;
 
@@ -60,6 +60,10 @@ const moreLeftPadding = css`
 
 const evenMoreLeftPadding = css`
   padding-left: 32px;
+`;
+
+const topPadding = css`
+  padding-top: 8px;
 `;
 
 const moreTopPadding = css`
@@ -145,34 +149,34 @@ export const CredentialDetail: React.FC<any> = ({route}) => {
           </LargeBoldText>
         </MessageTextContainer>
       </MessageContainer>
-      <SectionList
-        sections={data}
-        renderSectionHeader={({section: {title}}) => {
-          return title ? (
+      {data.map((datum, index) => (
+        <View key={datum.title + index} style={bottomPadding}>
+          {datum.title ? (
             <ListItemContainer
               style={[
-                moreTopPadding,
+                topPadding,
                 moreLeftPadding,
                 {
                   backgroundColor: theme.colors.backgroundGray,
                 },
               ]}
             >
-              <HeaderText>{title}</HeaderText>
+              <HeaderText>{datum.title}</HeaderText>
             </ListItemContainer>
-          ) : null;
-        }}
-        renderItem={({item}) => (
-          <ListItemContainer
-            style={item?.child ? [moreTopPadding, evenMoreLeftPadding] : []}
-          >
-            <TextContainer>
-              <LargeText style={[bottomPadding]}>{item.label}</LargeText>
-              <LargeBoldText>{item.text}</LargeBoldText>
-            </TextContainer>
-          </ListItemContainer>
-        )}
-      />
+          ) : null}
+          {datum.data.map(item => (
+            <ListItemContainer
+              key={datum.title + item.label + index}
+              style={item?.child ? [moreTopPadding, evenMoreLeftPadding] : []}
+            >
+              <TextContainer>
+                <LargeText style={[bottomPadding]}>{item.label}</LargeText>
+                <LargeBoldText>{item.text}</LargeBoldText>
+              </TextContainer>
+            </ListItemContainer>
+          ))}
+        </View>
+      ))}
     </Container>
   );
 };
