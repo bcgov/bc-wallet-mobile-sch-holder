@@ -190,7 +190,8 @@ export const Home: React.FC<any> = ({navigation}) => {
           onPress={async () => {
             await setTutorialCompletionStatus(true);
             navigation.navigate('Credentials');
-          }}>
+          }}
+        >
           <Text style={[primaryButtonText(theme), boldText]}>Get started</Text>
         </TouchableHighlight>
       </View>

@@ -1,10 +1,12 @@
-import React, {Ref, useContext, useRef} from 'react';
-import {Animated, Dimensions, FlatList, View} from 'react-native';
+import React, {Ref, useContext, useLayoutEffect, useRef, useState} from 'react';
+import {Alert, Animated, Dimensions, FlatList, View} from 'react-native';
 import {Context} from '../../Store';
 import {CredentialCardExpanded} from '../../components/credential/CredentialCardExpanded';
 import {css} from '@emotion/native';
 import {Credential} from '../../types';
 import {Pagination} from '../../components/shared/Pagination';
+import {CrendentialContextMenu} from '../../components/credential/CredentialContextMenu';
+import {DispatchAction} from '../../Reducer';
 
 const {width} = Dimensions.get('window');
 
@@ -25,19 +27,65 @@ const marginLeft = css`
   margin-left: 16px;
 `;
 
-export const CredentialsExpanded: React.FC<any> = ({route}) => {
-  const [state] = useContext(Context);
+export const CredentialsExpanded: React.FC<any> = ({route, navigation}) => {
+  const [state, dispatch] = useContext(Context);
   const {credentials} = state;
   const {credential} = route.params;
 
   const flatList: Ref<FlatList> = useRef(null);
-  const [activeData, setActiveData] = React.useState({index: 0, credential});
-  const scrollX = React.useRef(new Animated.Value(0)).current;
-  const onViewableItemsChangedRef = React.useRef(({viewableItems}: any) => {
+  const [activeData, setActiveData] = useState({index: 0, item: credential});
+  const scrollX = useRef(new Animated.Value(0)).current;
+  const onViewableItemsChangedRef = useRef(({viewableItems}: any) => {
     setActiveData(viewableItems[0]);
   });
-  const viewabilityConfigRef = React.useRef({
+  const viewabilityConfigRef = useRef({
     viewAreaCoveragePercentThreshold: 50,
+  });
+
+  useLayoutEffect(() => {
+    const deleteCard = () => {
+      try {
+        dispatch({
+          type: DispatchAction.RemoveCredential,
+          payload: [activeData.item],
+        });
+        navigation.goBack();
+      } catch (error) {
+        console.error(error);
+        Alert.alert(
+          'Yikes!',
+          'There was a problem removing this card.',
+          [{text: 'OK'}],
+          {cancelable: true},
+        );
+      }
+    };
+
+    const showCardDetails = () => {
+      try {
+        navigation.navigate(
+          'CredentialDetail' as never,
+          {credential: activeData.item} as never,
+        );
+      } catch (error) {
+        console.error(error);
+        Alert.alert(
+          'Yikes!',
+          'There was a problem viewing this card.',
+          [{text: 'OK'}],
+          {cancelable: true},
+        );
+      }
+    };
+
+    navigation.setOptions({
+      headerRight: () => (
+        <CrendentialContextMenu
+          onDeleteTouched={deleteCard}
+          onShowDetailsTouched={showCardDetails}
+        />
+      ),
+    });
   });
 
   const onScroll = Animated.event(

@@ -159,14 +159,16 @@ export const CredentialDetail: React.FC<any> = ({route}) => {
                 {
                   backgroundColor: theme.colors.backgroundGray,
                 },
-              ]}>
+              ]}
+            >
               <HeaderText>{datum.title}</HeaderText>
             </ListItemContainer>
           ) : null}
           {datum.data.map(item => (
             <ListItemContainer
               key={datum.title + item.label + index}
-              style={item?.child ? [moreTopPadding, evenMoreLeftPadding] : []}>
+              style={item?.child ? [moreTopPadding, evenMoreLeftPadding] : []}
+            >
               <TextContainer>
                 <LargeText style={[bottomPadding]}>{item.label}</LargeText>
                 <LargeBoldText>{item.text}</LargeBoldText>
