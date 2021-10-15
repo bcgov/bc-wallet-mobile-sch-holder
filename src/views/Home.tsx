@@ -1,5 +1,5 @@
 import {css} from '@emotion/native';
-import React, {Ref, useCallback, useContext, useRef} from 'react';
+import React, {Ref, useCallback, useContext, useRef, useState} from 'react';
 import {
   Animated,
   BackHandler,
@@ -78,13 +78,13 @@ const centeredText = css`
 
 export const Home: React.FC<any> = ({navigation}) => {
   const {translations} = useContext(LocalizationContext);
-  const [activeIndex, setActiveIndex] = React.useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
   const flatList: Ref<FlatList> = useRef(null);
-  const scrollX = React.useRef(new Animated.Value(0)).current;
-  const onViewableItemsChangedRef = React.useRef(({viewableItems}: any) => {
+  const scrollX = useRef(new Animated.Value(0)).current;
+  const onViewableItemsChangedRef = useRef(({viewableItems}: any) => {
     setActiveIndex(viewableItems[0].index);
   });
-  const viewabilityConfigRef = React.useRef({
+  const viewabilityConfigRef = useRef({
     viewAreaCoveragePercentThreshold: 50,
   });
 
@@ -112,21 +112,24 @@ export const Home: React.FC<any> = ({navigation}) => {
     }
   };
 
-  const renderItem = ({
-    item,
-    index,
-  }: {
-    item: {image: React.FC<SvgProps>; text: string};
-    index: number;
-  }) => (
-    <View key={index} style={[{width}, container]}>
-      {item.image({
-        fill: theme.colors.textGray,
-        height: 180,
-        width: 180,
-      })}
-      <Text style={[largeText, centeredText, margin]}>{item.text}</Text>
-    </View>
+  const renderItem = useCallback(
+    ({
+      item,
+      index,
+    }: {
+      item: {image: React.FC<SvgProps>; text: string};
+      index: number;
+    }) => (
+      <View key={index} style={[{width}, container]}>
+        {item.image({
+          fill: theme.colors.textGray,
+          height: 180,
+          width: 180,
+        })}
+        <Text style={[largeText, centeredText, margin]}>{item.text}</Text>
+      </View>
+    ),
+    [],
   );
 
   useFocusEffect(

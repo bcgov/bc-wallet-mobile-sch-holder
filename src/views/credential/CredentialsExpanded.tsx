@@ -1,4 +1,11 @@
-import React, {Ref, useContext, useLayoutEffect, useRef, useState} from 'react';
+import React, {
+  Ref,
+  useCallback,
+  useContext,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import {Alert, Animated, Dimensions, FlatList, View} from 'react-native';
 import {Context} from '../../Store';
 import {CredentialCardExpanded} from '../../components/credential/CredentialCardExpanded';
@@ -116,7 +123,7 @@ export const CredentialsExpanded: React.FC<any> = ({route, navigation}) => {
     }
   };
 
-  const renderItem = React.useCallback(
+  const renderItem = useCallback(
     ({item, index}: {item: Credential; index: number}) => (
       <View style={[index > 0 && marginLeft]}>
         <CredentialCardExpanded key={item.id} credential={item} />
