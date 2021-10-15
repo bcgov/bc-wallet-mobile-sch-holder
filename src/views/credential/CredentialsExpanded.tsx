@@ -1,11 +1,10 @@
-import React, {useContext} from 'react';
+import React, {Ref, useContext, useRef} from 'react';
 import {Animated, Dimensions, FlatList, View} from 'react-native';
 import {Context} from '../../Store';
 import {CredentialCardExpanded} from '../../components/credential/CredentialCardExpanded';
 import {css} from '@emotion/native';
 import {Credential} from '../../types';
-import {ScalingDot} from 'react-native-animated-pagination-dots';
-import {theme} from '../../../App';
+import {Pagination} from '../../components/shared/Pagination';
 
 const {width} = Dimensions.get('window');
 
@@ -13,9 +12,14 @@ const flex = css`
   flex: 1;
 `;
 
-// const centeredText = css`
-//   text-align: center;
-// `;
+const container = css`
+  align-items: center;
+`;
+
+const containerFlex = css`
+  ${flex}
+  ${container}
+`;
 
 const marginLeft = css`
   margin-left: 16px;
@@ -26,6 +30,7 @@ export const CredentialsExpanded: React.FC<any> = ({route}) => {
   const {credentials} = state;
   const {credential} = route.params;
 
+  const flatList: Ref<FlatList> = useRef(null);
   const [activeData, setActiveData] = React.useState({index: 0, credential});
   const scrollX = React.useRef(new Animated.Value(0)).current;
   const onViewableItemsChangedRef = React.useRef(({viewableItems}: any) => {
@@ -42,6 +47,27 @@ export const CredentialsExpanded: React.FC<any> = ({route}) => {
     },
   );
 
+  const next = () => {
+    const {index} = activeData;
+    if (index + 1 < data.length) {
+      flatList?.current?.scrollToIndex({
+        viewOffset: -16,
+        index: index + 1,
+        animated: true,
+      });
+    }
+  };
+  const previous = () => {
+    const {index} = activeData;
+    if (index !== 0) {
+      flatList?.current?.scrollToIndex({
+        viewOffset: index - 1 && -16,
+        index: index - 1,
+        animated: true,
+      });
+    }
+  };
+
   const renderItem = React.useCallback(
     ({item, index}: {item: Credential; index: number}) => (
       <View style={[index > 0 && marginLeft]}>
@@ -57,8 +83,9 @@ export const CredentialsExpanded: React.FC<any> = ({route}) => {
   ];
 
   return (
-    <View style={[flex]}>
+    <View style={[containerFlex]}>
       <FlatList
+        ref={flatList}
         horizontal
         showsHorizontalScrollIndicator={false}
         style={[{width}]}
@@ -77,15 +104,12 @@ export const CredentialsExpanded: React.FC<any> = ({route}) => {
         onScroll={onScroll}
         scrollEventThrottle={16}
       />
-      <View>
-        <ScalingDot
-          data={data}
-          scrollX={scrollX}
-          inActiveDotColor={theme.colors.primaryBlue}
-          activeDotColor={theme.colors.primaryBlue}
-          activeDotScale={1}
-        />
-      </View>
+      <Pagination
+        data={data}
+        scrollX={scrollX}
+        next={next}
+        previous={previous}
+      />
     </View>
   );
 };

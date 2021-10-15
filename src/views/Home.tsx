@@ -1,5 +1,5 @@
 import {css} from '@emotion/native';
-import React, {useCallback} from 'react';
+import React, {Ref, useCallback, useRef} from 'react';
 import {
   Animated,
   BackHandler,
@@ -27,7 +27,7 @@ import WelcomeFour from '../assets/img/welcome-4.svg';
 import {SvgProps} from 'react-native-svg';
 import {useFocusEffect} from '@react-navigation/native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {ScalingDot} from 'react-native-animated-pagination-dots';
+import {Pagination} from '../components/shared/Pagination';
 
 const {width} = Dimensions.get('window');
 
@@ -49,11 +49,6 @@ const containerMargin = css`
   margin-bottom: 32px;
   ${container}
 `;
-
-// const flexRow = css`
-//   flex-direction: row;
-//   align-items: center;
-// `;
 
 const largeText = css`
   ${text}
@@ -99,7 +94,15 @@ const data: {image: React.FC<SvgProps>; text: string}[] = [
 ];
 
 export const Home: React.FC<any> = ({navigation}) => {
+  const [activeIndex, setActiveIndex] = React.useState(0);
+  const flatList: Ref<FlatList> = useRef(null);
   const scrollX = React.useRef(new Animated.Value(0)).current;
+  const onViewableItemsChangedRef = React.useRef(({viewableItems}: any) => {
+    setActiveIndex(viewableItems[0].index);
+  });
+  const viewabilityConfigRef = React.useRef({
+    viewAreaCoveragePercentThreshold: 50,
+  });
 
   const onScroll = Animated.event(
     [{nativeEvent: {contentOffset: {x: scrollX}}}],
@@ -107,6 +110,23 @@ export const Home: React.FC<any> = ({navigation}) => {
       useNativeDriver: false,
     },
   );
+
+  const next = () => {
+    if (activeIndex + 1 < data.length) {
+      flatList?.current?.scrollToIndex({
+        index: activeIndex + 1,
+        animated: true,
+      });
+    }
+  };
+  const previous = () => {
+    if (activeIndex !== 0) {
+      flatList?.current?.scrollToIndex({
+        index: activeIndex - 1,
+        animated: true,
+      });
+    }
+  };
 
   const renderItem = ({
     item,
@@ -142,23 +162,24 @@ export const Home: React.FC<any> = ({navigation}) => {
       <Logo style={[headerSize as ImageStyle]} width={205} height={80} />
       <Text style={[headerText]}>BC Wallet</Text>
       <FlatList
+        ref={flatList}
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         style={[{width}]}
         data={data}
         renderItem={renderItem}
+        viewabilityConfig={viewabilityConfigRef.current}
+        onViewableItemsChanged={onViewableItemsChangedRef.current}
         onScroll={onScroll}
+        scrollEventThrottle={16}
       />
-      <View>
-        <ScalingDot
-          data={data}
-          scrollX={scrollX}
-          inActiveDotColor={theme.colors.primaryBlue}
-          activeDotColor={theme.colors.primaryBlue}
-          activeDotScale={1}
-        />
-      </View>
+      <Pagination
+        data={data}
+        scrollX={scrollX}
+        next={next}
+        previous={previous}
+      />
       <View style={[containerMargin]}>
         <TouchableHighlight
           style={[primaryButton(theme)]}
