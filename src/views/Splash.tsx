@@ -33,7 +33,6 @@ export const Splash: React.FC<any> = ({navigation}) => {
         // await deleteTutorialCompletionStatus();
 
         const tutorialState = await tutorialCompletionStatus();
-        console.log(results.length, tutorialState);
         if (results.length > 0 || tutorialState) {
           navigation.navigate('Credentials');
           return;
